@@ -51,7 +51,7 @@ function setLoading() {
           </div>
         </div>
         <div class="w-full flex justify-center items-center mt-10">
-          <PrimaryLink text="Return Back To Home." />
+          <PrimaryLink to="/" text="Return Back To Home." />
         </div>
       </div>
       <div class="hidden lg:flex lg:w-1/2 rounded flex-col justify-center py-3">
@@ -85,5 +85,6 @@ function setLoading() {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 </style>
