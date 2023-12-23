@@ -13,6 +13,22 @@ const genders = [
     value: 2,
   },
 ];
+
+const form = {
+  first_name: "",
+  last_name: "",
+  mobile: "",
+  gender: "",
+  email: "",
+  password: "",
+};
+
+const loading = ref(false);
+
+function register() {
+  loading.value = true;
+}
+
 </script>
 
 <template>
@@ -54,6 +70,7 @@ const genders = [
                 label="First Name"
                 placeholder="Enter your First Name"
                 type="text"
+                v-model="form.first_name"
               />
             </div>
             <div>
@@ -61,6 +78,7 @@ const genders = [
                 label="Last Name"
                 placeholder="Enter your Last Name"
                 type="text"
+                v-model="form.last_name"
               />
             </div>
           </div>
@@ -70,26 +88,31 @@ const genders = [
                 label="Mobile"
                 placeholder="Enter your mobile number"
                 type="text"
+                v-model="form.mobile"
               />
             </div>
             <div>
-              <PrimarySelect label="Gender" placeholder="Choose" :options="genders" />
+              <PrimarySelect
+                label="Gender"
+                placeholder="Choose"
+                :options="genders"
+                v-model="form.gender"
+              />
             </div>
           </div>
           <PrimaryInput
             label="Email"
             placeholder="Enter your email"
             type="email"
+            v-model="form.email"
           />
           <div class="flex flex-col">
             <PrimaryInput
               label="Password"
               placeholder="••••••••••••"
               type="password"
+              v-model="form.password"
             />
-            <div class="w-full flex justify-start items-center mt-2">
-              <UCheckbox name="remember" label="Remember Me" />
-            </div>
           </div>
         </div>
         <div class="w-full flex flex-col items-center px-10 mt-5">
@@ -103,7 +126,7 @@ const genders = [
           </div>
         </div>
         <div class="w-full flex justify-center items-center mt-5">
-          <PrimaryLink text="Return Back To Home." />
+          <PrimaryLink to="/" text="Return Back To Home." />
         </div>
       </div>
     </div>

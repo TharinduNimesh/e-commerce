@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps(["label", "placeholder", "type"]);
+const props = defineProps(["label", "placeholder", "type", "modelValue"]);
 
 const displayType = ref(props.type);
 
@@ -23,6 +23,8 @@ function toggleType() {
         :class="{
           'pr-10': type === 'password',
         }"
+        :value="modelValue"
+        @change="$emit('update:modelValue', $event.target.value)"
       />
       <div
         class="absolute h-11 w-10 flex justify-center items-center right-0 bottom-0 cursor-pointer"

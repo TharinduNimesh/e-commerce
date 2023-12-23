@@ -1,10 +1,14 @@
 <script setup>
 const color = useColorMode();
+const notifications = ref(useNotifications().value.notifications);
 
 onMounted(() => {
   window.addEventListener("keyup", (event) => {
     keyHandler(event);
   });
+  setInterval(() => {
+    removeExpiredNotification();
+  }, 500);
 });
 
 function keyHandler(event) {
@@ -12,6 +16,17 @@ function keyHandler(event) {
   if (event.ctrlKey && event.key === "Enter") {
     changeTheme();
   }
+}
+
+function removeExpiredNotification() {
+  const container = document.querySelector("#notifications");
+  const notifications = container.querySelectorAll(".toast");
+  notifications.forEach((notification) => {
+    console.log(notification.dataset.createdAt);
+    if (new Date(notification.dataset.createdAt) < Date.now() - 5000) {
+      notification.remove();
+    }
+  });
 }
 
 function changeTheme() {
@@ -25,6 +40,15 @@ function changeTheme() {
 
 <template>
   <div>
+    <div class="fixed right-5 top-5 z-50" id="notifications">
+      <!-- Notifications (Toasts) Will Appear Here -->
+      <Toast
+        v-for="notification in notifications"
+        :key="notification.message"
+        :type="notification.type"
+        :message="notification.message"
+      />
+    </div>
     <NuxtPage />
   </div>
 </template>
