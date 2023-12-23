@@ -25,10 +25,21 @@ const form = {
 
 const loading = ref(false);
 
-function register() {
+async function register() {
   loading.value = true;
+  const { data } = await useApiFetch("/api/login", {
+    method: "POST",
+    body: form,
+  });
+  if (data) {
+    useNotifications().value.notifications.push({
+      type: "success",
+      title: "Congratulations!",
+      message: "You have successfully registered.",
+    });
+  }
+  loading.value = false;
 }
-
 </script>
 
 <template>
@@ -118,7 +129,7 @@ function register() {
         <div class="w-full flex flex-col items-center px-10 mt-5">
           <PrimaryButton
             text="Sign Up"
-            @onclick="setLoading"
+            @onclick="register"
             :is-loading="loading"
           />
           <div class="w-full flex justify-center items-center mt-5">

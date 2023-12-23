@@ -22,7 +22,6 @@ function removeExpiredNotification() {
   const container = document.querySelector("#notifications");
   const notifications = container.querySelectorAll(".toast");
   notifications.forEach((notification) => {
-    console.log(notification.dataset.createdAt);
     if (new Date(notification.dataset.createdAt) < Date.now() - 5000) {
       notification.remove();
     }
@@ -46,6 +45,7 @@ function changeTheme() {
         v-for="notification in notifications"
         :key="notification.message"
         :type="notification.type"
+        :title="notification.title"
         :message="notification.message"
       />
     </div>

@@ -1,9 +1,6 @@
 export default defineNuxtRouteMiddleware((to, from) => {
   const token = useCookie("XSRF-TOKEN");
-  if (token.value) {
-    console.log("Already have token, skipping fetch");
-    return;
+  if (!token.value) {
+    useApiFetch("/sanctum/csrf-cookie");
   }
-  console.log("Fetching token");
-  useApiFetch("/sanctum/csrf-cookie");
 });
