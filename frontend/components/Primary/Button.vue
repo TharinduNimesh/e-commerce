@@ -6,7 +6,7 @@ defineProps({
   },
   style: {
     type: String,
-    default: "bg-blue-500 dark:bg-blue-800",
+    default: "bg-blue-500 hover:bg-blue-700 dark:bg-blue-800 dark:hover:bg-blue-900",
   },
   isDisabled: {
     type: Boolean,
@@ -21,11 +21,13 @@ defineProps({
 
 <template>
   <button
-    class="w-full flex items-center justify-center py-2 rounded text-gray-100 dark:text-gray-300 font-bold uppercase shadow-md dark:shadow-black"
-    :class="{
-      [style]: true,
-      'opacity-80 cursor-not-allowed': isDisabled || isLoading,
-    }"
+    class="w-full flex items-center justify-center py-2 rounded text-gray-100 dark:text-gray-300 font-bold uppercase shadow-md dark:shadow-black duration-300"
+    :class="[
+      style,
+      {
+        'opacity-80 cursor-not-allowed': isDisabled || isLoading,
+      },
+    ]"
     @click="$emit('onclick', $event)"
     :disabled="isDisabled || isLoading"
   >

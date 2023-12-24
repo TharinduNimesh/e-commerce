@@ -1,5 +1,6 @@
 <?php
 
+use App\Mail\WelcomeMail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return ['Laravel' => app()->version()];
+});
+
+// tempory mail templates
+Route::get('/mail', function () {
+    return new WelcomeMail([
+        'name'=> 'Tharindu Nimesh',
+    ]);
 });

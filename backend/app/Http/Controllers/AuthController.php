@@ -25,6 +25,12 @@ class AuthController extends Controller
             'status_id' => 1
         ]);
 
+        // send welcome email
+        MailController::welcome([
+            'email'=> $request->email,
+            'name'=> "$request->first_name $request->last_name",
+        ]);
+
         return response()->json([
             'message' => 'User registered successfully.',
             'request' => $request->all(),
