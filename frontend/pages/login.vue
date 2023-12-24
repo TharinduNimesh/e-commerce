@@ -2,13 +2,54 @@
 useHead({
   title: "Login | E-Commerce",
 });
+
+const credentials = useCookie("credentials");
 const loading = ref(false);
 
-function setLoading() {
+const form = ref({
+  email: "",
+  password: "",
+  remember_me: false,
+});
+
+onMounted(() => {
+  // if credentials cookie exists
+  if (credentials.value) {
+    form.value.email = credentials.value.email;
+    form.value.password = Crypto.decrypt(credentials.value.password);
+    form.value.remember_me = true;
+  }
+});
+
+async function login() {
   loading.value = true;
-  setTimeout(() => {
-    loading.value = false;
-  }, 2000);
+  // Check if form is valid
+  const { data } = await useApiFetch("/api/login", {
+    method: "POST",
+    body: form.value,
+  });
+  if (data) {
+    // if valid show notification
+    useNotifications().value.notifications.push({
+      message: "Login successful",
+    });
+
+    // set user and token
+    useAuth().value = data.user;
+    localStorage.setItem("auth-token", `Bearer ${data.token}`);
+
+    // if remember me is checked
+    if (form.value.remember_me) {
+      const password = Crypto.encrypt(form.value.password);
+      credentials.value = {
+        email: form.value.email,
+        password,
+      };
+    }
+    // reset form
+    form.value = useFormReset(form.value);
+  }
+  loading.value = false;
 }
 </script>
 
@@ -28,14 +69,17 @@ function setLoading() {
             label="Email"
             placeholder="Enter your email"
             type="email"
+            v-model="form.email"
           />
           <div class="flex flex-col">
             <PrimaryInput
               label="Password"
               placeholder="••••••••••••"
               type="password"
+              v-model="form.password"
             />
-            <div class="w-full flex justify-end items-center mt-2">
+            <div class="w-full flex justify-between items-center mt-2">
+              <UCheckbox v-model="form.remember_me" label="Remember Me" />
               <PrimaryLink text="Forgot Password ?" />
             </div>
           </div>
@@ -43,7 +87,7 @@ function setLoading() {
         <div class="w-full flex flex-col items-center px-10 mt-5">
           <PrimaryButton
             text="Sign In"
-            @onclick="setLoading"
+            @onclick="login"
             :is-loading="loading"
           />
           <div class="w-full flex justify-center items-center mt-5">

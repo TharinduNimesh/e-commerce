@@ -14,22 +14,22 @@ const genders = [
   },
 ];
 
-const form = {
+const form = ref({
   first_name: "",
   last_name: "",
   mobile: "",
   gender: "",
   email: "",
   password: "",
-};
+});
 
 const loading = ref(false);
 
 async function register() {
   loading.value = true;
-  const { data } = await useApiFetch("/api/login", {
+  const { data } = await useApiFetch("/api/register", {
     method: "POST",
-    body: form,
+    body: form.value,
   });
   if (data) {
     useNotifications().value.notifications.push({
@@ -37,6 +37,8 @@ async function register() {
       title: "Congratulations!",
       message: "You have successfully registered.",
     });
+    form.value = useFormReset(form.value);
+    useRouter().push("/login");
   }
   loading.value = false;
 }

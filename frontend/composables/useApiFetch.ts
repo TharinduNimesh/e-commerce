@@ -3,13 +3,20 @@ import { useErrorHandler } from "./useErrorHandler";
 
 export async function useApiFetch<T>(
   path: string | (() => string),
-  options: UseFetchOptions<T> = {}
+  options: UseFetchOptions<T> = {},
+  notify = true
 ) {
-  let headers: any = {};
+  let headers: any = {
+    Accept: "application/vnd.api+json",
+    "Content-Type": "application/vnd.api+json",
+  };
 
   const token = useCookie("XSRF-TOKEN");
+  const auth_token = localStorage.getItem("auth-token");
+
   if (token.value) {
-    headers["XSRF-TOKEN"] = token.value as string;
+    headers["X-XSRF-TOKEN"] = token.value as string;
+    headers["Authorization"] = auth_token ? auth_token : "";
   }
 
   try {
@@ -27,18 +34,25 @@ export async function useApiFetch<T>(
     );
 
     if (error.value) {
-      useErrorHandler(error.value.data);
+      if (notify) {
+        useErrorHandler(error.value.data);
+      }
       return {
         data: null,
         pending: false,
       };
-    } else {
-      return {
-        data: data.value,
-        pending: pending.value,
-      };
     }
+    return {
+      data: data.value,
+      pending: pending.value,
+    };
   } catch (err) {
-    useErrorHandler(err);
+    if (notify) {
+      useErrorHandler(err);
+    }
+    return {
+      data: null,
+      pending: false,
+    };
   }
 }

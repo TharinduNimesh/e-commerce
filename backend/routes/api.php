@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -15,11 +16,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return response()->json([
+        'status' => 'success',
+        'user' => $request->user(),
+    ]);
 });
 
-Route::post('/login', [UserController::class, 'create']);
+// Auth routes
+Route::middleware('throttle:auth')->group(function () {
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
+});
 
 // temporary route for testing
-Route::get('/deploy', [UserController::class,'deploy']);
+Route::get('/deploy', [UserController::class, 'deploy']);
