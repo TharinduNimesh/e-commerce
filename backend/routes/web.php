@@ -1,6 +1,6 @@
 <?php
 
-use App\Mail\WelcomeMail;
+use App\Mail\ForgotPasswordMail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,7 +20,8 @@ Route::get('/', function () {
 
 // tempory mail templates
 Route::get('/mail', function () {
-    return new WelcomeMail([
-        'name'=> 'Tharindu Nimesh',
+    return new ForgotPasswordMail([
+        'name' => 'Tharindu Nimesh',
+        'otp' => '123456',
     ]);
 });

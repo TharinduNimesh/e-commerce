@@ -39,7 +39,7 @@ function changeTheme() {
 
 <template>
   <div>
-    <div class="fixed right-5 top-5 z-50" id="notifications">
+    <div class="fixed right-5 top-5 z-[99999999]" id="notifications">
       <!-- Notifications (Toasts) Will Appear Here -->
       <Toast
         v-for="notification in notifications"

@@ -124,35 +124,11 @@ async function login() {
         </div>
       </div>
     </div>
-    <!-- Forget password modal start -->
-    <UModal v-model="forget_password_opened">
-      <div class="p-5">
-        <h1 class="text-xl uppercase font-bold text-gray-700 dark:text-gray-300">
-          Forgot Your Password
-        </h1>
-        <UDivider class="my-3" />
-        <p class="text-gray-500 dark:text-gray-400">
-          Enter your email address below and we'll send you a link to reset your
-          password.
-        </p>
-        <div class="mt-4">
-          <PrimaryInput placeholder="Enter your email" type="email" />
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 mt-5 gap-2">
-          <div class="order-2 md:order-1">
-            <PrimaryButton
-              @onclick="forget_password_opened = false"
-              text="Close"
-              class="bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800"
-            />
-          </div>
-          <div class="order-1 md:order-2">
-            <PrimaryButton text="Send" />
-          </div>
-        </div>
-      </div>
-    </UModal>
-    <!-- Forget password modal end -->
+    <!-- Forget password modal -->
+    <FormForgetPassword
+      v-model="forget_password_opened"
+      @onclose="forget_password_opened = false"
+    />
   </div>
 </template>
 

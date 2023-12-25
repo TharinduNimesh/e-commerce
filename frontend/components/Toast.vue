@@ -19,7 +19,7 @@ function closeToast(event) {
 
 <template>
   <div
-    class="toast mb-3 flex-col min-w-[300px] max-w-[500px] bg-gradient-to-r to-60% bg-[#f2f2f2] dark:bg-[#0d1217] rounded border border-blue-100 dark:border-blue-950 shadow-lg dark:shadow-black"
+    class="toast mb-3 flex-col min-w-[300px] max-w-[500px] bg-gradient-to-r to-60% bg-[#f2f2f2] dark:bg-[#0d1217] rounded border border-blue-100 dark:border-blue-950 shadow-lg dark:shadow-black z-50"
     :class="{
       'from-green-100 dark:from-green-900': type === 'success',
       'from-red-100 dark:from-red-900': type === 'error',

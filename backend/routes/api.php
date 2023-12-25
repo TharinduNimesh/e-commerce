@@ -27,6 +27,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('throttle:auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+    Route::post('/verify', [AuthController::class, 'verify']);
+    Route::post('/update-password', [AuthController::class, 'UpdatePassword']);
 });
 
 // temporary route for testing

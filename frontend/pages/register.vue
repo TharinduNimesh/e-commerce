@@ -34,7 +34,7 @@ async function register() {
   if (data) {
     useNotifications().value.notifications.push({
       type: "success",
-      title: "Congratulations!",
+      title: "Congratulations 🎉",
       message: "You have successfully registered.",
     });
     form.value = useFormReset(form.value);

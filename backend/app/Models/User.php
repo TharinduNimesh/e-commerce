@@ -48,6 +48,10 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function otps() {
+        return $this->hasMany(Otp::class);
+    }
+
     public function gender() {
         return $this->belongsTo(Gender::class);
     }

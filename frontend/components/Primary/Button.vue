@@ -21,7 +21,7 @@ defineProps({
 
 <template>
   <button
-    class="w-full flex items-center justify-center py-2 rounded text-gray-100 dark:text-gray-300 font-bold uppercase shadow-md dark:shadow-black duration-300"
+    class="w-full flex items-center justify-center py-2 rounded text-gray-100 dark:text-gray-300 font-bold uppercase outline-none shadow active:scale-95 dark:shadow-black transition-transform duration-300"
     :class="[
       style,
       {
