@@ -1,0 +1,21 @@
+.text-gradient {
+    @apply bg-gradient-to-r inline-block text-transparent bg-clip-text
+}
+
+.animate-float {
+    animation: float 3s infinite;
+}
+
+@keyframes float {
+    0% {
+        transform: translatey(0px);
+    }
+
+    50% {
+        transform: translatey(-10px);
+    }
+
+    100% {
+        transform: translatey(0px);
+    }
+}

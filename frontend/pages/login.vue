@@ -105,7 +105,7 @@ async function login() {
       <div class="hidden lg:flex lg:w-1/2 rounded flex-col justify-center py-3">
         <div class="w-full flex justify-center">
           <img
-            src="/img/login-vector.png"
+            src="/img/vr-box-3d.png"
             alt="Login Img"
             class="max-w-[240px] w-full h-full object-contain"
           />
@@ -113,12 +113,11 @@ async function login() {
         <div class="w-full flex justify-center">
           <div class="w-full flex flex-col items-center gap-3 px-5">
             <h1 class="text-2xl uppercase font-bold text-center">
-              Shop Dreams, Click Reality.
+              Play More, Game Haven Score.
             </h1>
             <p class="text-md text-center text-slate-600 dark:text-gray-400">
-              Embark on a digital shopping journey where desires meet
-              convenience. Explore curated collections and redefine your style
-              effortlessly. Welcome to seamless online indulgence.
+              Sign in for epic gaming. Explore exclusive deals, connect with
+              gamers, and level up your experience at GameHaven.
             </p>
           </div>
         </div>
