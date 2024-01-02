@@ -56,7 +56,7 @@ async function register() {
       >
         <div class="w-full flex justify-center">
           <img
-            src="/img/boy-3d.png"
+            src="/img/spiderman-reading-2.png"
             alt="Register Img"
             class="max-w-[300px] mb-8 w-full h-full object-contain"
           />
@@ -64,13 +64,12 @@ async function register() {
         <div class="w-full flex justify-center">
           <div class="w-full flex flex-col gap-3 px-5">
             <h1 class="text-2xl uppercase font-bold">
-              Unlock Your Gaming Odyssey at GameHaven
+              Join the League, Unlock Comic Realms!
             </h1>
             <p class="text-md text-slate-600 dark:text-gray-400">
-              Welcome to GameHaven, your ultimate destination for all things
-              gaming. Sign up now to embark on a journey through a vast realm of
-              digital delights. Level up your gaming, unlock exclusive deals,
-              and join a community passionate about play. Ready, Player One?
+              Embark on a journey with ComicCage. Register now to access an
+              exclusive universe of digital comics. Become a member, unlock the
+              extraordinary, and start your thrilling collection today.
             </p>
           </div>
         </div>

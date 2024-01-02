@@ -105,7 +105,7 @@ async function login() {
       <div class="hidden lg:flex lg:w-1/2 rounded flex-col justify-center py-3">
         <div class="w-full flex justify-center">
           <img
-            src="/img/vr-box-3d.png"
+            src="/img/spiderman-reading-1.png"
             alt="Login Img"
             class="max-w-[240px] w-full h-full object-contain"
           />
@@ -113,11 +113,12 @@ async function login() {
         <div class="w-full flex justify-center">
           <div class="w-full flex flex-col items-center gap-3 px-5">
             <h1 class="text-2xl uppercase font-bold text-center">
-              Play More, Game Haven Score.
+              Enter Your Portal to Comic Bliss!
             </h1>
             <p class="text-md text-center text-slate-600 dark:text-gray-400">
-              Sign in for epic gaming. Explore exclusive deals, connect with
-              gamers, and level up your experience at GameHaven.
+              Welcome back, hero! Your next adventure awaits. Log in to
+              ComicCage and resume your exploration of thrilling narratives,
+              stunning visuals, and a world of endless imagination.
             </p>
           </div>
         </div>

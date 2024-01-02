@@ -6,6 +6,15 @@
     animation: float 3s infinite;
 }
 
+.main-heading {
+    @apply w-fit relative text-3xl md:text-4xl text-gray-700 dark:text-gray-300 font-bold uppercase;
+}
+
+.main-heading::after {
+    @apply block w-2/3 h-1 mt-2 bg-gradient-to-r from-indigo-500 to-green-400  rounded-full;
+    content: "";
+}
+
 @keyframes float {
     0% {
         transform: translatey(0px);

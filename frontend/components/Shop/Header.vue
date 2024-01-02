@@ -24,6 +24,10 @@ const paths = [
     path: "/",
   },
   {
+    name: "Shop",
+    path: "/shop",
+  },
+  {
     name: "Category",
     path: "/category",
   },
@@ -41,9 +45,9 @@ const paths = [
 <template>
   <header class="fixed w-full top-0 z-40 px-5 py-4">
     <div
-      class="w-full px-5 py-2 h-14 bg-primary-light-transparent dark:bg-primary-dark-transparent rounded-lg shadow dark:shadow-black backdrop-blur-md"
+      class="w-full px-5 py-2 h-16 bg-primary-light-transparent dark:bg-primary-dark-transparent rounded-lg shadow dark:shadow-black backdrop-blur-md"
     >
-      <div class="w-full grid grid-cols-3">
+      <div class="w-full h-full grid grid-cols-3">
         <div class="hidden lg:flex items-center gap-5">
           <NuxtLink
             v-for="path in paths"
@@ -52,7 +56,7 @@ const paths = [
             class="duration-300"
             :class="{
               'text-blue-500 dark:text-blue-700': path.path === $route.path,
-              'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-100':
+              'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-100':
                 path.path !== $route.path,
             }"
           >
@@ -60,17 +64,17 @@ const paths = [
           </NuxtLink>
         </div>
         <div class="col-span-2 lg:col-span-1 flex lg:justify-center items-center gap-4">
-          <img src="/img/logo.png" class="w-10" alt="Logo of GameHeaven" />
+          <img src="/img/logo.png" class="w-10" alt="Logo of ComicCage" />
           <h1>
             <span
               class="text-2xl float-left font-bold text-gray-800 dark:text-slate-100"
             >
-              Game
+              Comic
             </span>
             <span
               class="text-2xl float-left font-bold text-gradient from-violet-600 to-blue-400"
             >
-              Heaven
+              Cage
             </span>
             <span>
               <span
