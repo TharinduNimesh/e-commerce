@@ -55,15 +55,17 @@ const paths = [
             :to="path.path"
             class="duration-300"
             :class="{
-              'text-blue-500 dark:text-blue-700': path.path === $route.path,
-              'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-100':
+              'text-blue-700': path.path === $route.path,
+              'text-gray-700 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-100':
                 path.path !== $route.path,
             }"
           >
             {{ path.name }}
           </NuxtLink>
         </div>
-        <div class="col-span-2 lg:col-span-1 flex lg:justify-center items-center gap-4">
+        <div
+          class="col-span-2 lg:col-span-1 flex lg:justify-center items-center gap-4"
+        >
           <img src="/img/logo.png" class="w-10" alt="Logo of ComicCage" />
           <h1>
             <span
