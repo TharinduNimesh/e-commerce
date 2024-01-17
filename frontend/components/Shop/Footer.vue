@@ -60,6 +60,40 @@ const categories = [
     path: "/category/thriller",
   },
 ];
+
+const is_loading = ref(false);
+const email = ref("");
+
+async function subscribe() {
+  if (is_loading.value) return;
+  is_loading.value = true;
+  if (email.value === "") {
+    useNotifications().value.notifications.push({
+      title: "Error",
+      message: "Please enter your email address",
+      type: "error",
+    });
+    is_loading.value = false;
+    return;
+  }
+
+  const { data } = await useApiFetch("/api/newsletter", {
+    method: "POST",
+    body: {
+      email: email.value,
+    },
+  });
+
+  if (data) {
+    useNotifications().value.notifications.push({
+      title: "Congratulations 🎉",
+      message: "You have successfully subscribed to our newsletter",
+    });
+    email.value = "";
+  }
+
+  is_loading.value = false;
+}
 </script>
 
 <template>
@@ -81,21 +115,24 @@ const categories = [
           >
         </h2>
         <p class="text-center text-gray-600 dark:text-gray-400 mt-2">
-          Subscribe to our 'Newsletter' newsletter for exclusive previews,
+          Subscribe to our newsletter for exclusive previews,
           latest releases, and insider updates. Join the ComicCage community and
           stay ahead in the world of digital comics!
         </p>
         <div class="flex mt-5 w-full md:w-2/3">
           <input
+            v-model="email"
             type="email"
             placeholder="Enter Your Email Address"
             class="w-full h-12 border border-gray-300 dark:border-gray-700 rounded-l px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-300 dark:focus:ring-gray-700"
           />
           <UButton
+            :loading="is_loading"
             label="Subscribe"
             size="md"
             color="indigo"
             class="rounded-none rounded-r px-5"
+            @click="subscribe"
           />
         </div>
       </div>

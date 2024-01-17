@@ -23,6 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     ]);
 });
 
+Route::post('/newsletter', [UserController::class, 'subscribe']);
+
 // Auth routes
 Route::middleware('throttle:auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);

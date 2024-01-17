@@ -28,6 +28,9 @@ class AuthController extends Controller
             'status_id' => 1
         ]);
 
+        // Subscribe to newsletter
+        UserController::subscribe($request);
+
         // send welcome email
         MailController::welcome([
             'email' => $request->email,
