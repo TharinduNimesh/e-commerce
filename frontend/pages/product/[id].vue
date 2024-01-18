@@ -25,6 +25,7 @@ const desciption = `"Batman: The Dark Knight Returns #1," a seminal comic writte
             narrative that explores the psychological and physical toll of a
             lifetime dedicated to justice.`;
 
+const is_rate_open = ref(false);
 const offer_percentage = ref(66);
 const product_price = ref(1000);
 const is_favorite = ref(false);
@@ -43,6 +44,186 @@ function calculatePrice() {
   let offer = parseFloat(offer_percentage.value);
   return (price - (price * offer) / 100).toFixed(2);
 }
+
+const selected_emoji = ref(0);
+const active_emoji = ref(0);
+
+watch(selected_emoji, (value) => {
+  if (value > active_emoji.value) {
+    active_emoji.value = value;
+  }
+});
+const emojis = [
+  {
+    label: "Very Bad",
+    emoji: "😡",
+  },
+  {
+    label: "Bad",
+    emoji: "😠",
+  },
+  {
+    label: "Okay",
+    emoji: "😐",
+  },
+  {
+    label: "Good",
+    emoji: "😊",
+  },
+  {
+    label: "Very Good",
+    emoji: "😍",
+  },
+];
+const comments = [
+  {
+    id: 1,
+    name: "BatmanFan87",
+    time: "2024-01-18T10:05:00",
+    comment:
+      "Incredible storytelling and a bold reimagining of Batman. Miller's genius shines through every panel.",
+  },
+  {
+    id: 2,
+    name: "ComicGeek42",
+    time: "2024-01-18T10:30:00",
+    comment:
+      "The Dark Knight Returns #1 is a masterpiece, with a gripping narrative and stunning artwork that stands the test of time.",
+  },
+  {
+    id: 3,
+    name: "GothamKnight",
+    time: "2024-01-18T11:15:00",
+    comment:
+      "A revolutionary take on Batman that delves into the darker corners of the character's psyche. Miller's vision is unmatched.",
+  },
+  {
+    id: 4,
+    name: "ArtConnoisseur",
+    time: "2024-01-18T11:45:00",
+    comment:
+      "Klaus Janson's art complements Frank Miller's writing perfectly, creating a visually stunning and emotionally impactful experience.",
+  },
+  {
+    id: 5,
+    name: "SuperheroBuff",
+    time: "2024-01-18T12:20:00",
+    comment:
+      "This comic is a game-changer. It brought a new level of depth and complexity to superhero storytelling.",
+  },
+  {
+    id: 6,
+    name: "BatObsessed",
+    time: "2024-01-18T13:00:00",
+    comment:
+      "Frank Miller's exploration of an older Batman is both gritty and thought-provoking. A must-read for any Bat-fan.",
+  },
+  {
+    id: 7,
+    name: "GraphicNovelAficionado",
+    time: "2024-01-18T13:30:00",
+    comment:
+      "The Dark Knight Returns #1 is a landmark in the evolution of graphic storytelling. It's raw, intense, and unforgettable.",
+  },
+  {
+    id: 8,
+    name: "DCDevotee",
+    time: "2024-01-18T14:10:00",
+    comment:
+      "This comic captures the essence of Batman's legacy and the impact of his return. A true classic!",
+  },
+  {
+    id: 9,
+    name: "ComicExplorer",
+    time: "2024-01-18T14:45:00",
+    comment:
+      "A cinematic experience on paper. The narrative is compelling, and the artwork is nothing short of spectacular.",
+  },
+  {
+    id: 10,
+    name: "BaneBane",
+    time: "2024-01-18T15:20:00",
+    comment:
+      "Miller's take on an older, battle-worn Batman is nothing short of brilliant. The Dark Knight Returns is a triumph.",
+  },
+  {
+    id: 11,
+    name: "JokerFanatic",
+    time: "2024-01-18T16:00:00",
+    comment:
+      "An iconic clash between Batman and the Joker that left me on the edge of my seat. The tension is palpable.",
+  },
+  {
+    id: 12,
+    name: "NostalgicReader",
+    time: "2024-01-18T16:30:00",
+    comment:
+      "Reading this comic feels like revisiting a classic. It's a timeless piece of Batman history that never gets old.",
+  },
+  {
+    id: 13,
+    name: "HeroicHues",
+    time: "2024-01-18T17:15:00",
+    comment:
+      "The artwork's use of shadows and contrasts adds a layer of depth that enhances the overall mood of the story.",
+  },
+  {
+    id: 14,
+    name: "ArkhamRegular",
+    time: "2024-01-18T17:45:00",
+    comment:
+      "A thrilling exploration of the consequences of a retired Batman returning to the chaos of Gotham. Gripping from start to finish.",
+  },
+  {
+    id: 15,
+    name: "GraphicNovelGuru",
+    time: "2024-01-18T18:20:00",
+    comment:
+      "This comic set the standard for mature and complex storytelling in superhero comics. A game-changer.",
+  },
+  {
+    id: 16,
+    name: "BatCollector",
+    time: "2024-01-18T19:00:00",
+    comment:
+      "The Dark Knight Returns #1 is a cornerstone of any Batman collection. Miller's narrative is iconic and unforgettable.",
+  },
+  {
+    id: 17,
+    name: "WonderReader",
+    time: "2024-01-18T19:30:00",
+    comment:
+      "A masterclass in character development. Batman's internal struggles are portrayed with depth and authenticity.",
+  },
+  {
+    id: 18,
+    name: "PanelPundit",
+    time: "2024-01-18T20:15:00",
+    comment:
+      "A visually stunning and emotionally charged journey into the heart of Gotham. Miller and Janson are a dynamic duo.",
+  },
+  {
+    id: 19,
+    name: "DarkComicAficionado",
+    time: "2024-01-18T20:45:00",
+    comment:
+      "The Dark Knight Returns #1 is a gritty, intense, and unforgettable chapter in Batman's legacy. A true masterpiece.",
+  },
+  {
+    id: 20,
+    name: "CapedObserver",
+    time: "2024-01-18T21:30:00",
+    comment:
+      "An absolute triumph that elevated the superhero genre. The impact of this comic is felt even decades later.",
+  },
+];
+
+const page = ref(1);
+const displayed_comments = computed(() => {
+  const start = (page.value - 1) * 5;
+  const end = page.value * 5;
+  return comments.slice(start, end);
+});
 </script>
 
 <template>
@@ -155,32 +336,49 @@ function calculatePrice() {
                   >LKR. {{ product_price }}</span
                 >
               </div>
-              <div class="w-full">
-                <UButton
-                  color="indigo"
-                  block
-                  size="lg"
-                  class="uppercase"
-                  label="Add To Cart"
-                  icon="i-heroicons-shopping-cart-20-solid"
-                />
+              <div class="w-full grid grid-cols-12 gap-3">
+                <div
+                  class="col-span-full md:col-span-6 lg:col-span-8 xl:col-span-9"
+                >
+                  <UButton
+                    color="indigo"
+                    block
+                    size="lg"
+                    class="uppercase"
+                    label="Add To Cart"
+                    icon="i-heroicons-shopping-cart-20-solid"
+                  />
+                </div>
+                <div
+                  class="col-span-full md:col-span-6 lg:col-span-4 xl:col-span-3"
+                >
+                  <UButton
+                    color="orange"
+                    block
+                    size="lg"
+                    class="uppercase"
+                    label="Rate This"
+                    icon="material-symbols-light:kid-star-sharp"
+                    @click="is_rate_open = true"
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="container flex flex-col py-5">
+      <section class="container flex flex-col p-5">
         <h2 class="text-3xl font-bold uppercase">20 Comments</h2>
         <div class="w-full grid grid-cols-12 md:px-10 lg:px-12 mt-10">
-          <div class="col-span-10">
+          <div class="col-span-8 md:col-span-10">
             <UInput
               size="xl"
               placeholder="Write a comment..."
               class="rounded-none rounded-l"
             />
           </div>
-          <div class="col-span-2">
+          <div class="col-span-4 md:col-span-2">
             <UButton
               color="indigo"
               size="xl"
@@ -192,7 +390,85 @@ function calculatePrice() {
             />
           </div>
         </div>
+        <div class="w-full flex flex-col gap-1 mt-5">
+          <Comment
+            v-for="comment in displayed_comments"
+            :key="comment.comment"
+            :name="comment.name"
+            :date="comment.time"
+            :comment="comment.comment"
+          />
+          <div class="flex justify-end">
+            <UPagination
+              v-model="page"
+              :page-count="5"
+              :total="comments.length"
+            />
+          </div>
+        </div>
       </section>
     </div>
+
+    <!-- Rate This Modal Start -->
+    <UModal v-model="is_rate_open">
+      <UCard
+        :ui="{
+          ring: '',
+          divide: 'divide-y divide-gray-100 dark:divide-gray-800',
+        }"
+      >
+        <template #header>
+          <div class="flex justify-between">
+            <h2 class="text-xl font-bold uppercase">Rate This Comic</h2>
+            <Icon
+              name="heroicons:x-mark-16-solid"
+              class="text-2xl cursor-pointer"
+              @click="is_rate_open = false"
+            />
+          </div>
+        </template>
+        <div class="flex gap-3 flex-col">
+          <UFormGroup label="Rate" required>
+            <div class="flex justify-center">
+              <div class="flex gap-3">
+                <div v-for="(emoji, index) in emojis" :key="emoji.emoji">
+                  <span
+                    class="text-4xl cursor-pointer"
+                    :class="{
+                      'opacity-50': active_emoji < index,
+                      'opacity-100': active_emoji >= index,
+                    }"
+                    @mouseover="active_emoji = index"
+                    @mouseleave="active_emoji = selected_emoji"
+                    @click="selected_emoji = index"
+                  >
+                    {{ emoji.emoji }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </UFormGroup>
+          <UFormGroup label="Comment" hint="Optional">
+            <UTextarea
+              color="gray"
+              variant="outline"
+              placeholder="Your Comment ...."
+            />
+          </UFormGroup>
+        </div>
+        <template #footer>
+          <div class="flex justify-end">
+            <UButton
+              color="indigo"
+              size="lg"
+              class="uppercase"
+              label="Submit"
+              @click="is_rate_open = false"
+            />
+          </div>
+        </template>
+      </UCard>
+    </UModal>
+    <!-- Rate This Modal End -->
   </NuxtLayout>
 </template>

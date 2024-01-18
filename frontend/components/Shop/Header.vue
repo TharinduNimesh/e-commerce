@@ -54,7 +54,7 @@ const items = [
     {
       label: "Settings",
       icon: "i-heroicons-cog-8-tooth",
-      click: () => useRouter().push('/app/profile')
+      click: () => useRouter().push("/app/profile"),
     },
   ],
   [
@@ -75,6 +75,7 @@ const items = [
     {
       label: "Sign out",
       icon: "i-heroicons-arrow-left-on-rectangle",
+      click: () => (is_auth.value = false),
     },
   ],
 ];
