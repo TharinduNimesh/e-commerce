@@ -25,7 +25,8 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
             'mobile' => $request->mobile,
             'gender_id' => $request->gender,
-            'status_id' => 1
+            'status_id' => 1, // 1 = Active
+            "role_id" => 1, // 1 = Buyer
         ]);
 
         // Subscribe to newsletter
