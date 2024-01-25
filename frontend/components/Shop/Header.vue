@@ -2,6 +2,7 @@
 const color = useColorMode().preference;
 const is_dark = ref(color === "dark");
 const is_auth = ref(true);
+const router = useRouter();
 
 // watch for color mode changes
 watch(
@@ -54,7 +55,7 @@ const items = [
     {
       label: "Settings",
       icon: "i-heroicons-cog-8-tooth",
-      click: () => useRouter().push("/app/profile"),
+      click: () => router.push("/app/profile"),
     },
   ],
   [
@@ -65,6 +66,7 @@ const items = [
     {
       label: "Cart",
       icon: "i-heroicons-shopping-cart",
+      click: () => router.push("/cart"),
     },
     {
       label: "Favourite",

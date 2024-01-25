@@ -46,13 +46,7 @@ function calculatePrice() {
 }
 
 const selected_emoji = ref(0);
-const active_emoji = ref(0);
 
-watch(selected_emoji, (value) => {
-  if (value > active_emoji.value) {
-    active_emoji.value = value;
-  }
-});
 const emojis = [
   {
     label: "Very Bad",
@@ -435,11 +429,9 @@ const displayed_comments = computed(() => {
                   <span
                     class="text-4xl cursor-pointer"
                     :class="{
-                      'opacity-50': active_emoji < index,
-                      'opacity-100': active_emoji >= index,
+                      'opacity-50': selected_emoji != index,
+                      'opacity-100': selected_emoji == index,
                     }"
-                    @mouseover="active_emoji = index"
-                    @mouseleave="active_emoji = selected_emoji"
                     @click="selected_emoji = index"
                   >
                     {{ emoji.emoji }}
