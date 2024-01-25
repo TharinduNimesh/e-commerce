@@ -5,8 +5,12 @@ export default defineAppConfig({
     icons: {
       dynamic: true,
     },
-    buttons: {
-      size: "md",
-    }
+    button: {
+      default: {
+        size: "md",
+      },
+      base: "uppercase text-xs font-bold",
+      font: "",
+    },
   },
 });

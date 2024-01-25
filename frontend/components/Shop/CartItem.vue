@@ -5,11 +5,11 @@ const props = defineProps({
     default: false,
   },
   offer_percentage: {
-    type: Number,
+    type: String,
     default: 0,
   },
   product_price: {
-    type: Number,
+    type: String,
     default: 0,
   },
   name: String,
