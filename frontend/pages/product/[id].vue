@@ -221,7 +221,7 @@ const displayed_comments = computed(() => {
 </script>
 
 <template>
-  <NuxtLayout name="home">
+  <NuxtLayout name="shop">
     <div class="w-full flex flex-col items-center pt-20">
       <section class="container flex flex-col flex-wrap min-h-screen">
         <div

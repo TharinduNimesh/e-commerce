@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="home">
+  <NuxtLayout name="shop">
     <div class="flex justify-center py-20">
       <div class="container flex flex-col pt-10 px-5 md:px-0">
         <div class="flex justify-between items-center px-5">
@@ -11,7 +11,7 @@
           </div>
         </div>
         <div class="w-full grid grid-cols-2 mt-5 gap-5">
-          <div class="col-span-full lg:col-span-1 flex flex-col gap-3 order-2 md:order-1">
+          <div class="col-span-full lg:col-span-1 flex flex-col gap-3 order-2 lg:order-1">
             <ShopCartItem
               v-for="item in 2"
               :key="item"
@@ -26,7 +26,7 @@
               buyers="10"
             />
           </div>
-          <div class="col-span-full lg:col-span-1 order-1 md:order-2">
+          <div class="col-span-full lg:col-span-1 order-1 lg:order-2">
             <div
               class="w-full flex flex-col bg-primary-light dark:bg-primary-dark-transparent rounded shadow-lg dark:shadow-black overflow-hidden"
             >

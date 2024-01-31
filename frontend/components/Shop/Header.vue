@@ -55,7 +55,7 @@ const items = [
     {
       label: "Settings",
       icon: "i-heroicons-cog-8-tooth",
-      click: () => router.push("/app/profile"),
+      click: () => router.push("/app/settings"),
     },
   ],
   [
@@ -105,7 +105,8 @@ const items = [
           </NuxtLink>
         </div>
         <div
-          class="col-span-2 lg:col-span-1 flex lg:justify-center items-center gap-4"
+          class="col-span-2 lg:col-span-1 flex lg:justify-center items-center gap-4 cursor-pointer"
+          @click="$router.push('/')"
         >
           <img src="/img/logo.png" class="w-10" alt="Logo of ComicCage" />
           <h1>
@@ -149,7 +150,10 @@ const items = [
           <div v-if="is_auth" class="flex gap-2">
             <UDropdown
               :items="items"
-              :ui="{ item: { disabled: 'cursor-text select-text' } }"
+              :ui="{
+                item: { disabled: 'cursor-text select-text' },
+                background: 'bg-white dark:bg-primary-dark',
+              }"
               :popper="{ placement: 'bottom-start' }"
             >
               <UAvatar

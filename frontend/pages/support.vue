@@ -5,7 +5,7 @@ useHead({
 </script>
 
 <template>
-  <NuxtLayout name="home">
+  <NuxtLayout name="shop">
     <!-- Hero section start -->
     <section
       class="relative w-full h-[80vh] bg-cover bg-top bg-[url(/img/ninja-turtles.jpg)]"

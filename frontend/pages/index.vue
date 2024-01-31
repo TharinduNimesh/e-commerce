@@ -9,7 +9,7 @@ function showModal(i) {
 </script>
 
 <template>
-  <NuxtLayout name="home">
+  <NuxtLayout name="shop">
     <!-- Hero Section Start -->
     <section
       class="w-full flex flex-wrap min-h-screen pt-20 lg:pt-0 bg-cover bg-top bg-fixed bg-[url(/img/justice-league.png)]"
