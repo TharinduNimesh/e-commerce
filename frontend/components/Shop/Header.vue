@@ -57,6 +57,11 @@ const items = [
       icon: "i-heroicons-cog-8-tooth",
       click: () => router.push("/app/settings"),
     },
+    {
+      label: "Console",
+      icon: "heroicons:presentation-chart-line",
+      click: () => router.push("/app/dashboard"),
+    },
   ],
   [
     {
