@@ -1,5 +1,6 @@
 <script setup>
 const is_navbar_open = useNavbarState();
+const current_year = new Date().getFullYear();
 
 function toggleNavbar() {
   is_navbar_open.value = !is_navbar_open.value;
@@ -7,7 +8,7 @@ function toggleNavbar() {
 </script>
 
 <template>
-  <div class="flex w-full h-screen bg-slate-200 dark:bg-[#0c0c0d]">
+  <div class="flex w-full h-screen bg-slate-200 dark:bg-secondary-dark">
     <AppNavbar :is_open="is_navbar_open" @toggle-navbar="toggleNavbar" />
     <div class="flex-1 p-3 flex flex-col justify-between">
       <div class="flex flex-col gap-4">
@@ -23,7 +24,7 @@ function toggleNavbar() {
           Design And Developed By <strong>Tharindu Nimesh</strong>.
         </span>
         <span class="text-gray-600 dark:text-slate-300">
-          &copy; Copyright 2024
+          &copy; Copyright {{ current_year }}
           <strong>ComicCage</strong> Alright Reserved.
         </span>
       </div>

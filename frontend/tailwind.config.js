@@ -8,7 +8,7 @@ export default {
         'primary-dark-transparent': '#17181B77',
         'primary-light': '#F9FAFB',
         'primary-light-transparent': '#F9FAFB77',
-        'secondary-dark': '#0E1013',
+        'secondary-dark': 'rgba(14, 16, 19)',
       }
     },
   },
