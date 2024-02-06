@@ -5,53 +5,43 @@ defineProps({
 
 const nav_items = [
   {
-    path: "/",
+    path: "/app/dashboard",
     icon: "solar:chart-bold",
     name: "Dashboard",
-    is_active: true,
   },
   {
-    path: "/comics",
-    icon: "bx:bxs-book-content",
+    path: "/app/comics",
+    icon: "solar:notebook-bookmark-bold",
     name: "Comics",
-    is_active: false,
   },
   {
-    path: "/categories",
-    icon: "bx:bxs-category",
+    path: "/app/issuers",
+    icon: "simple-icons:dcentertainment",
+    name: "Issuers",
+  },
+  {
+    path: "/app/categories",
+    icon: "solar:widget-add-bold",
     name: "Categories",
-    is_active: false,
   },
   {
-    path: "/authors",
-    icon: "bx:bxs-user",
-    name: "Authors",
-    is_active: false,
-  },
-  {
-    path: "/publishers",
-    icon: "bx:bxs-building-house",
-    name: "Publishers",
-    is_active: false,
-  },
-  {
-    path: "/users",
+    path: "/app/users",
     icon: "bx:bxs-user-account",
     name: "Users",
-    is_active: false,
   },
-  {
-    path: "/settings",
-    icon: "bx:bxs-cog",
-    name: "Settings",
-    is_active: false,
-  }
 ];
+
+function isActive(current_route, item_route) {
+  if (current_route.includes(item_route)) {
+    return true;
+  }
+  return false;
+}
 </script>
 
 <template>
   <div
-    class="w-[280px] absolute lg:relative h-full bg-primary-light dark:bg-primary-dark rounded-r-lg transition-[margin] duration-300"
+    class="w-[280px] absolute lg:relative h-full bg-primary-light dark:bg-primary-dark rounded-r-lg transition-[margin] duration-300 overflow-hidden overflow-y-scroll z-50"
     :class="{
       '-ml-[280px]': !is_open,
       'ml-0': is_open,
@@ -95,7 +85,7 @@ const nav_items = [
           :path="item.path"
           :icon="item.icon"
           :name="item.name"
-          :is_active="item.is_active"
+          :is_active="isActive($route.fullPath, item.path)"
         />
       </div>
     </div>

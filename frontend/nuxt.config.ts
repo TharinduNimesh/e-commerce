@@ -2,6 +2,6 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ["~/assets/css/style.css"],
-  modules: ["@nuxt/ui", "nuxt-icon", 'vue3-carousel-nuxt'],
+  modules: ["@nuxt/ui", "nuxt-icon"],
   ssr: false,
 });

@@ -8,9 +8,13 @@ function toggleNavbar() {
 </script>
 
 <template>
-  <div class="flex w-full h-screen bg-slate-200 dark:bg-secondary-dark">
+  <div
+    class="flex w-full h-screen bg-slate-200 dark:bg-secondary-dark overflow-hidden"
+  >
     <AppNavbar :is_open="is_navbar_open" @toggle-navbar="toggleNavbar" />
-    <div class="flex-1 p-3 flex flex-col justify-between">
+    <div
+      class="w-full lg:w-[calc(100%-280px)] flex-1 p-3 flex flex-col justify-between overflow-y-scroll gap-4"
+    >
       <div class="flex flex-col gap-4">
         <AppHeader @toggle-navbar="toggleNavbar" />
         <div class="w-full">
@@ -24,8 +28,8 @@ function toggleNavbar() {
           Design And Developed By <strong>Tharindu Nimesh</strong>.
         </span>
         <span class="text-gray-600 dark:text-slate-300">
-          &copy; Copyright {{ current_year }}
-          <strong>ComicCage</strong> Alright Reserved.
+          &copy; Copyright {{ current_year }} <strong>ComicCage</strong> Alright
+          Reserved.
         </span>
       </div>
     </div>

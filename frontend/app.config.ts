@@ -32,5 +32,24 @@ export default defineAppConfig({
         },
       },
     },
+    dropdown: {
+      background: "dark:bg-primary-dark",
+      item: {
+        base: "dark:hover:bg-secondary-dark/30",
+      },
+    },
+    table: {
+      th: {
+        base: "whitespace-nowrap",
+      },
+      td: {
+        base: "w-fit"
+      },
+      default: {
+        sortButton: {
+          class: "dark:hover:bg-secondary-dark/30",
+        },
+      },
+    },
   },
 });

@@ -157,7 +157,6 @@ const items = [
               :items="items"
               :ui="{
                 item: { disabled: 'cursor-text select-text' },
-                background: 'bg-white dark:bg-primary-dark',
               }"
               :popper="{ placement: 'bottom-start' }"
             >

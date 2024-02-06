@@ -50,7 +50,7 @@ const items = [
 ];
 
 function toggleTheme() {
-  color.value = color.value === "dark" ? "light" : "dark";
+  color.preference = color.preference === "dark" ? "light" : "dark";
 }
 </script>
 
@@ -103,7 +103,6 @@ function toggleTheme() {
         :items="items"
         :ui="{
           item: { disabled: 'cursor-text select-text' },
-          background: 'bg-white dark:bg-primary-dark',
         }"
         :popper="{ placement: 'bottom-start' }"
       >

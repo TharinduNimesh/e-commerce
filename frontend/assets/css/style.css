@@ -1,30 +1,56 @@
 .text-gradient {
-    @apply bg-gradient-to-r inline-block text-transparent bg-clip-text
+  @apply bg-gradient-to-r inline-block text-transparent bg-clip-text;
 }
 
 .animate-float {
-    animation: float 3s infinite;
+  animation: float 3s infinite;
 }
 
 .main-heading {
-    @apply w-fit relative text-3xl md:text-4xl text-gray-700 dark:text-gray-300 font-bold uppercase;
+  @apply w-fit relative text-3xl md:text-4xl text-gray-700 dark:text-gray-300 font-bold uppercase;
 }
 
 .main-heading::after {
-    @apply block w-2/3 h-1 mt-2 bg-gradient-to-r from-indigo-500 to-green-400  rounded-full;
-    content: "";
+  @apply block w-2/3 h-1 mt-2 bg-gradient-to-r from-indigo-500 to-green-400  rounded-full;
+  content: "";
 }
 
 @keyframes float {
-    0% {
-        transform: translatey(0px);
-    }
+  0% {
+    transform: translatey(0px);
+  }
 
-    50% {
-        transform: translatey(-10px);
-    }
+  50% {
+    transform: translatey(-10px);
+  }
 
-    100% {
-        transform: translatey(0px);
-    }
+  100% {
+    transform: translatey(0px);
+  }
+}
+
+/* scrollbar for firefox */
+* {
+  scrollbar-color: #6300db;
+  scrollbar-width: thin;
+}
+
+/* scrollbar width */
+::-webkit-scrollbar {
+  width: 2px;
+}
+
+/* scrollbar Track */
+::-webkit-scrollbar-track {
+    @apply bg-transparent
+}
+
+/* scrollbar Handle */
+::-webkit-scrollbar-thumb {
+  background: #6300db;
+}
+
+/* scrollbar Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #7300ff;
 }
