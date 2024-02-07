@@ -252,6 +252,7 @@ function updateComicsLayout(list) {
             label="Add New Comic"
             color="black"
             icon="solar:add-circle-bold"
+            to="/app/comics/new"
           />
         </div>
 

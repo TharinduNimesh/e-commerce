@@ -15,6 +15,7 @@ export default defineAppConfig({
     input: {
       default: {
         size: "lg",
+        color: "gray",
       },
       color: {
         gray: {
@@ -25,6 +26,18 @@ export default defineAppConfig({
     select: {
       default: {
         size: "lg",
+        color: "gray",
+      },
+      color: {
+        gray: {
+          outline: "dark:bg-[#2b2a33]",
+        },
+      },
+    },
+    textarea: {
+      default: {
+        size: "lg",
+        color: "gray",
       },
       color: {
         gray: {
@@ -43,7 +56,7 @@ export default defineAppConfig({
         base: "whitespace-nowrap",
       },
       td: {
-        base: "w-fit"
+        base: "w-fit",
       },
       default: {
         sortButton: {
