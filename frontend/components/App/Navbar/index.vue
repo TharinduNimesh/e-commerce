@@ -41,7 +41,7 @@ function isActive(current_route, item_route) {
 
 <template>
   <div
-    class="w-[280px] absolute lg:relative h-full bg-primary-light dark:bg-primary-dark rounded-r-lg transition-[margin] duration-300 overflow-hidden overflow-y-scroll z-50"
+    class="w-[280px] absolute lg:relative h-full bg-primary-light dark:bg-primary-dark rounded-r-lg transition-[margin] duration-300 z-50"
     :class="{
       '-ml-[280px]': !is_open,
       'ml-0': is_open,
@@ -63,7 +63,7 @@ function isActive(current_route, item_route) {
         />
       </div>
     </div>
-    <div class="w-full flex flex-col px-3">
+    <div class="w-full flex flex-col px-3 overflow-y-scroll">
       <div class="flex items-center mt-5 gap-3">
         <img src="/img/logo.png" alt="ComicCage" class="h-16 rounded-full" />
         <div class="flex flex-col">

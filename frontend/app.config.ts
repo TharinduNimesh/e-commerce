@@ -64,5 +64,13 @@ export default defineAppConfig({
         },
       },
     },
+    selectMenu: {
+      background: "dark:bg-[#2b2a33]",
+      input: "dark:bg-[#2b2a33]",
+      option: {
+        color: "dark:bg-[#2b2a33] dark:hover:bg-[#3a3943]",
+        selected: "dark:bg-primary-dark",
+      },
+    },
   },
 });
