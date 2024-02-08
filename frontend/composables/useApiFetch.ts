@@ -1,11 +1,17 @@
 import type { UseFetchOptions } from "#app";
 import { useErrorHandler } from "./useErrorHandler";
 
+type Response = {
+  data: any;
+  pending: boolean;
+  status: string;
+};
+
 export async function useApiFetch<T>(
   path: string | (() => string),
   options: UseFetchOptions<T> = {},
   notify = true
-) {
+): Promise<Response> {
   let headers: any = {
     Accept: "application/vnd.api+json",
     "Content-Type": "application/vnd.api+json",
@@ -40,11 +46,13 @@ export async function useApiFetch<T>(
       return {
         data: null,
         pending: false,
+        status: "error",
       };
     }
     return {
       data: data.value,
       pending: pending.value,
+      status: "success",
     };
   } catch (err) {
     if (notify) {
@@ -53,6 +61,7 @@ export async function useApiFetch<T>(
     return {
       data: null,
       pending: false,
+      status: "error",
     };
   }
 }
