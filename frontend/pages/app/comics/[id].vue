@@ -1,4 +1,5 @@
 <script setup>
+const route = useRoute();
 const desciption = `"Batman: The Dark Knight Returns #1," a seminal comic written by
             Frank Miller and illustrated by Klaus Janson, is a gripping and
             influential entry in the Batman canon. Published in 1986 by DC
@@ -25,6 +26,7 @@ const desciption = `"Batman: The Dark Knight Returns #1," a seminal comic writte
             narrative that explores the psychological and physical toll of a
             lifetime dedicated to justice.`;
 
+const id = route.params.id;
 const offer_percentage = ref(66);
 const product_price = ref(1000);
 const images = ref([
@@ -153,9 +155,7 @@ function calculatePrice() {
                 >
               </div>
               <div class="w-full grid grid-cols-12 gap-3">
-                <div
-                  class="col-span-full md:col-span-6 lg:col-span-7"
-                >
+                <div class="col-span-full md:col-span-6 lg:col-span-7">
                   <UButton
                     color="indigo"
                     block
@@ -163,11 +163,10 @@ function calculatePrice() {
                     class="uppercase"
                     label="View In Shop"
                     icon="solar:eye-outline"
+                    :to="`/comic/${id}`"
                   />
                 </div>
-                <div
-                  class="col-span-full md:col-span-6 lg:col-span-5"
-                >
+                <div class="col-span-full md:col-span-6 lg:col-span-5">
                   <UButton
                     color="orange"
                     block
@@ -175,7 +174,21 @@ function calculatePrice() {
                     class="uppercase"
                     label="Edit This"
                     icon="solar:pen-new-square-outline"
+                    :to="`/app/comics/edit/${id}`"
                   />
+                </div>
+                <div
+                  class="col-span-full italic flex flex-col text-gray-400 dark:text-gray-500 items-end mt-5 gap-2"
+                >
+                  <span>
+                    Issued At : {{ getFormatedDate(new Date("2023-11-30")) }}
+                  </span>
+                  <span>
+                    Published At (ComicCage) : {{ getFormatedDate(new Date("2023-12-01")) }}
+                  </span>
+                  <span>
+                    Last Update : {{ getFormatedDate(new Date("2024-01-04")) }}
+                  </span>
                 </div>
               </div>
             </div>

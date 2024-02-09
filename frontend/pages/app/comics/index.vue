@@ -27,6 +27,10 @@ const columns = [
     sortable: true,
   },
   {
+    key: "status",
+    label: "Status",
+  },
+  {
     key: "created_at",
     label: "Published At",
     sortable: true,
@@ -58,6 +62,7 @@ const items = (row) => [
     {
       label: "Visit in shop",
       icon: "solar:eye-bold",
+      click: () => router.push(`/comic/${row.id}`),
     },
   ],
   [
@@ -80,6 +85,7 @@ const comics = ref([
     issuer: "DC",
     price: 1000,
     buyers: 10,
+    status: "hidden",
     created_at: new Date(),
     updated_at: new Date(),
   },
@@ -116,6 +122,7 @@ const comics = ref([
     issuer: "DC",
     price: 950,
     buyers: 9,
+    status: "removed",
     created_at: new Date(),
     updated_at: new Date(),
   },
@@ -143,6 +150,7 @@ const comics = ref([
     issuer: "DC",
     price: 950,
     buyers: 9,
+    status: "removed",
     created_at: new Date(),
     updated_at: new Date(),
   },
@@ -152,6 +160,7 @@ const comics = ref([
     issuer: "Marvel",
     price: 1000,
     buyers: 10,
+    status: "hidden",
     created_at: new Date(),
     updated_at: new Date(),
   },
@@ -179,6 +188,7 @@ const comics = ref([
     issuer: "Marvel",
     price: 950,
     buyers: 9,
+    status: "removed",
     created_at: new Date(),
     updated_at: new Date(),
   },
@@ -188,6 +198,7 @@ const comics = ref([
     issuer: "DC",
     price: 1000,
     buyers: 10,
+    status: "hidden",
     created_at: new Date(),
     updated_at: new Date(),
   },
@@ -206,6 +217,7 @@ const comics = ref([
     issuer: "DC",
     price: 975,
     buyers: 10,
+    status: "hidden",
     created_at: new Date(),
     updated_at: new Date(),
   },
@@ -231,6 +243,7 @@ function updateComicsLayout(list) {
     issuer: data.issuer.toLowerCase(),
     price: `LKR ${data.price.toLocaleString("en-US")}`,
     profit: `LKR ${(data.price * data.buyers).toLocaleString("en-US")}`,
+    status: data.status ? data.status : "Active",
     created_at: getFormatedDate(new Date(data.created_at)),
     updated_at: getFormatedDate(new Date(data.updated_at)),
   }));
@@ -277,13 +290,35 @@ function updateComicsLayout(list) {
               </div>
             </template>
 
+            <template #status-data="{ row }">
+              <div class="capitalize">
+                <UBadge
+                  v-if="row.status == 'removed'"
+                  color="red"
+                  variant="subtle"
+                >
+                  {{ row.status }}
+                </UBadge>
+                <UBadge
+                  v-else-if="row.status == 'hidden'"
+                  color="yellow"
+                  variant="subtle"
+                >
+                  {{ row.status }}
+                </UBadge>
+                <UBadge v-else color="green" variant="subtle">
+                  {{ row.status }}
+                </UBadge>
+              </div>
+            </template>
+
             <template #buyers-data="{ row }">
               <UBadge v-if="row.buyers < 20" color="red" variant="subtle">
                 {{ row.buyers }} Buyers
               </UBadge>
               <UBadge
                 v-else-if="row.buyers < 50"
-                color="orange"
+                color="yellow"
                 variant="subtle"
               >
                 {{ row.buyers }} Buyers
