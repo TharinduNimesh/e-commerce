@@ -33,7 +33,7 @@ const categories = [
           />
         </div>
         <UDivider class="my-2" />
-        <AppHeading title="Add new comic" />
+        <AppHeading title="Edit This comic" />
         <div class="grid grid-cols-8 gap-3 mt-5">
           <div class="col-span-full md:col-span-5">
             <UFormGroup label="Name" required>
