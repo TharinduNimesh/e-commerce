@@ -99,15 +99,21 @@ const categories = [
               </div>
             </div>
           </div>
-          <div class="col-span-full flex justify-end gap-3">
-            <UButton color="gray" variant="solid" label="Clear" />
+          <div class="col-span-full flex justify-center md:justify-end gap-3">
+            <UButton color="gray" variant="solid" label="Discard" />
             <UButton
               color="black"
               variant="solid"
-              label="Submit"
+              label="Save Changes"
               icon="ic:round-send"
               trailing
             />
+          </div>
+          <div
+            class="col-span-full italic flex flex-col text-gray-400 dark:text-gray-500 items-end mt-5 gap-2"
+          >
+            <span> Created At : {{ getFormatedDate(new Date('2023-12-01')) }} </span>
+            <span> Last Update : {{ getFormatedDate(new Date('2024-01-04')) }} </span>
           </div>
         </div>
       </div>

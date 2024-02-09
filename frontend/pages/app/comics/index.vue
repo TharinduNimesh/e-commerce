@@ -51,7 +51,7 @@ const items = (row) => [
     {
       label: "Edit",
       icon: "i-heroicons-pencil-square-20-solid",
-      click: () => router.push(`/app/comics/${row.id}`),
+      click: () => router.push(`/app/comics/edit/${row.id}`),
     },
   ],
   [
