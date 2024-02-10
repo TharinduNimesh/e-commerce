@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\RegisterUserRequest;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\UpdatePasswordRequest;
 use App\Http\Requests\Auth\VerifyRequest;
+use App\Http\Requests\ChangePasswordRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -71,6 +72,32 @@ class AuthController extends Controller
                 "error" => $e->getMessage()
             ], 500);
         }
+    }
+
+
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        $request->validated();
+
+        $user = $request->user();
+
+        // check if current password is valid
+        $is_password_valid = Hash::check($request->current_password, $user->password);
+        if (!$is_password_valid) {
+            return response()->json([
+                'message' => 'Invalid current password.',
+            ], 401);
+        }
+
+        // update password
+        $user->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        return response()->json([
+            'message' => 'Password changed successfully.',
+            'user' => $user,
+        ]);
     }
 
     public function forgotPassword(ForgotPasswordRequest $request)

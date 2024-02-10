@@ -27,7 +27,7 @@ export async function useApiFetch<T>(
 
   try {
     const { data, error, pending } = await useFetch(
-      "http://api.eshop.viva" + path,
+      "http://localhost:8000" + path,
       {
         credentials: "include",
         watch: false,

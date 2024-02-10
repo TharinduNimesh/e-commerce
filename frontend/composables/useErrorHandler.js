@@ -4,19 +4,19 @@ export const useErrorHandler = (errors) => {
         if (errors.length > 0) {
             errors = errors[0];
             if (Array.isArray(errors)) {
-                useNotifications().value.notifications.push({
+                useNotifications().value.push({
                     type: 'error',
                     message: errors[0]
                 });
             } else {
-                useNotifications().value.notifications.push({
+                useNotifications().value.push({
                     type: 'error',
                     message: errors
                 });
             }
         }
     } else {
-        useNotifications().value.notifications.push({
+        useNotifications().value.push({
             type: 'error',
             message: errors
         });

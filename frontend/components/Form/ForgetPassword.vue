@@ -19,7 +19,7 @@ const new_password = ref({
 async function sendOtp() {
   // if loading, return
   if (is_loading.value) {
-    useNotifications().value.notifications.push({
+    useNotifications().value.push({
       message: "A request is already in progress",
       title: "Please wait",
       type: "warning",
@@ -35,7 +35,7 @@ async function sendOtp() {
     },
   });
   if (data) {
-    useNotifications().value.notifications.push({
+    useNotifications().value.push({
       message: data.message,
       title: "Check your Inbox",
     });
@@ -50,7 +50,7 @@ async function sendOtp() {
 async function verify() {
   // if loading, return
   if (is_loading.value) {
-    useNotifications().value.notifications.push({
+    useNotifications().value.push({
       message: "A request is already in progress",
       title: "Please wait",
       type: "warning",
@@ -67,7 +67,7 @@ async function verify() {
     },
   });
   if (data) {
-    useNotifications().value.notifications.push({
+    useNotifications().value.push({
       message: data.message,
       title: "Congratulations 🎉",
     });
@@ -80,7 +80,7 @@ async function verify() {
 async function updatePassword() {
   // if loading, return
   if (is_loading.value) {
-    useNotifications().value.notifications.push({
+    useNotifications().value.push({
       message: "A request is already in progress",
       title: "Please wait",
       type: "warning",
@@ -92,7 +92,7 @@ async function updatePassword() {
   if (
     new_password.value.password !== new_password.value.password_confirmation
   ) {
-    useNotifications().value.notifications.push({
+    useNotifications().value.push({
       message: "Password and confirm password does not match",
       title: "Try Again",
       type: "warning",
@@ -103,7 +103,7 @@ async function updatePassword() {
   is_loading.value = true;
   // send request to server
   const { data } = await useApiFetch("/api/update-password", {
-    method: "POST",
+    method: "PUT",
     body: {
       email: prev_email,
       otp: otp.value,
@@ -113,7 +113,7 @@ async function updatePassword() {
   });
 
   if (data) {
-    useNotifications().value.notifications.push({
+    useNotifications().value.push({
       message: data.message,
       title: "Congratulations 🎉",
     });

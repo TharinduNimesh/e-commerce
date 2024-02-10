@@ -32,7 +32,7 @@ async function register() {
     body: form.value,
   });
   if (data) {
-    useNotifications().value.notifications.push({
+    useNotifications().value.push({
       type: "success",
       title: "Congratulations 🎉",
       message: "You have successfully registered.",

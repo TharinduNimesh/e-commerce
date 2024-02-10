@@ -1,9 +1,26 @@
 <script setup>
 const form = ref({
   current_password: "",
-  new_password: "",
-  confirm_new_password: "",
+  password: "",
+  password_confirmation: "",
 });
+
+async function changePassword() {
+  console.log("updating password")
+  const { data } = await useApiFetch('/api/change-password', {
+    method: 'PUT',
+    body: form.value,
+  });
+
+  if (data) {
+    useNotifications().value.push({
+      title: 'Password Updated',
+      message: 'Your password has been updated successfully!',
+      type: 'success',
+    });
+    useFormReset(form.value);
+  }
+}
 </script>
 
 <template>
@@ -72,7 +89,7 @@ const form = ref({
               <UFormGroup label="New Password">
                 <UInput
                   color="gray"
-                  v-model="form.new_password"
+                  v-model="form.password"
                   placeholder="Enter Your New Password"
                   type="password"
                 />
@@ -80,7 +97,7 @@ const form = ref({
               <UFormGroup label="Confirm New Password">
                 <UInput
                   color="gray"
-                  v-model="form.confirm_new_password"
+                  v-model="form.password_confirmation"
                   placeholder="Confirm Your New Password"
                   type="password"
                 />
@@ -91,6 +108,7 @@ const form = ref({
                   variant="solid"
                   color="primary"
                   icon="solar:pen-new-square-line-duotone"
+                  @click="changePassword"
                 >
                   Update Password
                 </UButton>

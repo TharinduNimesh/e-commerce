@@ -1,6 +1,6 @@
 <script setup>
 const color = useColorMode();
-const notifications = ref(useNotifications().value.notifications);
+const notifications = useNotifications().value;
 
 onMounted(() => {
   window.addEventListener("keyup", (event) => {
@@ -20,8 +20,8 @@ function keyHandler(event) {
 
 function removeExpiredNotification() {
   const container = document.querySelector("#notifications");
-  const notifications = container.querySelectorAll(".toast");
-  notifications.forEach((notification) => {
+  const notificationList = container.querySelectorAll(".toast");
+  notificationList.forEach((notification) => {
     if (new Date(notification.dataset.createdAt) < Date.now() - 5000) {
       notification.remove();
     }

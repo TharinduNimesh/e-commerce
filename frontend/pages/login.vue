@@ -31,7 +31,7 @@ async function login() {
   });
   if (data) {
     // if valid show notification
-    useNotifications().value.notifications.push({
+    useNotifications().value.push({
       message: "Login successful",
     });
 

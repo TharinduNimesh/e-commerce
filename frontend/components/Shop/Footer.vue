@@ -68,7 +68,7 @@ async function subscribe() {
   if (is_loading.value) return;
   is_loading.value = true;
   if (email.value === "") {
-    useNotifications().value.notifications.push({
+    useNotifications().value.push({
       title: "Error",
       message: "Please enter your email address",
       type: "error",
@@ -85,7 +85,7 @@ async function subscribe() {
   });
 
   if (data) {
-    useNotifications().value.notifications.push({
+    useNotifications().value.push({
       title: "Congratulations 🎉",
       message: "You have successfully subscribed to our newsletter",
     });

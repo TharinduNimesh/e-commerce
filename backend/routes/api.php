@@ -31,7 +31,13 @@ Route::middleware('throttle:auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
     Route::post('/verify', [AuthController::class, 'verify']);
-    Route::post('/update-password', [AuthController::class, 'UpdatePassword']);
+    Route::put('/update-password', [AuthController::class, 'UpdatePassword']);
+});
+
+
+// global auth middleware
+Route::middleware('auth:sanctum')->group(function() {
+    Route::put('/change-password', [AuthController::class, 'changePassword']);
 });
 
 // temporary route for testing
