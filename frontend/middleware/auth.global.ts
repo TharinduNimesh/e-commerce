@@ -11,6 +11,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     but user has access to shop, and /login /register pages
   */
   if (!to.path.includes("/app")) return;
-  console.log("redirect to login")
+
   return navigateTo("/login");
 });
