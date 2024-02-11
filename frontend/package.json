@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@nuxt/ui": "^2.11.1",
+    "@pinia/nuxt": "^0.5.1",
     "@tiptap/extension-blockquote": "^2.2.2",
     "@tiptap/extension-horizontal-rule": "^2.2.2",
     "@tiptap/extension-text-align": "^2.2.2",
@@ -26,6 +27,7 @@
     "@tiptap/pm": "^2.2.2",
     "@tiptap/starter-kit": "^2.2.2",
     "@tiptap/vue-3": "^2.2.2",
-    "crypto-js": "^4.2.0"
+    "crypto-js": "^4.2.0",
+    "pinia": "^2.1.7"
   }
 }

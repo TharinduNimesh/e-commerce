@@ -1,5 +1,4 @@
 <script setup>
-// const user = await useAuth();
 const editable = ref(false);
 const display_form = ref({
   first_name: "Tharindu",

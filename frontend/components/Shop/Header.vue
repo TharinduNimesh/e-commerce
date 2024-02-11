@@ -1,8 +1,8 @@
 <script setup>
 const color = useColorMode().preference;
 const is_dark = ref(color === "dark");
-const is_auth = ref(true);
 const router = useRouter();
+const auth_store = useAuthStore();
 
 // watch for color mode changes
 watch(
@@ -82,10 +82,11 @@ const items = [
     {
       label: "Sign out",
       icon: "i-heroicons-arrow-left-on-rectangle",
-      click: () => (is_auth.value = false),
+      click: auth_store.logout,
     },
   ],
 ];
+
 </script>
 
 <template>
@@ -152,7 +153,7 @@ const items = [
               class="text-lg dark:text-gray-400"
             />
           </div>
-          <div v-if="is_auth" class="flex gap-2">
+          <div v-if="auth_store.isLoggedIn" class="flex gap-2">
             <UDropdown
               :items="items"
               :ui="{

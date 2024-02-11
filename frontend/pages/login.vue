@@ -36,7 +36,6 @@ async function login() {
     });
 
     // set user and token
-    useAuth().value = data.user;
     localStorage.setItem("auth-token", `Bearer ${data.token}`);
 
     // if remember me is checked

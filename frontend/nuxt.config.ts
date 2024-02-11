@@ -2,6 +2,12 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ["~/assets/css/style.css"],
-  modules: ["@nuxt/ui", "nuxt-icon"],
+  modules: ["@nuxt/ui", "nuxt-icon", "@pinia/nuxt"],
   ssr: false,
+  pinia: {
+    storesDirs: ["./stores/**"],
+  },
+  imports: {
+    dirs: ["stores"]
+  }
 });

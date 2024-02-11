@@ -72,5 +72,11 @@ export default defineAppConfig({
         selected: "dark:bg-primary-dark",
       },
     },
+    slideover: {
+      overlay: {
+        background: "dark:bg-primary-dark/60",
+      },
+      background: "dark:bg-primary-dark",
+    }
   },
 });
