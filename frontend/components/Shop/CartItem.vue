@@ -13,7 +13,7 @@ const props = defineProps({
     default: 0,
   },
   name: String,
-  issuer: String,
+  publisher: String,
   image: String,
   rating: String,
   buyers: String,
@@ -62,7 +62,7 @@ function calculatePrice(price, offer) {
         <span
           class="text-sm font-semibold uppercase text-gray-400 dark:text-slate-400"
         >
-          {{ issuer }}
+          {{ publisher }}
         </span>
       </div>
       <div class="flex justify-center">

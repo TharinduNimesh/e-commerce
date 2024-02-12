@@ -15,9 +15,9 @@ const nav_items = [
     name: "Comics",
   },
   {
-    path: "/app/issuers",
+    path: "/app/publishers",
     icon: "simple-icons:dcentertainment",
-    name: "Issuers",
+    name: "Publishers",
   },
   {
     path: "/app/categories",

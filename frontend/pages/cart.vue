@@ -20,7 +20,7 @@
                 :key="item"
                 :id="1"
                 name="Batman Gotham Knight #1"
-                issuer="DC Comics"
+                publisher="DC Comics"
                 image="batman-comic.png"
                 rating="8.5"
                 favourite="2"

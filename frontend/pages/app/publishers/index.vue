@@ -3,8 +3,9 @@ onMounted(() => {
   formatIssuers();
 });
 
+const router = useRouter();
 const is_add_issuer_open = ref(false);
-const issuers = ref([]);
+const publishers = ref([]);
 
 const columns = [
   {
@@ -13,8 +14,8 @@ const columns = [
     sortable: true,
   },
   {
-    label: "Issues",
-    key: "issues",
+    label: "publishes",
+    key: "publishes",
     sortable: true,
   },
   {
@@ -40,102 +41,96 @@ const columns = [
 
 const data_issuers = ref([
   {
+    id: 1,
     name: "DC Comics",
-    issuer: "dc",
+    publisher: "dc",
     last_comic: "Batman: The Long Halloween #6",
     last_issued_at: new Date(),
-    issues: 20,
+    publishes: 20,
     buyers: 50,
   },
   {
+    id: 1,
     name: "Marvel Comics",
-    issuer: "marvel",
+    publisher: "marvel",
     last_comic: "The Amazing Spider #3",
     last_issued_at: new Date(),
-    issues: 30,
+    publishes: 30,
     buyers: 100,
   },
   {
+    id: 1,
     name: "Image Comics",
-    issuer: "image",
+    publisher: "image",
     last_comic: "Spawn #1",
     last_issued_at: new Date(),
-    issues: 10,
+    publishes: 10,
     buyers: 10,
   },
   {
+    id: 1,
     name: "Dark Horse Comics",
-    issuer: "dark-horse",
+    publisher: "dark-horse",
     last_comic: "Hellboy: The Corpse",
     last_issued_at: new Date(),
-    issues: 15,
+    publishes: 15,
     buyers: 20,
   },
   {
+    id: 1,
     name: "IDW Publishing",
-    issuer: "idw",
+    publisher: "idw",
     last_comic: "Teenage Mutant Ninja Turtles #1",
     last_issued_at: new Date(),
-    issues: 5,
+    publishes: 5,
     buyers: 5,
   },
   {
+    id: 1,
     name: "Boom! Studios",
-    issuer: "boom",
+    publisher: "boom",
     last_comic: "Mighty Morphin Power Rangers #1",
     last_issued_at: new Date(),
-    issues: 25,
+    publishes: 25,
     buyers: 30,
   },
   {
+    id: 1,
     name: "Dynamite Entertainment",
-    issuer: "dynamite",
+    publisher: "dynamite",
     last_comic: "The Boys #6",
     last_issued_at: new Date(),
-    issues: 35,
+    publishes: 35,
     buyers: 40,
   },
   {
+    id: 1,
     name: "Valiant Comics",
-    issuer: "valiant",
+    publisher: "valiant",
     last_comic: "X-O Manowar #1",
     last_issued_at: new Date(),
-    issues: 40,
+    publishes: 40,
     buyers: 60,
   },
   {
+    id: 1,
     name: "Archie Comics",
-    issuer: "archie",
+    publisher: "archie",
     last_comic: "Archie #1",
     last_issued_at: new Date(),
-    issues: 45,
+    publishes: 45,
     buyers: 70,
   },
   {
+    id: 1,
     name: "Aftershock Comics",
-    issuer: "aftershock",
+    publisher: "aftershock",
     last_comic: "Animosity #1",
     last_issued_at: new Date(),
-    issues: 50,
+    publishes: 50,
     buyers: 80,
   },
 ]);
-const items = (row) => [
-  [
-    {
-      label: "Information",
-      icon: "solar:database-bold",
-      click: () => router.push(`/app/comics/${row.id}`),
-    },
-  ],
-  [
-    {
-      label: "Edit",
-      icon: "i-heroicons-pencil-square-20-solid",
-      click: () => router.push(`/app/comics/edit/${row.id}`),
-    },
-  ],
-];
 
 watch(data_issuers, (new_value) => {
   formatIssuers();
@@ -145,16 +140,16 @@ const page = ref(1);
 const pageCount = 5;
 
 const rows = computed(() => {
-  return issuers.value.slice(
+  return publishers.value.slice(
     (page.value - 1) * pageCount,
     page.value * pageCount
   );
 });
 
 function formatIssuers() {
-  issuers.value = data_issuers.value.map((issuer) => ({
-    ...issuer,
-    last_issued_at: getFormatedDate(new Date(issuer.last_issued_at)),
+  publishers.value = data_issuers.value.map((publisher) => ({
+    ...publisher,
+    last_issued_at: getFormatedDate(new Date(publisher.last_issued_at)),
   }));
 }
 </script>
@@ -168,10 +163,10 @@ function formatIssuers() {
         <div
           class="flex flex-col lg:flex-row items-center lg:items-start justify-between"
         >
-          <AppHeading title="Comic Issuers" />
+          <AppHeading title="Comic publishers" />
 
           <UButton
-            label="Add An Issuer"
+            label="Add An publisher"
             color="black"
             icon="solar:add-circle-bold"
             @click="is_add_issuer_open = true"
@@ -192,8 +187,8 @@ function formatIssuers() {
               </div>
             </template>
 
-            <template #issues-data="{ row }">
-                {{ row.issues }} Issues
+            <template #publishes-data="{ row }">
+              {{ row.publishes }} publishes
             </template>
 
             <template #buyers-data="{ row }">
@@ -213,14 +208,13 @@ function formatIssuers() {
             </template>
 
             <template #action-data="{ row }">
-              <UDropdown :items="items(row)">
-                <UButton
-                  color="gray"
-                  variant="ghost"
-                  icon="i-heroicons-ellipsis-horizontal-20-solid"
-                  class="dark:hover:bg-secondary-dark/30"
-                />
-              </UDropdown>
+              <UButton
+                color="black"
+                variant="ghost"
+                icon="solar:eye-outline"
+                class="mr-2"
+                :to="`/app/publishers/${row.publisher}`"
+              />
             </template>
             <!-- custom column end -->
           </UTable>
@@ -231,12 +225,12 @@ function formatIssuers() {
             <UPagination
               v-model="page"
               :page-count="pageCount"
-              :total="issuers.length"
+              :total="publishers.length"
             />
           </div>
         </div>
 
-        <!-- Add New Issuer SideOver Start -->
+        <!-- Add New publisher SideOver Start -->
         <USlideover v-model="is_add_issuer_open">
           <UCard
             class="flex flex-col flex-1 p-5 overflow-y-scroll"
@@ -248,7 +242,7 @@ function formatIssuers() {
           >
             <template #header>
               <div class="flex">
-                <h3 class="text-lg font-semibold">Add An Issuer</h3>
+                <h3 class="text-lg font-semibold">Add An publisher</h3>
                 <UButton
                   color="black"
                   icon="solar:close-circle-bold"
@@ -261,7 +255,7 @@ function formatIssuers() {
 
             <div class="my-3 flex flex-col gap-3">
               <UFormGroup label="Name" required>
-                <UInput placeholder="Enter the name of the issuer" />
+                <UInput placeholder="Enter the name of the publisher" />
               </UFormGroup>
               <UFormGroup label="Logo" required>
                 <FileUploader />
@@ -281,7 +275,7 @@ function formatIssuers() {
             </template>
           </UCard>
         </USlideover>
-        <!-- Add New Issuer SideOver End -->
+        <!-- Add New publisher SideOver End -->
       </div>
     </NuxtLayout>
   </div>

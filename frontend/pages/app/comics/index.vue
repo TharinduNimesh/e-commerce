@@ -82,7 +82,7 @@ const comics = ref([
   {
     id: 1,
     name: "Batman The Gotham Knight #1",
-    issuer: "DC",
+    publisher: "DC",
     price: 1000,
     buyers: 10,
     status: "hidden",
@@ -92,7 +92,7 @@ const comics = ref([
   {
     id: 2,
     name: "Spider-Man: The Amazing Adventures #1",
-    issuer: "Marvel",
+    publisher: "Marvel",
     price: 1200,
     buyers: 150,
     created_at: new Date(),
@@ -101,7 +101,7 @@ const comics = ref([
   {
     id: 3,
     name: "Superman: Man of Steel #1",
-    issuer: "DC",
+    publisher: "DC",
     price: 900,
     buyers: 30,
     created_at: new Date(),
@@ -110,7 +110,7 @@ const comics = ref([
   {
     id: 4,
     name: "X-Men: The Uncanny #1",
-    issuer: "Marvel",
+    publisher: "Marvel",
     price: 1100,
     buyers: 132,
     created_at: new Date(),
@@ -119,7 +119,7 @@ const comics = ref([
   {
     id: 5,
     name: "Wonder Woman: The Amazon Princess #1",
-    issuer: "DC",
+    publisher: "DC",
     price: 950,
     buyers: 9,
     status: "removed",
@@ -129,7 +129,7 @@ const comics = ref([
   {
     id: 6,
     name: "The Flash: Speed Force #1",
-    issuer: "DC",
+    publisher: "DC",
     price: 1050,
     buyers: 11,
     created_at: new Date(),
@@ -138,7 +138,7 @@ const comics = ref([
   {
     id: 7,
     name: "Iron Man: Armored Avenger #1",
-    issuer: "Marvel",
+    publisher: "Marvel",
     price: 1150,
     buyers: 13,
     created_at: new Date(),
@@ -147,7 +147,7 @@ const comics = ref([
   {
     id: 8,
     name: "Aquaman: King of the Seas #1",
-    issuer: "DC",
+    publisher: "DC",
     price: 950,
     buyers: 9,
     status: "removed",
@@ -157,7 +157,7 @@ const comics = ref([
   {
     id: 9,
     name: "Captain America: The Sentinel of Liberty #1",
-    issuer: "Marvel",
+    publisher: "Marvel",
     price: 1000,
     buyers: 10,
     status: "hidden",
@@ -167,7 +167,7 @@ const comics = ref([
   {
     id: 10,
     name: "Green Lantern: Emerald Guardian #1",
-    issuer: "DC",
+    publisher: "DC",
     price: 1100,
     buyers: 12,
     created_at: new Date(),
@@ -176,7 +176,7 @@ const comics = ref([
   {
     id: 11,
     name: "Thor: God of Thunder #1",
-    issuer: "Marvel",
+    publisher: "Marvel",
     price: 1250,
     buyers: 14,
     created_at: new Date(),
@@ -185,7 +185,7 @@ const comics = ref([
   {
     id: 12,
     name: "Black Widow: Deadly Origin #1",
-    issuer: "Marvel",
+    publisher: "Marvel",
     price: 950,
     buyers: 9,
     status: "removed",
@@ -195,7 +195,7 @@ const comics = ref([
   {
     id: 13,
     name: "Green Arrow: The Emerald Archer #1",
-    issuer: "DC",
+    publisher: "DC",
     price: 1000,
     buyers: 10,
     status: "hidden",
@@ -205,7 +205,7 @@ const comics = ref([
   {
     id: 14,
     name: "The Incredible Hulk: Smash #1",
-    issuer: "Marvel",
+    publisher: "Marvel",
     price: 1050,
     buyers: 11,
     created_at: new Date(),
@@ -214,7 +214,7 @@ const comics = ref([
   {
     id: 15,
     name: "Catwoman: The Feline Fatale #1",
-    issuer: "DC",
+    publisher: "DC",
     price: 975,
     buyers: 10,
     status: "hidden",
@@ -240,7 +240,7 @@ watch(comics, (new_value) => {
 function updateComicsLayout(list) {
   return list.map((data) => ({
     ...data,
-    issuer: data.issuer.toLowerCase(),
+    publisher: data.publisher.toLowerCase(),
     price: `LKR ${data.price.toLocaleString("en-US")}`,
     profit: `LKR ${(data.price * data.buyers).toLocaleString("en-US")}`,
     status: data.status ? data.status : "Active",
@@ -277,14 +277,14 @@ function updateComicsLayout(list) {
                 <img
                   class="h-8"
                   :src="`/img/comics/batman-comic.png`"
-                  :alt="row.issuer"
+                  :alt="row.publisher"
                 />
                 <div class="flex flex-col">
                   <h5 class="text-md">
                     {{ row.name }}
                   </h5>
                   <span class="text-xs font-semibold uppercase">
-                    {{ row.issuer }}
+                    {{ row.publisher }}
                   </span>
                 </div>
               </div>
