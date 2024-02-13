@@ -107,7 +107,7 @@ function calculatePrice(price, offer) {
         <UButton color="red" icon="material-symbols:delete-sharp" />
         <div class="flex-1">
           <UButton
-            label="Visit Project"
+            label="Visit Product"
             icon="material-symbols:shopping-cart-rounded"
             block
           />

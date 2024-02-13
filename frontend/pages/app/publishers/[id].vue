@@ -34,9 +34,11 @@
               <h1 class="text-2xl font-bold hidden md:block">DC Comics</h1>
               <div class="flex justify-between w-full md:w-3/4">
                 <div class="flex flex-col gap-1">
-                  <div class="flex items-center gap-3 text-gray-700 dark:text-gray-200">
+                  <div
+                    class="flex items-center gap-3 text-gray-700 dark:text-gray-200"
+                  >
                     <Icon class="text-xl" name="solar:crown-bold" />
-                    <span class="text-sm font-bold uppercase">Rank</span>
+                    <span class="text-sm font-bold uppercase hidden sm:block">Rank</span>
                   </div>
                   <span class="font-semibold text-gray-500 dark:text-slate-400">
                     1
@@ -44,12 +46,14 @@
                 </div>
 
                 <div class="flex flex-col gap-1">
-                  <div class="flex items-center gap-3 text-gray-700 dark:text-gray-200">
+                  <div
+                    class="flex items-center gap-3 text-gray-700 dark:text-gray-200"
+                  >
                     <Icon
                       class="text-xl"
                       name="solar:book-bookmark-minimalistic-bold"
                     />
-                    <span class="text-sm font-bold uppercase">
+                    <span class="text-sm font-bold uppercase hidden sm:block">
                       Total publishes
                     </span>
                   </div>
@@ -59,9 +63,11 @@
                 </div>
 
                 <div class="flex flex-col gap-1">
-                  <div class="flex items-center gap-3 text-gray-700 dark:text-gray-200">
+                  <div
+                    class="flex items-center gap-3 text-gray-700 dark:text-gray-200"
+                  >
                     <Icon class="text-xl" name="solar:user-bold" />
-                    <span class="text-sm font-bold uppercase">
+                    <span class="text-sm font-bold uppercase hidden sm:block">
                       Total Buyers
                     </span>
                   </div>
@@ -77,6 +83,19 @@
         <UDivider class="my-3" />
 
         <AppHeading title="Most Popular Comics" class="mb-3" />
+        <div class="w-full grid lg:grid-cols-2 gap-5">
+          <AppComicCard
+            v-for="comic in 4"
+            :key="comic"
+            name="Batman Gotham Knight #1"
+            image="batman-comic.png"
+            rating="8.5"
+            favourite="2"
+            product_price="1000"
+            offer_percentage="66"
+            buyers="10"
+          />
+        </div>
       </div>
     </NuxtLayout>
   </div>
