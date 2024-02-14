@@ -46,41 +46,32 @@ useHead({
                 <div
                   class="col-span-full sm:col-span-1 md:col-span-full lg:col-span-1"
                 >
-                  <PrimaryInput
-                    type="text"
-                    placeholder="Enter Your First Name"
-                    class="w-full"
-                    label="first name"
-                  />
+                  <UFormGroup label="First Name" required>
+                    <UInput type="text" placeholder="Enter Your First Name" />
+                  </UFormGroup>
                 </div>
                 <div
                   class="col-span-full sm:col-span-1 md:col-span-full lg:col-span-1"
                 >
-                  <PrimaryInput
-                    type="text"
-                    placeholder="Enter Your Last Name"
-                    class="w-full"
-                    label="Last name"
-                  />
+                  <UFormGroup label="Last Name" required>
+                    <UInput type="text" placeholder="Enter Your Last Name" />
+                  </UFormGroup>
                 </div>
               </div>
-              <PrimaryInput
-                type="email"
-                placeholder="Enter Your Email Address"
-                class="w-full"
-                label="Email Address"
-              />
-              <PrimaryInput
-                type="text"
-                placeholder="Enter The Subject"
-                class="w-full"
-                label="Subject"
-              />
-              <PrimaryTextArea
-                placeholder="Message..."
-                class="w-full"
-                label="Message"
-              />
+              <UFormGroup label="Email Address" required>
+                <UInput type="email" placeholder="Enter Your Email Address" />
+              </UFormGroup>
+
+              <UFormGroup label="Subject" required>
+                <UInput type="text" placeholder="Enter The Subject" />
+              </UFormGroup>
+
+              <UFormGroup label="Message" required>
+                <UTextarea placeholder="Message..." />
+              </UFormGroup>
+              <div class="flex">
+                <UButton label="Send Message" block />
+              </div>
             </form>
           </div>
         </div>

@@ -5,7 +5,6 @@ onMounted(() => {
 });
 
 const styles = computed(() => {
-  console.log(mainHeight.value);
   if (mainHeight.value < 2000) {
     return "bg-cover";
   }

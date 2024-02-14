@@ -35,9 +35,6 @@ async function login() {
       message: "Login successful",
     });
 
-    // set user and token
-    localStorage.setItem("auth-token", `Bearer ${data.token}`);
-
     // if remember me is checked
     if (form.value.remember_me) {
       const password = Crypto.encrypt(form.value.password);
@@ -65,40 +62,50 @@ async function login() {
           <h2 class="text-2xl uppercase font-bold">WELCOME BACK</h2>
         </div>
         <div class="w-full px-10 mt-5 flex flex-col gap-7">
-          <PrimaryInput
-            label="Email"
-            placeholder="Enter your email"
-            type="email"
-            v-model="form.email"
-          />
-          <div class="flex flex-col">
-            <PrimaryInput
+          <UFormGroup label="Email Address">
+            <UInput
+              placeholder="Enter your email"
+              type="email"
+              v-model="form.email"
+            />
+          </UFormGroup>
+
+          <UFormGroup label="Email Address">
+            <template #hint>
+              <ULink
+                @click="forget_password_opened = true"
+                class="text-sm text-blue-600 dark:text-blue-500"
+              >
+                Forgot Password ?
+              </ULink>
+            </template>
+
+            <template #help>
+              <UCheckbox v-model="form.remember_me" label="Remember Me" />
+            </template>
+            <UInput
               label="Password"
               placeholder="••••••••••••"
               type="password"
               v-model="form.password"
             />
-            <div class="w-full flex justify-between items-center mt-2">
-              <UCheckbox v-model="form.remember_me" label="Remember Me" />
-              <PrimaryLink
-                @onclick="forget_password_opened = true"
-                text="Forgot Password ?"
-              />
-            </div>
-          </div>
+          </UFormGroup>
         </div>
         <div class="w-full flex flex-col items-center px-10 mt-5">
-          <PrimaryButton
-            text="Sign In"
-            @onclick="login"
-            :is-loading="loading"
-          />
+          <UButton label="Sign In" @click="login" :loading="loading" block />
           <div class="w-full flex justify-center items-center mt-5">
-            <PrimaryLink to="/register" text="Don't have an account ?" />
+            <ULink
+              to="/register"
+              class="text-sm text-blue-600 dark:text-blue-500"
+            >
+              Don't have an account ?
+            </ULink>
           </div>
         </div>
         <div class="w-full flex justify-center items-center mt-10">
-          <PrimaryLink to="/" text="Return Back To Home." />
+          <ULink to="/" class="text-sm text-blue-600 dark:text-blue-500">
+            Return Back To Home.
+          </ULink>
         </div>
       </div>
       <div class="hidden lg:flex lg:w-1/2 rounded flex-col justify-center py-3">

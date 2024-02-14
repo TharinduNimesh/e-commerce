@@ -8,6 +8,7 @@ export default defineAppConfig({
     button: {
       default: {
         size: "md",
+        loadingIcon: "mingcute:loading-3-fill",
       },
       base: "uppercase text-xs font-bold",
       font: "",
@@ -77,6 +78,6 @@ export default defineAppConfig({
         background: "dark:bg-primary-dark/60",
       },
       background: "dark:bg-primary-dark",
-    }
+    },
   },
 });

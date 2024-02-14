@@ -6,7 +6,6 @@ const form = ref({
 });
 
 async function changePassword() {
-  console.log("updating password")
   const { data } = await useApiFetch('/api/change-password', {
     method: 'PUT',
     body: form.value,

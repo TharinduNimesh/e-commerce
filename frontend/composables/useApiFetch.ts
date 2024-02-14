@@ -22,7 +22,6 @@ export async function useApiFetch<T>(
 
   if (token.value) {
     headers["X-XSRF-TOKEN"] = token.value as string;
-    headers["Authorization"] = auth_token ? auth_token : "";
   }
 
   try {

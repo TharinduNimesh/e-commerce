@@ -80,68 +80,65 @@ async function register() {
         </div>
         <div class="w-full px-10 mt-5 flex flex-col gap-5">
           <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-2">
-            <div>
-              <PrimaryInput
-                label="First Name"
+            <UFormGroup label="First Name" required>
+              <UInput
                 placeholder="Enter your First Name"
                 type="text"
                 v-model="form.first_name"
               />
-            </div>
-            <div>
-              <PrimaryInput
-                label="Last Name"
+            </UFormGroup>
+            <UFormGroup label="Last Name" required>
+              <UInput
                 placeholder="Enter your Last Name"
                 type="text"
                 v-model="form.last_name"
               />
-            </div>
+            </UFormGroup>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-            <div class="col-span-2">
-              <PrimaryInput
-                label="Mobile"
+            <UFormGroup label="Mobile" class="col-span-2" required>
+              <UInput
                 placeholder="Enter your mobile number"
                 type="text"
                 v-model="form.mobile"
               />
-            </div>
-            <div>
-              <PrimarySelect
-                label="Gender"
+            </UFormGroup>
+            <UFormGroup label="Gender" required>
+              <USelect
                 placeholder="Choose"
                 :options="genders"
                 v-model="form.gender"
               />
-            </div>
+            </UFormGroup>
           </div>
-          <PrimaryInput
-            label="Email"
-            placeholder="Enter your email"
-            type="email"
-            v-model="form.email"
-          />
-          <div class="flex flex-col">
-            <PrimaryInput
-              label="Password"
+          <UFormGroup label="Email" required>
+            <UInput
+              placeholder="Enter your email"
+              type="email"
+              v-model="form.email"
+            />
+          </UFormGroup>
+
+          <UFormGroup label="Password" class="flex flex-col" required>
+            <UInput
               placeholder="••••••••••••"
               type="password"
               v-model="form.password"
             />
-          </div>
+          </UFormGroup>
         </div>
         <div class="w-full flex flex-col items-center px-10 mt-5">
-          <PrimaryButton
-            text="Sign Up"
-            @onclick="register"
-            :is-loading="loading"
-          />
+          <UButton label="Sign Up" @click="register" :loading="loading" block />
           <div class="w-full flex justify-center items-center mt-5">
-            <PrimaryLink to="/login" text="Already Have An Account ?" />
+            <ULink to="/login" class="text-sm text-blue-600 dark:text-blue-500">
+              Already Have An Account ?
+            </ULink>
           </div>
         </div>
         <div class="w-full flex justify-center items-center mt-5">
-          <PrimaryLink to="/" text="Return Back To Home." />
+          <ULink to="/" class="text-sm text-blue-600 dark:text-blue-500">
+            Return Back To Home.
+          </ULink>
         </div>
       </div>
     </div>

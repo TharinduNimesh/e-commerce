@@ -150,25 +150,23 @@ async function updatePassword() {
           your password.
         </p>
         <div class="mt-4">
-          <PrimaryInput
-            placeholder="Enter your email"
-            type="email"
-            v-model="email"
-          />
+          <UInput placeholder="Enter your email" type="email" v-model="email" />
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 mt-5 gap-2">
           <div class="order-2 md:order-1">
-            <PrimaryButton
-              @onclick="$emit('onclose')"
-              text="Close"
-              class="bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800"
+            <UButton
+              @click="$emit('onclose')"
+              label="Close"
+              color="red"
+              block
             />
           </div>
           <div class="order-1 md:order-2">
-            <PrimaryButton
-              :is-loading="is_loading"
-              text="Continue"
-              @onclick="sendOtp"
+            <UButton
+              :loading="is_loading"
+              label="Continue"
+              @click="sendOtp"
+              block
             />
           </div>
         </div>
@@ -196,7 +194,7 @@ async function updatePassword() {
           inbox and enter the code below.
         </p>
         <div class="mt-4 flex justify-center gap-2">
-          <PrimaryInput
+          <UInput
             placeholder="xxxxxx"
             styles="text-center uppercase"
             v-model="otp"
@@ -204,14 +202,10 @@ async function updatePassword() {
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 mt-5 gap-2">
           <div class="order-2 md:order-1">
-            <PrimaryButton
-              @onclick="step--"
-              text="Back"
-              class="bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800"
-            />
+            <UButton @click="step--" label="Back" color="red" block />
           </div>
           <div class="order-1 md:order-2">
-            <PrimaryButton text="Submit" @onclick="verify" />
+            <UButton label="Submit" @click="verify" block />
           </div>
         </div>
         <div class="flex flex-col items-center text-center mt-5 gap-y-2">
@@ -241,7 +235,7 @@ async function updatePassword() {
           Enter your new password below.
         </p>
         <div class="mt-4">
-          <PrimaryInput
+          <UInput
             label="New Password"
             placeholder="Enter your new password"
             type="password"
@@ -249,7 +243,7 @@ async function updatePassword() {
           />
         </div>
         <div class="mt-4">
-          <PrimaryInput
+          <UInput
             label="Confirm Password"
             placeholder="Confirm your new password"
             type="password"
@@ -258,17 +252,19 @@ async function updatePassword() {
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 mt-5 gap-2">
           <div class="order-2 md:order-1">
-            <PrimaryButton
-              @onclick="$emit('onclose')"
-              text="Close"
-              class="bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800"
+            <UButton
+              @click="$emit('onclose')"
+              label="Close"
+              color="red"
+              block
             />
           </div>
           <div class="order-1 md:order-2">
-            <PrimaryButton
-              :is-loading="is_loading"
-              text="Confirm"
-              @onclick="updatePassword"
+            <UButton
+              :loading="is_loading"
+              label="Confirm"
+              @click="updatePassword"
+              block
             />
           </div>
         </div>
