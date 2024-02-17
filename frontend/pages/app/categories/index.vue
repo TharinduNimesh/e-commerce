@@ -17,6 +17,10 @@ const columns = [
     sortable: true,
   },
   {
+    label: "Top Publisher",
+    key: "top_publisher",
+  },
+  {
     label: "Action",
     key: "action",
     sortable: false,
@@ -29,60 +33,70 @@ const categories = ref([
     name: "Action/Adventures",
     comics: 20,
     buyers: 50,
+    top_publisher: "DC Comics",
   },
   {
     id: 1,
     name: "Drama",
     comics: 30,
     buyers: 100,
+    top_publisher: "DC Comics",
   },
   {
     id: 1,
     name: "Esoteric",
     comics: 10,
     buyers: 10,
+    top_publisher: "DC Comics",
   },
   {
     id: 1,
     name: "Manga",
     comics: 15,
     buyers: 20,
+    top_publisher: "DC Comics",
   },
   {
     id: 1,
     name: "Science Fiction",
     comics: 5,
     buyers: 5,
+    top_publisher: "DC Comics",
   },
   {
     id: 1,
     name: "Fantasy",
     comics: 25,
     buyers: 30,
+    top_publisher: "DC Comics",
   },
   {
     id: 1,
     name: "Comedy",
     comics: 35,
     buyers: 40,
+    top_publisher: "DC Comics",
   },
   {
     id: 1,
     name: "Horror",
     comics: 40,
     buyers: 60,
+    top_publisher: "DC Comics",
   },
   {
     id: 1,
     name: "Humour",
     comics: 45,
     buyers: 70,
+    top_publisher: "DC Comics",
   },
   {
     id: 1,
     name: "Romance",
     comics: 50,
     buyers: 80,
+    top_publisher: "DC Comics",
   },
 ]);
 
@@ -143,7 +157,7 @@ const rows = computed(() => {
                   variant="ghost"
                   icon="solar:eye-outline"
                   class="mr-2"
-                  :to="`/app/publishers/${row.name.toLowerCase()}`"
+                  :to="`/app/categories/${row.name.toLowerCase()}`"
                 />
               </template>
               <!-- custom column end -->
