@@ -14,6 +14,28 @@ const categories = [
   "humour",
   "romance",
 ];
+
+const publishers = [
+  "DC Comics",
+  "Marvel Comics",
+  "Image Comics",
+  "Dark Horse Comics",
+  "IDW Publishing",
+  "Dynamite Entertainment",
+  "BOOM! Studios",
+  "Valiant Comics",
+  "Archie Comics",
+  "Oni Press",
+  "Top Cow Productions",
+  "Avatar Press",
+  "Zenescope Entertainment",
+  "Aspen MLT",
+  "Action Lab Entertainment",
+  "Aftershock Comics",
+  "Abstract Studio",
+  "Aardvark-Vanaheim",
+  "AC Comics",
+];
 </script>
 
 <template>
@@ -56,7 +78,7 @@ const categories = [
               <TipTap v-model="description" />
             </UFormGroup>
           </div>
-          <div class="col-span-full md:col-span-3">
+          <div class="col-span-full md:col-span-4">
             <UFormGroup label="Price" required>
               <UInput placeholder="Enter the Price" class="rounded-l-none">
                 <template #leading>
@@ -67,7 +89,7 @@ const categories = [
               </UInput>
             </UFormGroup>
           </div>
-          <div class="col-span-full md:col-span-3">
+          <div class="col-span-full md:col-span-4">
             <UFormGroup label="Discount">
               <UInput
                 :disabled="!has_discount"
@@ -80,8 +102,19 @@ const categories = [
               </UInput>
             </UFormGroup>
           </div>
-          <div class="col-span-full md:col-span-2">
-            <UFormGroup label="Issued Date" required>
+          <div class="col-span-full md:col-span-4">
+            <UFormGroup label="Publisher" required>
+              <USelectMenu
+                searchable
+                searchable-placeholder="Search a category..."
+                placeholder="Select a category"
+                :options="publishers"
+                model-value="DC Comics"
+              />
+            </UFormGroup>
+          </div>
+          <div class="col-span-full md:col-span-4">
+            <UFormGroup label="Published Date" required>
               <UInput type="date" class="rounded-l-none" />
             </UFormGroup>
           </div>
@@ -112,8 +145,12 @@ const categories = [
           <div
             class="col-span-full italic flex flex-col text-gray-400 dark:text-gray-500 items-end mt-5 gap-2"
           >
-            <span> Created At : {{ getFormatedDate(new Date('2023-12-01')) }} </span>
-            <span> Last Update : {{ getFormatedDate(new Date('2024-01-04')) }} </span>
+            <span>
+              Created At : {{ getFormatedDate(new Date("2023-12-01")) }}
+            </span>
+            <span>
+              Last Update : {{ getFormatedDate(new Date("2024-01-04")) }}
+            </span>
           </div>
         </div>
       </div>
