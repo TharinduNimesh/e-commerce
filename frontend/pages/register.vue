@@ -104,14 +104,10 @@ async function register() {
               />
             </UFormGroup>
             <UFormGroup label="Gender" required>
-              <USelect
-                placeholder="Choose"
-                :options="genders"
-                v-model="form.gender"
-              />
+              <USelectMenu :options="genders" v-model="form.gender" />
             </UFormGroup>
           </div>
-          <UFormGroup label="Email" required>
+          <UFormGroup label="Email Address" required>
             <UInput
               placeholder="Enter your email"
               type="email"
@@ -120,11 +116,7 @@ async function register() {
           </UFormGroup>
 
           <UFormGroup label="Password" class="flex flex-col" required>
-            <UInput
-              placeholder="••••••••••••"
-              type="password"
-              v-model="form.password"
-            />
+            <UPasswordInput v-model="form.password" />
           </UFormGroup>
         </div>
         <div class="w-full flex flex-col items-center px-10 mt-5">

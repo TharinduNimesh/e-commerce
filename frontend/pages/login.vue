@@ -70,7 +70,7 @@ async function login() {
             />
           </UFormGroup>
 
-          <UFormGroup label="Email Address">
+          <UFormGroup label="Password">
             <template #hint>
               <ULink
                 @click="forget_password_opened = true"
@@ -83,12 +83,7 @@ async function login() {
             <template #help>
               <UCheckbox v-model="form.remember_me" label="Remember Me" />
             </template>
-            <UInput
-              label="Password"
-              placeholder="••••••••••••"
-              type="password"
-              v-model="form.password"
-            />
+            <UPasswordInput v-model="form.password" />
           </UFormGroup>
         </div>
         <div class="w-full flex flex-col items-center px-10 mt-5">
