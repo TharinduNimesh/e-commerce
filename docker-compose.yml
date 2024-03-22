@@ -1,0 +1,21 @@
+services:
+  frontend: 
+    container_name: 'eshop-frontend'
+    build: ./frontend
+    ports:
+      - "3000:3000"
+
+  backend:
+    container_name: 'eshop-backend'
+    build: ./backend
+    ports:
+      - "8000:8000"
+
+  database:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: laravel
+      MONGO_INITDB_ROOT_PASSWORD: laravel
