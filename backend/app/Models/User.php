@@ -4,7 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use MongoDB\Laravel\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -24,9 +24,9 @@ class User extends Authenticatable
         'email',
         'email_verified_at',
         'password',
-        'gender_id',
-        'status_id',
-        'role_id'
+        'gender',
+        'status',
+        'role'
     ];
 
     /**
@@ -48,12 +48,4 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-
-    public function otps() {
-        return $this->hasMany(Otp::class);
-    }
-
-    public function gender() {
-        return $this->belongsTo(Gender::class);
-    }
 }

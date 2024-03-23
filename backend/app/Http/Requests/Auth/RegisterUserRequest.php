@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class RegisterUserRequest extends FormRequest
@@ -29,7 +30,7 @@ class RegisterUserRequest extends FormRequest
             "last_name" => ["required", "min:2", "max:30"],
             "mobile" => ["required", "regex:$this->mobile_regex", "unique:users"],
             "email" => ["required", "email", "unique:users"],
-            "gender" => ["required", "exists:genders,id"],
+            "gender" => ["required", Rule::in(["Male", "Female"])],
             "password" => ["required", "regex:$this->password_regex"],
         ];
     }
@@ -40,7 +41,7 @@ class RegisterUserRequest extends FormRequest
             "mobile.regex" => "Valid LK mobile number is required.",
             "mobile.unique" => "This mobile number is already in use.",
             "email.unique" => "This email address is already in use.",
-            "gender" => "Something wrong in gender selection.",
+            "gender" => "Please select your gender.",
             "password" => "Password should have minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:",
         ];
     }

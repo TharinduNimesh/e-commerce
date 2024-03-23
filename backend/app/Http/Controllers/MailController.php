@@ -16,6 +16,6 @@ class MailController extends Controller
 
     public static function forgotPassword($data)
     {
-        Mail::to($data["email"])->queue(new ForgotPasswordMail($data));
+        Mail::to($data["email"])->send(new ForgotPasswordMail($data));
     }
 }

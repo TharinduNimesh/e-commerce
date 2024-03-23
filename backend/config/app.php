@@ -170,6 +170,10 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+        // Laravel MongoDB
+        MongoDB\Laravel\MongoDBServiceProvider::class,
+        MongoDB\Laravel\MongoDBQueueServiceProvider::class,
     ])->toArray(),
 
     /*

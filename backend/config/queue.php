@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('QUEUE_CONNECTION', 'sync'),
+    'default' => env('QUEUE_CONNECTION', 'database'),
 
     /*
     |--------------------------------------------------------------------------
@@ -35,11 +35,12 @@ return [
         ],
 
         'database' => [
-            'driver' => 'database',
+            'driver' => 'mongodb',
+            // You can also specify your jobs specific database created on config/database.php
+            // 'connection' => env('DB_URI') . env('DB_DATABASE'),
             'table' => 'jobs',
             'queue' => 'default',
-            'retry_after' => 90,
-            'after_commit' => false,
+            'expire' => 60,
         ],
 
         'beanstalkd' => [
@@ -101,8 +102,9 @@ return [
     */
 
     'failed' => [
-        'driver' => env('QUEUE_FAILED_DRIVER', 'database-uuids'),
-        'database' => env('DB_CONNECTION', 'mysql'),
+        'driver' => 'mongodb',
+        // You can also specify your jobs specific database created on config/database.php
+        // 'connection' => env('DB_URI') . env('DB_DATABASE'),
         'table' => 'failed_jobs',
     ],
 
