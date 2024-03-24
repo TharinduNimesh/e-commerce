@@ -132,6 +132,11 @@ const data_issuers = ref([
   },
 ]);
 
+const form = ref({
+  name: "",
+  logo: "",
+});
+
 watch(data_issuers, (new_value) => {
   formatIssuers();
 });
@@ -151,6 +156,21 @@ function formatIssuers() {
     ...publisher,
     last_issued_at: getFormatedDate(new Date(publisher.last_issued_at)),
   }));
+}
+
+async function addPublisher() {
+  const { data } = await useApiFetch("/api/publisher/create", {
+    method: "POST",
+    body: form.value,
+  });
+
+  if (data) {
+    useNotifications().value.push({
+      type: "success",
+      message: "Publisher added successfully",
+    });
+    form.value = useFormReset(form.value);
+  }
 }
 </script>
 
@@ -255,10 +275,13 @@ function formatIssuers() {
 
             <div class="my-3 flex flex-col gap-3">
               <UFormGroup label="Name" required>
-                <UInput placeholder="Enter the name of the publisher" />
+                <UInput
+                  placeholder="Enter the name of the publisher"
+                  v-model="form.name"
+                />
               </UFormGroup>
               <UFormGroup label="Logo" required>
-                <FileUploader />
+                <FileUploader v-model="form.logo" />
               </UFormGroup>
             </div>
 
@@ -269,7 +292,7 @@ function formatIssuers() {
                   label="Submit"
                   color="black"
                   icon="solar:add-circle-bold"
-                  @click="is_add_issuer_open = false"
+                  @click="addPublisher"
                 />
               </div>
             </template>

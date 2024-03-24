@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\PublisherController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -35,10 +36,14 @@ Route::middleware('throttle:auth')->group(function () {
     Route::put('/update-password', [PasswordController::class, 'UpdatePassword']);
 });
 
-
-// global auth middleware
+// Change password
 Route::middleware('auth:sanctum')->group(function() {
     Route::put('/change-password', [PasswordController::class, 'changePassword']);
+});
+
+// Publisher routes
+Route::prefix('publisher')->group(function () {
+    Route::post('/create', [PublisherController::class, 'create']);
 });
 
 // temporary route for testing

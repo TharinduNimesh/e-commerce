@@ -1,3 +1,19 @@
+<script setup>
+defineProps(["modelValue"]);
+
+const emit = defineEmits(["update:modelValue"]);
+
+function uploadFile(event) {
+  const file = event.target.files[0];
+  const reader = new FileReader();
+
+  reader.onload = (event) => {
+    emit("update:modelValue", event.target.result);
+  };
+  reader.readAsDataURL(file);
+}
+</script>
+
 <template>
   <div class="flex items-center justify-center w-full">
     <label
@@ -27,7 +43,12 @@
           SVG, PNG, JPG or GIF (MAX. 800x400px)
         </p>
       </div>
-      <input id="dropzone-file" type="file" class="hidden" />
+      <input
+        id="dropzone-file"
+        type="file"
+        class="hidden"
+        @change="uploadFile"
+      />
     </label>
   </div>
 </template>
