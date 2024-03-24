@@ -35,6 +35,8 @@ async function sendOtp() {
     },
   });
   if (data) {
+    console.log(data);
+
     useNotifications().value.push({
       message: data.message,
       title: "Check your Inbox",
@@ -121,7 +123,6 @@ async function updatePassword() {
     // reset form
     email.value = "";
     otp.value = "";
-    attempts.value = 5;
     new_password.value.password = "";
     new_password.value.password_confirmation = "";
 
@@ -131,6 +132,18 @@ async function updatePassword() {
   }
   is_loading.value = false;
 }
+
+function endProcess() {
+  // reset all details
+  step.value = 1;
+  prev_email = null;
+  attempts.value = 5;
+  new_password.value.password = "";
+  new_password.value.password_confirmation = "";
+
+  // close modal
+  emit("onclose");
+}
 </script>
 
 <template>
@@ -138,7 +151,7 @@ async function updatePassword() {
     <div
       class="p-5 bg-[url('/img/modal-bg.png')] bg-cover bg-right bg-no-repeat"
     >
-      <div v-show="step === 1">
+      <div v-show="step === 1" @keyup.enter="sendOtp">
         <h1
           class="text-xl uppercase font-bold text-gray-700 dark:text-gray-300"
         >
@@ -252,12 +265,7 @@ async function updatePassword() {
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 mt-5 gap-2">
           <div class="order-2 md:order-1">
-            <UButton
-              @click="$emit('onclose')"
-              label="Close"
-              color="red"
-              block
-            />
+            <UButton @click="endProcess" label="Close" color="red" block />
           </div>
           <div class="order-1 md:order-2">
             <UButton

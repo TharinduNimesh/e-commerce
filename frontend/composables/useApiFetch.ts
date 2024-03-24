@@ -24,6 +24,10 @@ export async function useApiFetch<T>(
     headers["X-XSRF-TOKEN"] = token.value as string;
   }
 
+  if (auth_token) {
+    headers["Authorization"] = `Bearer ${auth_token}`;
+  }
+
   try {
     const { data, error, pending } = await useFetch(
       "http://localhost:8000" + path,

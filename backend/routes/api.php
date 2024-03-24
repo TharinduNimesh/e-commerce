@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -29,15 +30,15 @@ Route::post('/newsletter', [UserController::class, 'subscribe']);
 Route::middleware('throttle:auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
-    Route::post('/verify', [AuthController::class, 'verify']);
-    Route::put('/update-password', [AuthController::class, 'UpdatePassword']);
+    Route::post('/forgot-password', [PasswordController::class, 'forgotPassword']);
+    Route::post('/verify', [PasswordController::class, 'verify']);
+    Route::put('/update-password', [PasswordController::class, 'UpdatePassword']);
 });
 
 
 // global auth middleware
 Route::middleware('auth:sanctum')->group(function() {
-    Route::put('/change-password', [AuthController::class, 'changePassword']);
+    Route::put('/change-password', [PasswordController::class, 'changePassword']);
 });
 
 // temporary route for testing

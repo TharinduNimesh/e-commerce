@@ -3,6 +3,7 @@ useHead({
   title: "Login | E-Commerce",
 });
 
+const router = useRouter();
 const credentials = useCookie("credentials");
 const loading = ref(false);
 const forget_password_opened = ref(false);
@@ -43,8 +44,12 @@ async function login() {
         password,
       };
     }
-    // reset form
+    // set auth token
+    useAuthStore().setToken(data.token);
+
+    // reset form & redirect
     form.value = useFormReset(form.value);
+    router.push("/");
   }
   loading.value = false;
 }
@@ -57,7 +62,11 @@ async function login() {
     <div
       class="min-w-[400px] max-w-[850px] w-2/3 flex border border-blue-200 dark:border-blue-950 bg-primary-light-transparent dark:bg-primary-dark-transparent rounded backdrop-blur-lg shadow-lg dark:shadow-black"
     >
-      <div class="w-full lg:w-1/2 flex flex-col gap-5 py-5">
+      <form
+        @submit.prevent="login"
+        @keyup.enter="login"
+        class="w-full lg:w-1/2 flex flex-col gap-5 py-5"
+      >
         <div class="w-full text-center">
           <h2 class="text-2xl uppercase font-bold">WELCOME BACK</h2>
         </div>
@@ -102,7 +111,7 @@ async function login() {
             Return Back To Home.
           </ULink>
         </div>
-      </div>
+      </form>
       <div class="hidden lg:flex lg:w-1/2 rounded flex-col justify-center py-3">
         <div class="w-full flex justify-center">
           <img

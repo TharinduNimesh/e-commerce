@@ -3,17 +3,6 @@ useHead({
   title: "Register | E-Commerce",
 });
 
-const genders = [
-  {
-    label: "Male",
-    value: 1,
-  },
-  {
-    label: "Female",
-    value: 2,
-  },
-];
-
 const form = ref({
   first_name: "",
   last_name: "",
@@ -74,7 +63,11 @@ async function register() {
           </div>
         </div>
       </div>
-      <div class="w-full lg:w-7/12 flex flex-col gap-5 py-5">
+      <form
+        @submit.prevent="register"
+        @keyup.enter="register"
+        class="w-full lg:w-7/12 flex flex-col gap-5 py-5"
+      >
         <div class="w-full text-center">
           <h2 class="text-2xl uppercase font-bold">JOIN WITH US TODAY</h2>
         </div>
@@ -104,7 +97,10 @@ async function register() {
               />
             </UFormGroup>
             <UFormGroup label="Gender" required>
-              <USelectMenu :options="genders" v-model="form.gender" />
+              <USelectMenu
+                :options="['Male', 'Female']"
+                v-model="form.gender"
+              />
             </UFormGroup>
           </div>
           <UFormGroup label="Email Address" required>
@@ -132,7 +128,7 @@ async function register() {
             Return Back To Home.
           </ULink>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 </template>

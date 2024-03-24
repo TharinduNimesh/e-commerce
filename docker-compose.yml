@@ -16,6 +16,8 @@ services:
     restart: always
     ports:
       - 27017:27017
+    volumes:
+      - ./database/data:/data/db
     environment:
       MONGO_INITDB_ROOT_USERNAME: laravel
       MONGO_INITDB_ROOT_PASSWORD: laravel

@@ -7,16 +7,15 @@ use App\Http\Controllers\MailController;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\UpdatePasswordRequest;
 use App\Http\Requests\Auth\VerifyRequest;
-use App\Http\Requests\ChangePasswordRequest;
+use App\Http\Requests\Auth\ChangePasswordRequest;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 
 class PasswordController extends Controller
 {
     public function changePassword(ChangePasswordRequest $request)
     {
-        $request->validated();
-
         $user = $request->user();
 
         // check if current password is valid
@@ -40,13 +39,11 @@ class PasswordController extends Controller
 
     public function forgotPassword(ForgotPasswordRequest $request)
     {
-        $request->validated();
-
         $user = User::where('email', $request->email)->first();
 
         // trying to generate OTP
         $output = $this->generateOtp($user);
-        if ($output['status'] == 'error') {
+        if (isset($output['status']) && $output['status'] == 'error') {
             return response()->json([
                 'message' => $output['message'],
             ], 429);
@@ -67,14 +64,17 @@ class PasswordController extends Controller
 
     public function updatePassword(UpdatePasswordRequest $request)
     {
-        $request->validated();
+         // Get user
+         $user = User::where('email', $request->email)->first();
 
-        $user = User::where('email', $request->email)->first();
+        if (!is_array($user->otps)) {
+            return response()->json([
+                'message' => 'Failed to update password. Malicious activity detected.',
+            ], 401);
+        }
 
-        $otp_details = $user->otps()
-            ->where('is_used', true)
-            ->orderBy('id', 'desc')
-            ->first();
+         // Get last OTP
+         $otp_details = array_reverse($user->otps)[0];
 
         if (!$otp_details) {
             return response()->json([
@@ -82,13 +82,13 @@ class PasswordController extends Controller
             ], 401);
         }
 
-        if ($otp_details->expires_at < now()) {
+        if (Carbon::parse($otp_details["expires_at"]) < now()) {
             return response()->json([
                 'message' => 'OTP has expired. Please request for a new one.',
             ], 400);
         }
 
-        if ($otp_details->otp != $request->otp) {
+        if ($otp_details["otp"] != $request->otp) {
             return response()->json([
                 'message' => 'Failed to update password. Malicious activity detected.',
             ], 401);
@@ -105,39 +105,39 @@ class PasswordController extends Controller
 
     public function verify(VerifyRequest $request)
     {
-        $request->validated();
-
         // Get user
         $user = User::where('email', $request->email)->first();
 
-        // OTP requests
-        $otp_details = $user->otps()->orderBy('id', 'desc')->first();
+        // Get last OTP
+        $otp_details = array_reverse($user->otps)[0];
 
         // Check if OTP is expired
-        if ($otp_details->expires_at < now()) {
+        if (Carbon::parse($otp_details["expires_at"])->isBefore(now())) {
             return response()->json([
                 'message' => 'OTP has expired. Please request for a new one.',
             ], 400);
         }
 
         // Check if OTP has already been used
-        if ($otp_details->is_used) {
+        if (isset($otp_details["is_used"]) && $otp_details["is_used"]) {
             return response()->json([
                 "message" => "This OTP has already been used.",
             ], 401);
         }
 
         // Check if OTP is valid
-        if ($request->otp != $otp_details->otp) {
+        if ($request->otp != $otp_details["otp"]) {
             return response()->json([
                 "message" => "Invalid OTP",
             ], 401);
         }
 
         // Update OTP status
-        $otp_details->update([
-            "is_used" => true,
-        ]);
+        $user->raw()->updateOne(
+            ['email' => $user->email],
+            ['$set' => ['otps.$[elem].is_used' => true]],
+            ['arrayFilters' => [['elem.id' => $otp_details["id"]]]]
+        );
 
         // Verify email if not verified
         if (!$user->email_verified_at) {
@@ -148,6 +148,7 @@ class PasswordController extends Controller
 
         return response()->json([
             "message" => "OTP verified successfully.",
+            "otp" => $otp_details
         ]);
     }
 
@@ -155,7 +156,17 @@ class PasswordController extends Controller
     {
         $max_request_per_day = 5;
 
-        $today_requests = $user->otps()->where('created_at', '>', now()->subDay())->count();
+        $otps = $user->otps;
+        $today_requests = 0;
+
+        // Get today's requests
+        if (is_array($otps)) {
+            $today_requests = count(array_filter($otps, function ($otp) {
+                return Carbon::parse($otp['created_at'])->isToday();
+            }));
+        } else {
+            $otps = [];
+        }
 
         // Send error message
         if ($today_requests >= $max_request_per_day) {
@@ -169,9 +180,12 @@ class PasswordController extends Controller
         $otp = rand(100000, 999999);
 
         // Save the OTP to the database
-        $user->otps()->create([
+        $user->push('otps', [
+            'id' => count($otps) + 1,
             'otp' => $otp,
-            'expires_at' => now()->addMinutes(20),
+            'is_used' => false,
+            'created_at' => now()->toString(),
+            'expires_at' => now()->addMinutes(15)->toString(),
         ]);
 
         return [
