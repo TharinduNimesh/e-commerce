@@ -8,6 +8,16 @@ use Illuminate\Support\Facades\Storage;
 
 class PublisherController extends Controller
 {
+    public function index()
+    {
+        $publishers = Publisher::all();
+
+        return response()->json([
+            'status' => 'success',
+            'publishers' => $publishers
+        ]);
+    }
+
     public function create(CreatePublisherRequest $request)
     {
         // get image from base64
@@ -15,7 +25,7 @@ class PublisherController extends Controller
 
         // store image in storage
         $path = '/publisher/' . uniqid() . '.png';
-        Storage::disk('local')->put('/public' . $path, $logo, 'public');
+        Storage::disk('public')->put($path, $logo, 'public');
 
         // check if image was stored
         if (!Storage::disk('local')->exists('/public' . $path)) {

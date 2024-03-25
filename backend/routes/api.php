@@ -37,12 +37,13 @@ Route::middleware('throttle:auth')->group(function () {
 });
 
 // Change password
-Route::middleware('auth:sanctum')->group(function() {
+Route::middleware('auth:sanctum')->group(function () {
     Route::put('/change-password', [PasswordController::class, 'changePassword']);
 });
 
 // Publisher routes
-Route::prefix('publisher')->group(function () {
+Route::prefix('publisher')->middleware(['auth:sanctum'])->group(function () {
+    Route::get('/', [PublisherController::class, 'index']);
     Route::post('/create', [PublisherController::class, 'create']);
 });
 

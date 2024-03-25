@@ -1,11 +1,13 @@
 <script setup>
 onMounted(() => {
+  loadPublishers();
   formatIssuers();
 });
 
 const router = useRouter();
 const is_add_issuer_open = ref(false);
 const publishers = ref([]);
+const isLoading = ref(false);
 
 const columns = [
   {
@@ -39,106 +41,102 @@ const columns = [
   },
 ];
 
-const data_issuers = ref([
-  {
-    id: 1,
-    name: "DC Comics",
-    publisher: "dc",
-    last_comic: "Batman: The Long Halloween #6",
-    last_issued_at: new Date(),
-    publishes: 20,
-    buyers: 50,
-  },
-  {
-    id: 1,
-    name: "Marvel Comics",
-    publisher: "marvel",
-    last_comic: "The Amazing Spider #3",
-    last_issued_at: new Date(),
-    publishes: 30,
-    buyers: 100,
-  },
-  {
-    id: 1,
-    name: "Image Comics",
-    publisher: "image",
-    last_comic: "Spawn #1",
-    last_issued_at: new Date(),
-    publishes: 10,
-    buyers: 10,
-  },
-  {
-    id: 1,
-    name: "Dark Horse Comics",
-    publisher: "dark-horse",
-    last_comic: "Hellboy: The Corpse",
-    last_issued_at: new Date(),
-    publishes: 15,
-    buyers: 20,
-  },
-  {
-    id: 1,
-    name: "IDW Publishing",
-    publisher: "idw",
-    last_comic: "Teenage Mutant Ninja Turtles #1",
-    last_issued_at: new Date(),
-    publishes: 5,
-    buyers: 5,
-  },
-  {
-    id: 1,
-    name: "Boom! Studios",
-    publisher: "boom",
-    last_comic: "Mighty Morphin Power Rangers #1",
-    last_issued_at: new Date(),
-    publishes: 25,
-    buyers: 30,
-  },
-  {
-    id: 1,
-    name: "Dynamite Entertainment",
-    publisher: "dynamite",
-    last_comic: "The Boys #6",
-    last_issued_at: new Date(),
-    publishes: 35,
-    buyers: 40,
-  },
-  {
-    id: 1,
-    name: "Valiant Comics",
-    publisher: "valiant",
-    last_comic: "X-O Manowar #1",
-    last_issued_at: new Date(),
-    publishes: 40,
-    buyers: 60,
-  },
-  {
-    id: 1,
-    name: "Archie Comics",
-    publisher: "archie",
-    last_comic: "Archie #1",
-    last_issued_at: new Date(),
-    publishes: 45,
-    buyers: 70,
-  },
-  {
-    id: 1,
-    name: "Aftershock Comics",
-    publisher: "aftershock",
-    last_comic: "Animosity #1",
-    last_issued_at: new Date(),
-    publishes: 50,
-    buyers: 80,
-  },
-]);
+// const data_issuers = ref([
+//   {
+//     id: 1,
+//     name: "DC Comics",
+//     publisher: "dc",
+//     last_comic: "Batman: The Long Halloween #6",
+//     last_issued_at: new Date(),
+//     publishes: 20,
+//     buyers: 50,
+//   },
+//   {
+//     id: 1,
+//     name: "Marvel Comics",
+//     publisher: "marvel",
+//     last_comic: "The Amazing Spider #3",
+//     last_issued_at: new Date(),
+//     publishes: 30,
+//     buyers: 100,
+//   },
+//   {
+//     id: 1,
+//     name: "Image Comics",
+//     publisher: "image",
+//     last_comic: "Spawn #1",
+//     last_issued_at: new Date(),
+//     publishes: 10,
+//     buyers: 10,
+//   },
+//   {
+//     id: 1,
+//     name: "Dark Horse Comics",
+//     publisher: "dark-horse",
+//     last_comic: "Hellboy: The Corpse",
+//     last_issued_at: new Date(),
+//     publishes: 15,
+//     buyers: 20,
+//   },
+//   {
+//     id: 1,
+//     name: "IDW Publishing",
+//     publisher: "idw",
+//     last_comic: "Teenage Mutant Ninja Turtles #1",
+//     last_issued_at: new Date(),
+//     publishes: 5,
+//     buyers: 5,
+//   },
+//   {
+//     id: 1,
+//     name: "Boom! Studios",
+//     publisher: "boom",
+//     last_comic: "Mighty Morphin Power Rangers #1",
+//     last_issued_at: new Date(),
+//     publishes: 25,
+//     buyers: 30,
+//   },
+//   {
+//     id: 1,
+//     name: "Dynamite Entertainment",
+//     publisher: "dynamite",
+//     last_comic: "The Boys #6",
+//     last_issued_at: new Date(),
+//     publishes: 35,
+//     buyers: 40,
+//   },
+//   {
+//     id: 1,
+//     name: "Valiant Comics",
+//     publisher: "valiant",
+//     last_comic: "X-O Manowar #1",
+//     last_issued_at: new Date(),
+//     publishes: 40,
+//     buyers: 60,
+//   },
+//   {
+//     id: 1,
+//     name: "Archie Comics",
+//     publisher: "archie",
+//     last_comic: "Archie #1",
+//     last_issued_at: new Date(),
+//     publishes: 45,
+//     buyers: 70,
+//   },
+//   {
+//     id: 1,
+//     name: "Aftershock Comics",
+//     publisher: "aftershock",
+//     last_comic: "Animosity #1",
+//     last_issued_at: new Date(),
+//     publishes: 50,
+//     buyers: 80,
+//   },
+// ]);
 
 const form = ref({
   name: "",
   logo: "",
-});
-
-watch(data_issuers, (new_value) => {
-  formatIssuers();
 });
 
 const page = ref(1);
@@ -151,8 +149,18 @@ const rows = computed(() => {
   );
 });
 
+async function loadPublishers() {
+  isLoading.value = true;
+  const { data } = await useApiFetch("/api/publisher");
+  if (data) {
+    console.log(toRaw(data));
+    publishers.value = data.publishers;
+  }
+  isLoading.value = false;
+}
+
 function formatIssuers() {
-  publishers.value = data_issuers.value.map((publisher) => ({
+  publishers.value = publishers.value.map((publisher) => ({
     ...publisher,
     last_issued_at: getFormatedDate(new Date(publisher.last_issued_at)),
   }));
@@ -233,7 +241,7 @@ async function addPublisher() {
                 variant="ghost"
                 icon="solar:eye-outline"
                 class="mr-2"
-                :to="`/app/publishers/${row.publisher}`"
+                :to="`/app/publishers/${row._id}`"
               />
             </template>
             <!-- custom column end -->
