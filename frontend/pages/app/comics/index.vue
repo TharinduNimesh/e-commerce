@@ -50,19 +50,19 @@ const items = (row) => [
     {
       label: "Information",
       icon: "solar:database-bold",
-      click: () => router.push(`/app/comics/${row.id}`),
+      click: () => router.push(`/app/comics/${row._id}`),
     },
     {
       label: "Edit",
       icon: "i-heroicons-pencil-square-20-solid",
-      click: () => router.push(`/app/comics/edit/${row.id}`),
+      click: () => router.push(`/app/comics/edit/${row._id}`),
     },
   ],
   [
     {
       label: "Visit in shop",
       icon: "solar:eye-bold",
-      click: () => router.push(`/comic/${row.id}`),
+      click: () => router.push(`/comic/${row._id}`),
     },
   ],
   [
@@ -77,151 +77,153 @@ const items = (row) => [
   ],
 ];
 
+const is_loading = ref(false);
 const updated_comics = ref([]);
-const comics = ref([
-  {
-    id: 1,
-    name: "Batman The Gotham Knight #1",
-    publisher: "DC",
-    price: 1000,
-    buyers: 10,
-    status: "hidden",
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    id: 2,
-    name: "Spider-Man: The Amazing Adventures #1",
-    publisher: "Marvel",
-    price: 1200,
-    buyers: 150,
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    id: 3,
-    name: "Superman: Man of Steel #1",
-    publisher: "DC",
-    price: 900,
-    buyers: 30,
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    id: 4,
-    name: "X-Men: The Uncanny #1",
-    publisher: "Marvel",
-    price: 1100,
-    buyers: 132,
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    id: 5,
-    name: "Wonder Woman: The Amazon Princess #1",
-    publisher: "DC",
-    price: 950,
-    buyers: 9,
-    status: "removed",
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    id: 6,
-    name: "The Flash: Speed Force #1",
-    publisher: "DC",
-    price: 1050,
-    buyers: 11,
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    id: 7,
-    name: "Iron Man: Armored Avenger #1",
-    publisher: "Marvel",
-    price: 1150,
-    buyers: 13,
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    id: 8,
-    name: "Aquaman: King of the Seas #1",
-    publisher: "DC",
-    price: 950,
-    buyers: 9,
-    status: "removed",
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    id: 9,
-    name: "Captain America: The Sentinel of Liberty #1",
-    publisher: "Marvel",
-    price: 1000,
-    buyers: 10,
-    status: "hidden",
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    id: 10,
-    name: "Green Lantern: Emerald Guardian #1",
-    publisher: "DC",
-    price: 1100,
-    buyers: 12,
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    id: 11,
-    name: "Thor: God of Thunder #1",
-    publisher: "Marvel",
-    price: 1250,
-    buyers: 14,
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    id: 12,
-    name: "Black Widow: Deadly Origin #1",
-    publisher: "Marvel",
-    price: 950,
-    buyers: 9,
-    status: "removed",
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    id: 13,
-    name: "Green Arrow: The Emerald Archer #1",
-    publisher: "DC",
-    price: 1000,
-    buyers: 10,
-    status: "hidden",
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    id: 14,
-    name: "The Incredible Hulk: Smash #1",
-    publisher: "Marvel",
-    price: 1050,
-    buyers: 11,
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    id: 15,
-    name: "Catwoman: The Feline Fatale #1",
-    publisher: "DC",
-    price: 975,
-    buyers: 10,
-    status: "hidden",
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-]);
+const comics = ref([]);
+// const comics = ref([
+//   {
+//     id: 1,
+//     name: "Batman The Gotham Knight #1",
+//     publisher: "DC",
+//     price: 1000,
+//     buyers: 10,
+//     status: "hidden",
+//     created_at: new Date(),
+//     updated_at: new Date(),
+//   },
+//   {
+//     id: 2,
+//     name: "Spider-Man: The Amazing Adventures #1",
+//     publisher: "Marvel",
+//     price: 1200,
+//     buyers: 150,
+//     created_at: new Date(),
+//     updated_at: new Date(),
+//   },
+//   {
+//     id: 3,
+//     name: "Superman: Man of Steel #1",
+//     publisher: "DC",
+//     price: 900,
+//     buyers: 30,
+//     created_at: new Date(),
+//     updated_at: new Date(),
+//   },
+//   {
+//     id: 4,
+//     name: "X-Men: The Uncanny #1",
+//     publisher: "Marvel",
+//     price: 1100,
+//     buyers: 132,
+//     created_at: new Date(),
+//     updated_at: new Date(),
+//   },
+//   {
+//     id: 5,
+//     name: "Wonder Woman: The Amazon Princess #1",
+//     publisher: "DC",
+//     price: 950,
+//     buyers: 9,
+//     status: "removed",
+//     created_at: new Date(),
+//     updated_at: new Date(),
+//   },
+//   {
+//     id: 6,
+//     name: "The Flash: Speed Force #1",
+//     publisher: "DC",
+//     price: 1050,
+//     buyers: 11,
+//     created_at: new Date(),
+//     updated_at: new Date(),
+//   },
+//   {
+//     id: 7,
+//     name: "Iron Man: Armored Avenger #1",
+//     publisher: "Marvel",
+//     price: 1150,
+//     buyers: 13,
+//     created_at: new Date(),
+//     updated_at: new Date(),
+//   },
+//   {
+//     id: 8,
+//     name: "Aquaman: King of the Seas #1",
+//     publisher: "DC",
+//     price: 950,
+//     buyers: 9,
+//     status: "removed",
+//     created_at: new Date(),
+//     updated_at: new Date(),
+//   },
+//   {
+//     id: 9,
+//     name: "Captain America: The Sentinel of Liberty #1",
+//     publisher: "Marvel",
+//     price: 1000,
+//     buyers: 10,
+//     status: "hidden",
+//     created_at: new Date(),
+//     updated_at: new Date(),
+//   },
+//   {
+//     id: 10,
+//     name: "Green Lantern: Emerald Guardian #1",
+//     publisher: "DC",
+//     price: 1100,
+//     buyers: 12,
+//     created_at: new Date(),
+//     updated_at: new Date(),
+//   },
+//   {
+//     id: 11,
+//     name: "Thor: God of Thunder #1",
+//     publisher: "Marvel",
+//     price: 1250,
+//     buyers: 14,
+//     created_at: new Date(),
+//     updated_at: new Date(),
+//   },
+//   {
+//     id: 12,
+//     name: "Black Widow: Deadly Origin #1",
+//     publisher: "Marvel",
+//     price: 950,
+//     buyers: 9,
+//     status: "removed",
+//     created_at: new Date(),
+//     updated_at: new Date(),
+//   },
+//   {
+//     id: 13,
+//     name: "Green Arrow: The Emerald Archer #1",
+//     publisher: "DC",
+//     price: 1000,
+//     buyers: 10,
+//     status: "hidden",
+//     created_at: new Date(),
+//     updated_at: new Date(),
+//   },
+//   {
+//     id: 14,
+//     name: "The Incredible Hulk: Smash #1",
+//     publisher: "Marvel",
+//     price: 1050,
+//     buyers: 11,
+//     created_at: new Date(),
+//     updated_at: new Date(),
+//   },
+//   {
+//     id: 15,
+//     name: "Catwoman: The Feline Fatale #1",
+//     publisher: "DC",
+//     price: 975,
+//     buyers: 10,
+//     status: "hidden",
+//     created_at: new Date(),
+//     updated_at: new Date(),
+//   },
+// ]);
 
 const page = ref(1);
 const pageCount = 5;
@@ -237,11 +239,25 @@ watch(comics, (new_value) => {
   updated_comics.value = updateComicsLayout(new_value);
 });
 
+onMounted(() => {
+  loadComics();
+});
+
+async function loadComics() {
+  is_loading.value = true;
+  const { data } = await useApiFetch("/api/comics");
+
+  if (data) {
+    comics.value = data.comics;
+  }
+  is_loading.value = false;
+}
+
 function updateComicsLayout(list) {
   return list.map((data) => ({
     ...data,
-    publisher: data.publisher.toLowerCase(),
-    price: `LKR ${data.price.toLocaleString("en-US")}`,
+    publisher: data.publisher?.toLowerCase(),
+    price: `LKR ${data.price?.toLocaleString("en-US")}`,
     profit: `LKR ${(data.price * data.buyers).toLocaleString("en-US")}`,
     status: data.status ? data.status : "Active",
     created_at: getFormatedDate(new Date(data.created_at)),

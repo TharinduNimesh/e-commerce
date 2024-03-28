@@ -1,5 +1,11 @@
 <script setup>
 const payments = ref(0);
+const is_payment_model_open = ref(false);
+const payment_type = ref(null);
+
+function setPaymentType(type) {
+  payment_type.value = type;
+}
 </script>
 
 <template>
@@ -73,7 +79,7 @@ const payments = ref(0);
                   variant="solid"
                   color="primary"
                   icon="ic:round-add"
-                  @click="payments += 1"
+                  @click="is_payment_model_open = true"
                 >
                   Add Payment Method
                 </UButton>
@@ -81,6 +87,65 @@ const payments = ref(0);
             </div>
           </div>
         </div>
+        <UModal v-model="is_payment_model_open">
+          <div
+            class="p-5 bg-[url('/img/modal-bg.png')] bg-cover bg-right bg-no-repeat"
+          >
+            <div>
+              <div>
+                <h3
+                  class="text-xl font-semibold text-gray-700 dark:text-slate-200"
+                >
+                  Add Payment Method
+                </h3>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4 py-5">
+              <div class="col-span-3 flex justify-between px-5 flex-wrap">
+                <div class="flex flex-col items-center gap-2" @click="setPaymentType('Visa')">
+                  <img src="/img/payments/visa.png" alt="Visa" class="h-8" />
+                  <URadio v-model="payment_type" value="Visa" />
+                </div>
+                <div class="flex flex-col items-center gap-2" @click="setPaymentType('Mastercard')">
+                  <img
+                    src="/img/payments/master.png"
+                    alt="Mastercard"
+                    class="h-8"
+                  />
+                  <URadio v-model="payment_type" value="Mastercard" />
+                </div>
+                <div class="flex flex-col items-center gap-2" @click="setPaymentType('Amex')">
+                  <img src="/img/payments/amex.png" alt="Amex" class="h-8" />
+                  <URadio v-model="payment_type" value="Amex" />
+                </div>
+              </div>
+              <div class="col-span-3">
+                <UInput
+                  label="Card Number"
+                  placeholder="Enter your card number"
+                />
+              </div>
+              <div class="col-span-2">
+                <UInput label="Expiry Date" placeholder="MM/YY" />
+              </div>
+              <div class="col-span-1">
+                <UInput label="CVV" placeholder="Enter CVV" />
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-end gap-3">
+                <UButton
+                  @click="is_payment_model_open = false"
+                  color="gray"
+                  label="Close"
+                />
+                <UButton label="Submit" />
+              </div>
+            </div>
+          </div>
+        </UModal>
       </div>
     </NuxtLayout>
   </div>
