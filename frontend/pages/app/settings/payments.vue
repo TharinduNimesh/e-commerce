@@ -1,10 +1,28 @@
 <script setup>
 const payments = ref(0);
 const is_payment_model_open = ref(false);
-const payment_type = ref(null);
+const is_loading = ref(false);
+
+const payment_method_form = ref({
+  payment_type: null,
+  card_number: "",
+  expiry_date: "",
+  cvv: "",
+});
 
 function setPaymentType(type) {
-  payment_type.value = type;
+  payment_method_form.value.payment_type = type;
+}
+
+async function addPaymentMethod() {
+  is_loading.value = true;
+  const { data } = await useApiFetch("/payments/add");
+  if (data) {
+    useNotifications().value.push({
+      status: "success",
+      message: "New Payment Method has been added",
+    });
+  }
 }
 </script>
 
@@ -103,21 +121,39 @@ function setPaymentType(type) {
 
             <div class="grid grid-cols-3 gap-4 py-5">
               <div class="col-span-3 flex justify-between px-5 flex-wrap">
-                <div class="flex flex-col items-center gap-2" @click="setPaymentType('Visa')">
+                <div
+                  class="flex flex-col items-center gap-2"
+                  @click="setPaymentType('Visa')"
+                >
                   <img src="/img/payments/visa.png" alt="Visa" class="h-8" />
-                  <URadio v-model="payment_type" value="Visa" />
+                  <URadio
+                    v-model="payment_method_form.payment_type"
+                    value="Visa"
+                  />
                 </div>
-                <div class="flex flex-col items-center gap-2" @click="setPaymentType('Mastercard')">
+                <div
+                  class="flex flex-col items-center gap-2"
+                  @click="setPaymentType('Mastercard')"
+                >
                   <img
                     src="/img/payments/master.png"
                     alt="Mastercard"
                     class="h-8"
                   />
-                  <URadio v-model="payment_type" value="Mastercard" />
+                  <URadio
+                    v-model="payment_method_form.payment_type"
+                    value="Mastercard"
+                  />
                 </div>
-                <div class="flex flex-col items-center gap-2" @click="setPaymentType('Amex')">
+                <div
+                  class="flex flex-col items-center gap-2"
+                  @click="setPaymentType('Amex')"
+                >
                   <img src="/img/payments/amex.png" alt="Amex" class="h-8" />
-                  <URadio v-model="payment_type" value="Amex" />
+                  <URadio
+                    v-model="payment_method_form.payment_type"
+                    value="Amex"
+                  />
                 </div>
               </div>
               <div class="col-span-3">

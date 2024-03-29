@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\ComicController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PublisherController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -52,6 +53,11 @@ Route::prefix('publisher')->middleware(['auth:sanctum'])->group(function () {
 Route::prefix('comics')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [ComicController::class, 'index']);
     Route::post('/create', [ComicController::class, 'create']);
+});
+
+// Payment Routes
+Route::prefix('payment')->middleware(['auth:sanctum'])->group(function () {
+    Route::post('/add', [PaymentController::class, 'create']);
 });
 
 // temporary route for testing
