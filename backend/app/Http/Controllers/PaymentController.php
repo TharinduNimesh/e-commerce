@@ -4,10 +4,31 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AddPaymentMethodRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
+
+    public function index()
+    {
+        $user = request()->user();
+        $payment_methods = $user->payment_methods;
+
+        // filter hidden card number and card type as $payment_methods
+        $payment_methods = collect($payment_methods)->map(function ($payment_method) {
+            return [
+                'id' => $payment_method['id'],
+                'payment_type' => $payment_method['payment_type'],
+                'card_number' => $this->hide($this->decrypt($payment_method['card_number'])),
+            ];
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'payment_methods' => $payment_methods,
+        ]);
+    }
+
     public function create(AddPaymentMethodRequest $request)
     {
         // Check if the payment method with card number already exists
@@ -18,9 +39,16 @@ class PaymentController extends Controller
                 'message' => 'Payment method already exists.',
             ], 409);
         }
+        
+        $user = $request->user();
+        $payment_id = 1;
+        if (isset($user->payment_methods) && count($user->payment_methods) > 0) {
+            $payment_id = count($user->payment_methods) + 1;
+        }
 
         // Add the payment method
         $payment_method = [
+            'id' => $payment_id,
             'payment_type' => $request->payment_type,
             'expiry_date' => $request->expiry_date,
             'cvv' => $this->encrypt($request->cvv),
@@ -28,12 +56,39 @@ class PaymentController extends Controller
         ];
 
         // push to payment_methods
-        $request->user()->push('payment_methods', $payment_method);
+        $user->push('payment_methods', $payment_method);
 
         return response()->json([
             'status' => 'success',
             'message' => 'Payment method added successfully.',
         ], 201);
+    }
+
+    public function delete($id)
+    {
+        $user = request()->user();
+        $payment_methods = $user->payment_methods;
+
+        // Check if the payment method exists
+        if ($payment_methods == null || empty($payment_methods)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Payment method not found.',
+            ], 404);
+        }
+
+        $user->pull('payment_methods', [
+            'id' => intval($id),
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Payment method deleted successfully.',
+        ]);
+    }
+
+    private function hide($number) {
+        return substr($number, 0, 4) . '****' . substr($number, -2);
     }
 
     private function encrypt($data)
