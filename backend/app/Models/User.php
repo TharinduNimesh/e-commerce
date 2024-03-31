@@ -27,7 +27,8 @@ class User extends Authenticatable
         'gender',
         'status',
         'role',
-        'otps'
+        'otps',
+        'payment_methods',
     ];
 
     /**
@@ -38,7 +39,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
-        'otps'
+        'otps',
+        'payment_methods',
     ];
 
     /**

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AddPaymentMethodRequest;
+use App\Http\Requests\Payment\AddPaymentMethodRequest;
+use App\Http\Requests\Payment\UpdatePaymentRequest;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
@@ -41,14 +41,10 @@ class PaymentController extends Controller
         }
         
         $user = $request->user();
-        $payment_id = 1;
-        if (isset($user->payment_methods) && count($user->payment_methods) > 0) {
-            $payment_id = count($user->payment_methods) + 1;
-        }
 
         // Add the payment method
         $payment_method = [
-            'id' => $payment_id,
+            'id' => uniqid(),
             'payment_type' => $request->payment_type,
             'expiry_date' => $request->expiry_date,
             'cvv' => $this->encrypt($request->cvv),
@@ -62,6 +58,51 @@ class PaymentController extends Controller
             'status' => 'success',
             'message' => 'Payment method added successfully.',
         ], 201);
+    }
+
+    public function update(UpdatePaymentRequest $request, $id) 
+    {
+        $user = request()->user();
+        $payment_methods = $user->payment_methods;
+
+        // Check if the payment method exists
+        if ($payment_methods == null || empty($payment_methods)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Payment method not found.',
+            ], 404);
+        }
+        $method = null;
+        foreach ($payment_methods as $key => $payment_method) {
+            if ($payment_method['id'] == $id) {
+                $method = $payment_method;
+                break;
+            }
+        }
+        if ($method == null) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Payment method not found.',
+            ], 404);
+        }
+
+        // Update the payment method
+        $user->raw()->updateOne(
+            ['email' => $user->email],
+            ['$set' => [
+                'payment_methods.$[elem].cvv' => $request->cvv,
+                'payment_methods.$[elem].expiry_date' => $request->expiry_date,
+            ]],
+            ['arrayFilters' => [['elem.id' => $id]]]
+        );
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Payment method updated successfully.',
+            'user' => $user,
+            'id' => $id,
+            'method' => $method,
+        ]);
     }
 
     public function delete($id)

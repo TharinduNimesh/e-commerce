@@ -59,7 +59,12 @@ Route::prefix('comics')->middleware(['auth:sanctum'])->group(function () {
 Route::prefix('payments')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [PaymentController::class, 'index']);
     Route::post('/add', [PaymentController::class, 'create']);
+    Route::put('/update/{id}', [PaymentController::class, 'update']);
     Route::delete('/delete/{id}', [PaymentController::class, 'delete']);
+});
+
+Route::prefix('users')->middleware(['auth:sanctum'])->group(function () {
+    Route::put('/update', [UserController::class, 'update']);
 });
 
 // temporary route for testing

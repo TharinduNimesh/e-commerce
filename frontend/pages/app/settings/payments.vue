@@ -3,6 +3,7 @@ const payments = ref([]);
 const is_payment_model_open = ref(false);
 const is_edit_payment_model_open = ref(false);
 const is_loading = ref(false);
+const editing_card_id = ref(null);
 onMounted(() => {
   loadPayments();
 });
@@ -10,6 +11,11 @@ onMounted(() => {
 const payment_method_form = ref({
   payment_type: null,
   card_number: "",
+  expiry_date: "",
+  cvv: "",
+});
+
+const update_payment_form = ref({
   expiry_date: "",
   cvv: "",
 });
@@ -29,6 +35,27 @@ async function addPaymentMethod() {
       status: "success",
       message: "New Payment Method has been added",
     });
+    loadPayments();
+    payment_method_form.value = useFormReset(payment_method_form.value);
+  }
+  is_loading.value = false;
+}
+
+async function updatePaymentMethod() {
+  is_loading.value = true;
+  const { data } = await useApiFetch(
+    `/api/payments/update/${editing_card_id.value}`,
+    {
+      method: "PUT",
+      body: update_payment_form.value,
+    }
+  );
+  if (data) {
+    useNotifications().value.push({
+      status: "success",
+      message: "Payment Method has been updated",
+    });
+    update_payment_form.value = useFormReset(update_payment_form.value);
   }
   is_loading.value = false;
 }
@@ -50,6 +77,19 @@ function deletePaymentMethod(id) {
   useApiFetch(`/api/payments/delete/${id}`, {
     method: "DELETE",
   });
+}
+
+function openEditPaymentMethod(id) {
+  if (id) {
+    editing_card_id.value = id;
+    is_edit_payment_model_open.value = true;
+  }
+}
+
+function getPaymentObject(id) {
+  if (id) {
+    return payments.value.find((payment) => payment.id === id);
+  }
 }
 </script>
 
@@ -110,7 +150,7 @@ function deletePaymentMethod(id) {
                       color="gray"
                       variant="link"
                       icon="solar:pen-new-square-line-duotone"
-                      @click="is_edit_payment_model_open = true"
+                      @click="openEditPaymentMethod(payment.id)"
                     />
                     <UButton
                       color="gray"
@@ -138,10 +178,11 @@ function deletePaymentMethod(id) {
           </div>
         </div>
 
-        <!-- Add Payment Modal End -->
+        <!-- Add Payment Modal Start -->
         <UModal v-model="is_payment_model_open">
           <div
             class="p-5 bg-[url('/img/modal-bg.png')] bg-cover bg-right bg-no-repeat"
+            @keyup.enter="addPaymentMethod"
           >
             <div>
               <div>
@@ -241,38 +282,50 @@ function deletePaymentMethod(id) {
                 <h3
                   class="text-xl font-semibold text-gray-700 dark:text-slate-200"
                 >
-                  Add Payment Method
+                  Update Payment Method
                 </h3>
               </div>
             </div>
 
             <div class="grid grid-cols-3 gap-4 py-5">
               <div class="col-span-3 flex justify-between flex-wrap">
-                <UInput placeholder="Search..." class="w-full" block disabled>
-                  <template #leading>
-                    <img class="w-[30px]" src="/img/payments/Visa.png" />
-                  </template>
-                </UInput>
-              </div>
-              <div class="col-span-3">
-                <UInput
-                  label="Card Number"
-                  placeholder="Enter your card number"
-                  v-model="payment_method_form.card_number"
-                />
+                <div class="relative flex items-center w-full">
+                  <div
+                    class="w-[50px] px-2 dark:bg-[#2b2a33] h-full flex justify-center items-center rounded-l-lg border dark:border-gray-800 dark:border-r-0 border-gray-300"
+                  >
+                    <img
+                      :src="`/img/payments/${
+                        getPaymentObject(editing_card_id).payment_type
+                      }.png`"
+                    />
+                  </div>
+                  <div class="flex-1">
+                    <UInput
+                      placeholder="Search..."
+                      block
+                      disabled
+                      :modelValue="
+                        getPaymentObject(editing_card_id).card_number
+                      "
+                      :ui="{
+                        rounded: 'rounded-none rounded-r-lg',
+                      }"
+                    />
+                  </div>
+                </div>
               </div>
               <div class="col-span-2">
                 <UInput
                   label="Expiry Date"
                   placeholder="MM/YY"
-                  v-model="payment_method_form.expiry_date"
+                  v-model="update_payment_form.expiry_date"
                 />
               </div>
               <div class="col-span-1">
                 <UInput
                   label="CVV"
                   placeholder="Enter CVV"
-                  v-model="payment_method_form.cvv"
+                  v-model="update_payment_form.cvv"
                 />
               </div>
             </div>
@@ -280,14 +333,17 @@ function deletePaymentMethod(id) {
             <div>
               <div class="flex justify-end gap-3">
                 <UButton
-                  @click="is_edit_payment_model_open = false"
+                  @click="
+                    is_edit_payment_model_open = false;
+                    editing_card_id = null;
+                  "
                   color="gray"
                   label="Close"
                 />
                 <UButton
-                  label="Submit"
+                  label="Update"
                   :loading="is_loading"
-                  @click="addPaymentMethod"
+                  @click="updatePaymentMethod"
                 />
               </div>
             </div>

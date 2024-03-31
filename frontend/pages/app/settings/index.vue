@@ -1,12 +1,33 @@
 <script setup>
 const editable = ref(false);
-const display_form = ref({
-  first_name: "Tharindu",
-  last_name: "Nimesh",
-  gender: "Male",
-  email: "tharindunimesh.abc@gmail.com",
-  mobile: "+94771234567",
+const auth = useAuthStore();
+const is_loading = ref(false);
+const user = ref({
+  first_name: auth.user.first_name,
+  last_name: auth.user.last_name,
+  gender: auth.user.gender,
+  email: auth.user.email,
+  mobile: auth.user.mobile,
 });
+
+async function update() {
+  is_loading.value = true;
+  const { data }  = await useApiFetch(`/api/users/update`, {
+    method: 'PUT',
+    body: user.value,
+  });
+
+  if (data) {
+    useNotifications().value.push({
+      title: 'Success',
+      message: 'User information updated successfully',
+      type: 'success',
+    });
+    auth.fetchUser();
+    editable.value = false;
+  }
+  is_loading.value = false;
+}
 </script>
 
 <template>
@@ -66,7 +87,7 @@ const display_form = ref({
               <UFormGroup label="First Name">
                 <UInput
                   color="gray"
-                  v-model="display_form.first_name"
+                  v-model="user.first_name"
                   placeholder="Enter Your First Name"
                   :disabled="!editable"
                 />
@@ -76,7 +97,7 @@ const display_form = ref({
               <UFormGroup label="Last Name">
                 <UInput
                   color="gray"
-                  v-model="display_form.last_name"
+                  v-model="user.last_name"
                   placeholder="Enter Your First Name"
                   :disabled="!editable"
                 />
@@ -87,14 +108,14 @@ const display_form = ref({
                 <UInput
                   color="gray"
                   v-if="!editable"
-                  v-model="display_form.gender"
+                  v-model="user.gender"
                   placeholder="Enter Your Gender"
                   :disabled="!editable"
                 />
                 <USelect
                   v-else
                   color="gray"
-                  v-model="display_form.gender"
+                  v-model="user.gender"
                   :options="['Male', 'Female']"
                 />
               </UFormGroup>
@@ -112,7 +133,7 @@ const display_form = ref({
                   <div class="col-span-full lg:col-span-8">
                     <UInput
                       color="gray"
-                      v-model="display_form.email"
+                      v-model="user.email"
                       placeholder="Enter Your Email"
                       disabled
                     />
@@ -135,7 +156,7 @@ const display_form = ref({
               <UFormGroup label="Phone Number">
                 <UInput
                   color="gray"
-                  v-model="display_form.mobile"
+                  v-model="user.mobile"
                   placeholder="Enter Your Phone Number"
                   :disabled="!editable"
                 />
@@ -167,7 +188,8 @@ const display_form = ref({
                   variant="solid"
                   color="primary"
                   icon="solar:check-circle-outline"
-                  @click="editable = !editable"
+                  @click="update"
+                  :loading="is_loading"
                 >
                   Save Changes
                 </UButton>

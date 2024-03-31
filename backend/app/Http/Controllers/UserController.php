@@ -2,17 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\LoginRequest;
-use App\Http\Requests\RegisterUserRequest;
-use App\Models\Gender;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\Newsletter;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    public function update(UpdateUserRequest $request)
+    {
+        $user = request()->user();
+
+        $user->update($request->validated());
+
+        return response()->json([
+            'status' => 'success',
+            'user' => $user,
+        ]);
+    }
+
     public static function subscribe(Request $request)
     {
         $request->validate([
