@@ -2,6 +2,10 @@
 const is_loading = ref(false);
 const image_container = ref();
 const image = ref("");
+const publisher = ref("");
+onMounted(() => {
+  loadPublishers();
+});
 watch(image, (value) => {
   if (value) {
     if (form.value.images.length >= 5) {
@@ -16,6 +20,13 @@ watch(image, (value) => {
     form.value.images.push(value);
     image.value = "";
   }
+});
+watch(publisher, (value) => {
+  const selected_publisher = publishers_data.value.find(
+    (pub) => pub.name === value
+  );
+  console.log(selected_publisher);
+  form.value.publisher = selected_publisher?._id;
 });
 
 const form = ref({
@@ -43,27 +54,8 @@ const categories = [
   "romance",
 ];
 
-const publishers = [
-  "DC Comics",
-  "Marvel Comics",
-  "Image Comics",
-  "Dark Horse Comics",
-  "IDW Publishing",
-  "Dynamite Entertainment",
-  "BOOM! Studios",
-  "Valiant Comics",
-  "Archie Comics",
-  "Oni Press",
-  "Top Cow Productions",
-  "Avatar Press",
-  "Zenescope Entertainment",
-  "Aspen MLT",
-  "Action Lab Entertainment",
-  "Aftershock Comics",
-  "Abstract Studio",
-  "Aardvark-Vanaheim",
-  "AC Comics",
-];
+const publishers = ref([]);
+const publishers_data = ref([]);
 
 function removeImage(index) {
   form.value.images.splice(index, 1);
@@ -91,6 +83,14 @@ async function addProduct() {
     form.value = useFormReset(form.value);
     form.value.images = [];
     form.value.categories = [];
+  }
+}
+
+async function loadPublishers() {
+  const { data } = await useApiFetch("/api/publishers");
+  if (data) {
+    publishers.value = data.publishers.map(publisher => publisher.name);
+    publishers_data.value = data.publishers;
   }
 }
 </script>
@@ -153,6 +153,7 @@ async function addProduct() {
                 :disabled="!form.has_discount"
                 placeholder="Enter The Discount"
                 :ui="{ icon: { leading: { pointer: '' } } }"
+                v-model="form.discount"
               >
                 <template #leading>
                   <UCheckbox v-model="form.has_discount" />
@@ -167,7 +168,7 @@ async function addProduct() {
                 searchable-placeholder="Search a category..."
                 placeholder="Select a category"
                 :options="publishers"
-                v-model="form.publisher"
+                v-model="publisher"
               />
             </UFormGroup>
           </div>

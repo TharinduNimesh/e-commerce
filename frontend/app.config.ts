@@ -79,5 +79,8 @@ export default defineAppConfig({
       },
       background: "dark:bg-primary-dark",
     },
+    skeleton: {
+      background: "dark:bg-[#2b2a33]",
+    }
   },
 });

@@ -256,7 +256,7 @@ async function loadComics() {
 function updateComicsLayout(list) {
   return list.map((data) => ({
     ...data,
-    publisher: data.publisher?.toLowerCase(),
+    publisher: data.publisher?.name.toLowerCase(),
     price: `LKR ${data.price?.toLocaleString("en-US")}`,
     profit: `LKR ${(data.price * data.buyers).toLocaleString("en-US")}`,
     status: data.status ? data.status : "Active",

@@ -27,9 +27,10 @@ class CreateComicRequest extends FormRequest
             'images' => ['required', 'array'],
             'price' => ['required', 'numeric'],
             'has_discount' => ['required', 'boolean'],
-            'discount_price' => ['required_if:has_discount,true', 'numeric'],
+            'discount' => ['required_if:has_discount,true'],
             'categories' => ['required', 'array'],
             'categories.*' => ['required', 'string'],
+            'publisher' => ['required', 'exists:publishers,_id'],
             'published_date' => ['required', 'date'],
         ];
     }

@@ -151,9 +151,8 @@ const rows = computed(() => {
 
 async function loadPublishers() {
   isLoading.value = true;
-  const { data } = await useApiFetch("/api/publisher");
+  const { data } = await useApiFetch("/api/publishers");
   if (data) {
-    console.log(toRaw(data));
     publishers.value = data.publishers;
   }
   isLoading.value = false;
@@ -167,7 +166,7 @@ function formatIssuers() {
 }
 
 async function addPublisher() {
-  const { data } = await useApiFetch("/api/publisher/create", {
+  const { data } = await useApiFetch("/api/publishers/create", {
     method: "POST",
     body: form.value,
   });
@@ -207,9 +206,9 @@ async function addPublisher() {
             <template #name-data="{ row }">
               <div class="flex items-center gap-3">
                 <img
-                  :src="`/img/brands/dc.png`"
+                  :src="`${$config.public.apiURL}/storage${row.logo}`"
                   :alt="row.name"
-                  class="h-8 rounded-full"
+                  class="h-8"
                 />
                 <span>{{ row.name }}</span>
               </div>

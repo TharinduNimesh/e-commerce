@@ -1,6 +1,13 @@
 <script setup>
+const route = useRoute();
 const description = ref("");
 const has_discount = ref(false);
+const is_loading = ref(false);
+const data = ref(null);
+const id = route.params.id;
+onMounted(async () => {
+  await loadData();
+});
 
 const categories = [
   "esoteric",
@@ -36,6 +43,21 @@ const publishers = [
   "Aardvark-Vanaheim",
   "AC Comics",
 ];
+
+async function loadData() {
+  is_loading.value = true;
+  const { data: comic } = await useApiFetch(`/api/comics/${id}`, {}, false);
+  if (comic) {
+    data.value = comic.comic;
+  } else {
+    data.value = "not_found";
+    useNotifications().value.push({
+      type: "warning",
+      message: "Failed to load comic data",
+    });
+  }
+  is_loading.value = false;
+}
 </script>
 
 <template>

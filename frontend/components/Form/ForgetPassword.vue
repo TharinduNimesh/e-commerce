@@ -35,8 +35,6 @@ async function sendOtp() {
     },
   });
   if (data) {
-    console.log(data);
-
     useNotifications().value.push({
       message: data.message,
       title: "Check your Inbox",

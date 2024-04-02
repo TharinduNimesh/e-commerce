@@ -44,7 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // Publisher routes
-Route::prefix('publisher')->middleware(['auth:sanctum'])->group(function () {
+Route::prefix('publishers')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [PublisherController::class, 'index']);
     Route::post('/create', [PublisherController::class, 'create']);
 });
