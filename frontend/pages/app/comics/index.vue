@@ -260,7 +260,7 @@ function updateComicsLayout(list) {
     price: `LKR ${data.price?.toLocaleString("en-US")}`,
     profit: `LKR ${(data.price * data.buyers).toLocaleString("en-US")}`,
     status: data.status ? data.status : "Active",
-    created_at: getFormatedDate(new Date(data.created_at)),
+    created_at: getFormatedDate(new Date(data.issued_at)),
     updated_at: getFormatedDate(new Date(data.updated_at)),
   }));
 }
@@ -292,7 +292,7 @@ function updateComicsLayout(list) {
               <div class="flex items-center gap-2 pr-5">
                 <img
                   class="h-8"
-                  :src="`/img/comics/batman-comic.png`"
+                  :src="`${$config.public.apiURL}/storage${row.images[0]}`"
                   :alt="row.publisher"
                 />
                 <div class="flex flex-col">

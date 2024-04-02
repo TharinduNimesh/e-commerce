@@ -1,6 +1,34 @@
 <script setup>
-const description = ref("");
-const has_discount = ref(false);
+const is_loading = ref(false);
+const image_container = ref();
+const image = ref("");
+watch(image, (value) => {
+  if (value) {
+    if (form.value.images.length >= 5) {
+      useNotifications().value.push({
+        type: "error",
+        title: "Error",
+        message: "You can only upload 5 images",
+      });
+      return;
+    }
+
+    form.value.images.push(value);
+    image.value = "";
+  }
+});
+
+const form = ref({
+  name: "",
+  categories: [],
+  description: "",
+  price: "",
+  has_discount: false,
+  discount: "",
+  publisher: "",
+  published_date: "",
+  images: [],
+});
 
 const categories = [
   "esoteric",
@@ -36,6 +64,35 @@ const publishers = [
   "Aardvark-Vanaheim",
   "AC Comics",
 ];
+
+function removeImage(index) {
+  form.value.images.splice(index, 1);
+}
+
+function markAsPrimary(index) {
+  const primary = form.value.images[index];
+  form.value.images.splice(index, 1);
+  form.value.images.unshift(primary);
+}
+
+async function addProduct() {
+  is_loading.value = true;
+  const { data } = await useApiFetch("/api/comics/create", {
+    method: "POST",
+    body: form.value,
+  });
+
+  if (data) {
+    useNotifications().value.push({
+      type: "success",
+      title: "Success",
+      message: "Comic added successfully",
+    });
+    form.value = useFormReset(form.value);
+    form.value.images = [];
+    form.value.categories = [];
+  }
+}
 </script>
 
 <template>
@@ -59,28 +116,29 @@ const publishers = [
         <div class="grid grid-cols-8 gap-3 mt-5">
           <div class="col-span-full md:col-span-5">
             <UFormGroup label="Name" required>
-              <UInput placeholder="Name Of The Comic Book" />
+              <UInput placeholder="Name Of The Comic Book" v-model="form.name" />
             </UFormGroup>
           </div>
           <div class="col-span-full md:col-span-3">
             <UFormGroup label="Category" required>
               <USelectMenu
                 searchable
+                multiple
                 searchable-placeholder="Search a category..."
                 placeholder="Select a category"
                 :options="categories"
-                model-value="superhero"
+                v-model="form.categories"
               />
             </UFormGroup>
           </div>
           <div class="col-span-full">
             <UFormGroup label="Description" required>
-              <TipTap v-model="description" />
+              <TipTap v-model="form.description" />
             </UFormGroup>
           </div>
           <div class="col-span-full md:col-span-4">
             <UFormGroup label="Price" required>
-              <UInput placeholder="Enter the Price" class="rounded-l-none">
+              <UInput placeholder="Enter the Price" class="rounded-l-none" v-model="form.price">
                 <template #leading>
                   <span class="text-gray-500 dark:text-gray-400 text-sm"
                     >LKR</span
@@ -92,12 +150,12 @@ const publishers = [
           <div class="col-span-full md:col-span-4">
             <UFormGroup label="Discount">
               <UInput
-                :disabled="!has_discount"
+                :disabled="!form.has_discount"
                 placeholder="Enter The Discount"
                 :ui="{ icon: { leading: { pointer: '' } } }"
               >
                 <template #leading>
-                  <UCheckbox v-model="has_discount" />
+                  <UCheckbox v-model="form.has_discount" />
                 </template>
               </UInput>
             </UFormGroup>
@@ -109,26 +167,29 @@ const publishers = [
                 searchable-placeholder="Search a category..."
                 placeholder="Select a category"
                 :options="publishers"
-                model-value="DC Comics"
+                v-model="form.publisher"
               />
             </UFormGroup>
           </div>
           <div class="col-span-full md:col-span-4">
             <UFormGroup label="Published Date" required>
-              <UInput type="date" class="rounded-l-none" />
+              <UInput type="date" class="rounded-l-none" v-model="form.published_date"/>
             </UFormGroup>
           </div>
           <div class="col-span-full">
             <div class="flex flex-col gap-5">
               <UFormGroup label="Images" hint="Max 5 Images" required>
-                <FileUploader />
+                <FileUploader v-model="image" />
               </UFormGroup>
-              <div class="flex gap-3 flex-wrap">
-                <AppImage image="https://via.placeholder.com/400x200" primary />
-                <AppImage image="https://via.placeholder.com/150x200" />
-                <AppImage image="https://via.placeholder.com/1280x720" />
-                <AppImage image="https://via.placeholder.com/150" />
-                <AppImage image="https://via.placeholder.com/400x200" />
+              <div class="flex gap-3 flex-wrap" ref="image_container">
+                <AppImage
+                  v-for="(image, index) in form.images"
+                  :image="image"
+                  :index="index"
+                  :primary="index == 0"
+                  @onremove="removeImage"
+                  @onmark="markAsPrimary"
+                />
               </div>
             </div>
           </div>
@@ -139,6 +200,7 @@ const publishers = [
               variant="solid"
               label="Submit"
               icon="ic:round-send"
+              @click="addProduct"
               trailing
             />
           </div>

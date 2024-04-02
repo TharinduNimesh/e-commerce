@@ -335,7 +335,6 @@ function getPaymentObject(id) {
                 <UButton
                   @click="
                     is_edit_payment_model_open = false;
-                    editing_card_id = null;
                   "
                   color="gray"
                   label="Close"

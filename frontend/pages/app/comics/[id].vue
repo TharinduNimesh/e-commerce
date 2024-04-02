@@ -1,30 +1,7 @@
 <script setup>
 const route = useRoute();
-const desciption = `"Batman: The Dark Knight Returns #1," a seminal comic written by
-            Frank Miller and illustrated by Klaus Janson, is a gripping and
-            influential entry in the Batman canon. Published in 1986 by DC
-            Comics, this issue marks the beginning of a groundbreaking four-part
-            miniseries that redefined the character and the superhero genre as a
-            whole.
-            <br />
-            <br />
-            Set in a dystopian future where Gotham City is overrun by crime and
-            corruption, an aging Bruce Wayne comes out of retirement to don the
-            cape and cowl once more. Miller's narrative explores a world
-            grappling with moral decay, political turmoil, and a longing for the
-            return of its caped crusader. Janson's dynamic artwork complements
-            the gritty tone, capturing the intensity of Batman's resurgence and
-            the harsh realities of the urban landscape.
-            <br />
-            <br />
-            As Batman confronts a new breed of criminals and faces off against
-            old adversaries, the story delves into themes of justice, aging, and
-            the enduring spirit of a hero. "The Dark Knight Returns #1" is a
-            pivotal chapter in Batman's history, contributing to the character's
-            complex mythology and leaving an indelible mark on the comic book
-            industry. This issue serves as a powerful introduction to a
-            narrative that explores the psychological and physical toll of a
-            lifetime dedicated to justice.`;
+const is_loading = ref(false);
+const data = ref(null);
 
 const id = route.params.id;
 const offer_percentage = ref(66);
@@ -37,12 +14,31 @@ const images = ref([
   "/img/comics/batman-4.webp",
   "/img/comics/batman-5.png",
 ]);
-const active_image = ref(images.value[0]);
+const active_image = ref(null);
+onMounted(async () => {
+  await loadData();
+  active_image.value = data.value.images[0];
+});
 
 function calculatePrice() {
   let price = parseFloat(product_price.value);
   let offer = parseFloat(offer_percentage.value);
   return (price - (price * offer) / 100).toFixed(2);
+}
+
+async function loadData() {
+  is_loading.value = true;
+  const { data: comic } = await useApiFetch(`/api/comics/${id}`);
+  if (comic) {
+    data.value = comic.comic;
+    console.log(toRaw(data.value));
+    is_loading.value = false;
+  } else {
+    useNotifications().value.push({
+      type: "warning",
+      message: "Failed to load comic data",
+    });
+  }
 }
 </script>
 
@@ -63,7 +59,7 @@ function calculatePrice() {
           />
         </div>
         <UDivider class="my-5" />
-        <div class="w-full flex gap-5 lg:gap-0 flex-wrap">
+        <div class="w-full flex gap-5 lg:gap-0 flex-wrap" v-if="data">
           <div
             class="relative w-full flex flex-col justify-center items-center lg:w-1/2"
           >
@@ -77,7 +73,7 @@ function calculatePrice() {
             </div>
             <div class="w-4/5 max-w-[500px]">
               <img
-                :src="active_image"
+                :src="`${$config.public.apiURL}/storage${active_image}`"
                 alt="Batman Comic Cover"
                 class="w-full max-h-[400px] object-contain"
               />
@@ -86,14 +82,14 @@ function calculatePrice() {
               class="h-[80px] flex gap-1 mt-5 w-full overflow-x-scroll overflow-y-hidden"
             >
               <div
-                v-for="image in images"
+                v-for="image in data.images"
                 :key="image"
                 class="h-full flex-none cursor-pointer duration-300 hover:scale-105"
                 @click="active_image = image"
               >
                 <img
                   v-show="image != active_image"
-                  :src="image"
+                  :src="`${$config.public.apiURL}/storage${image}`"
                   alt="Batman Comic Cover"
                   class="h-full"
                 />
@@ -105,12 +101,12 @@ function calculatePrice() {
               <h1
                 class="text-3xl font-bold uppercase text-gray-700 dark:text-slate-100"
               >
-                Batman: The Dark Knight Returns #1
+                {{ data.name }}
               </h1>
               <span
                 class="text-lg font-semibold uppercase text-gray-400 dark:text-slate-400"
               >
-                DC Comics
+                {{ data.publisher }}
               </span>
             </div>
             <div class="flex justify-center py-5">
@@ -135,13 +131,13 @@ function calculatePrice() {
                 </div>
               </div>
             </div>
-            <div class="text-gray-500 dark:text-gray-400" v-html="desciption" />
+            <div class="text-gray-500 dark:text-gray-400" v-html="data.description" />
             <div class="w-full flex flex-col gap-3">
               <div class="w-full flex mt-5 py-2">
-                <span v-if="offer_percentage">
+                <span v-if="data.has_discount">
                   <span
                     class="line-through text-red-500 dark:text-red-400 text-sm"
-                    >LKR. {{ product_price }}</span
+                    >LKR. {{ data.price }}</span
                   >
                   <span
                     class="text-green-500 dark:text-green-600 font-semibold text-xl"
@@ -151,7 +147,7 @@ function calculatePrice() {
                 <span
                   v-else
                   class="font-semibold text-xl text-gray-500 dark:text-gray-400"
-                  >LKR. {{ product_price }}</span
+                  >LKR. {{ data.price }}</span
                 >
               </div>
               <div class="w-full grid grid-cols-12 gap-3">
@@ -181,13 +177,14 @@ function calculatePrice() {
                   class="col-span-full italic flex flex-col text-gray-400 dark:text-gray-500 items-end mt-5 gap-2"
                 >
                   <span>
-                    Issued At : {{ getFormatedDate(new Date("2023-11-30")) }}
+                    Issued At : {{ getFormatedDate(new Date(data.issued_at)) }}
                   </span>
                   <span>
-                    Published At (ComicCage) : {{ getFormatedDate(new Date("2023-12-01")) }}
+                    Published At (ComicCage) :
+                    {{ getFormatedDate(new Date(data.created_at)) }}
                   </span>
                   <span>
-                    Last Update : {{ getFormatedDate(new Date("2024-01-04")) }}
+                    Last Update : {{ getFormatedDate(new Date(data.updated_at)) }}
                   </span>
                 </div>
               </div>

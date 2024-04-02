@@ -10,15 +10,11 @@ class CategoryController extends Controller
 {
     public function create(CreateCategoryRequest $request)
     {
-        // get image from base64
-        $image = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->image));
-
-        $path = '/categories/' . uniqid() . '.png';
-        Storage::disk('public')->put($path, $image, 'public');
+        $path = ImageController::store($request->image, 'categories');
 
         $category = Category::create([
             'name' => $request->name,
-            'image' => $request->image,
+            'image' => $path,
         ]);
 
         return response()->json([

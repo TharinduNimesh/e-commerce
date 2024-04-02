@@ -9,5 +9,10 @@ export default defineNuxtConfig({
   },
   imports: {
     dirs: ["stores"]
+  },
+  runtimeConfig: {
+    public: {
+      apiURL: process.env.API_URL || "http://localhost:3000",
+    }
   }
 });

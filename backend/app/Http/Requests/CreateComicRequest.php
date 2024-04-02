@@ -22,13 +22,15 @@ class CreateComicRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string'],
+            'name' => ['required', 'string'],
             'description' => ['required', 'string'],
             'images' => ['required', 'array'],
             'price' => ['required', 'numeric'],
+            'has_discount' => ['required', 'boolean'],
+            'discount_price' => ['required_if:has_discount,true', 'numeric'],
             'categories' => ['required', 'array'],
             'categories.*' => ['required', 'string'],
-            'issued_at' => ['required', 'date'],
+            'published_date' => ['required', 'date'],
         ];
     }
 
@@ -42,7 +44,6 @@ class CreateComicRequest extends FormRequest
         return [
             'images.required' => 'Images are required',
             'categories.required' => 'Categories are required',
-            'issued_at.required' => 'Issued at is required',
         ];
     }
 }
