@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateComicRequest;
 use App\Models\Comic;
 use App\Models\Publisher;
-use Illuminate\Http\Request;
 
 class ComicController extends Controller
 {
@@ -14,19 +13,8 @@ class ComicController extends Controller
         $comics = Comic::all();
         $mapped_comics = $comics->map(function ($comic) {
             $publisher = Publisher::find($comic->publisher);
-            return [
-                '_id' => $comic->_id,
-                'name' => $comic->name,
-                'images' => $comic->images,
-                'price' => $comic->price,
-                'has_discount' => $comic->has_discount,
-                'discount' => $comic->discount,
-                'publisher' => $publisher,
-                'issued_at' => $comic->issued_at,
-                'created_by' => $comic->created_by,
-                'created_at' => $comic->created_at,
-                'updated_at' => $comic->updated_at,
-            ];
+            $comic->publisher = $publisher;
+            return $comic;
         });
 
         return response()->json([
@@ -52,6 +40,26 @@ class ComicController extends Controller
         return response()->json([
             'status' => 'success',
             'comic' => $comic
+        ]);
+    }
+
+    public function toggleHide($id)
+    {
+        $comic = Comic::find($id);
+
+        if ($comic == null) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Comic not found'
+            ], 404);
+        }
+
+        $comic->is_hidden = !$comic->is_hidden;
+        $comic->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Comic visibility toggled successfully'
         ]);
     }
 

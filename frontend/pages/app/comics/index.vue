@@ -61,14 +61,15 @@ const items = (row) => [
   [
     {
       label: "Visit in shop",
-      icon: "solar:eye-bold",
+      icon: "bi:basket3-fill",
       click: () => router.push(`/comic/${row._id}`),
     },
   ],
   [
     {
-      label: "Hide",
-      icon: "ph:eye-slash-fill",
+      label: row.is_hidden ? "Mark as visible" : "Hide",
+      icon: row.is_hidden ? "solar:eye-bold" : "ph:eye-slash-fill",
+      click: () => hideComic(row._id),
     },
     {
       label: "Delete",
@@ -264,6 +265,15 @@ function updateComicsLayout(list) {
     updated_at: getFormatedDate(new Date(data.updated_at)),
   }));
 }
+
+async function hideComic(id) {
+  const { data } = await useApiFetch(`/api/comics/hide/${id}`, {
+    method: "PUT",
+  });
+  if (data) {
+    loadComics();
+  }
+}
 </script>
 
 <template>
@@ -309,21 +319,21 @@ function updateComicsLayout(list) {
             <template #status-data="{ row }">
               <div class="capitalize">
                 <UBadge
-                  v-if="row.status == 'removed'"
+                  v-if="row.is_removed"
                   color="red"
                   variant="subtle"
                 >
-                  {{ row.status }}
+                  Removed
                 </UBadge>
                 <UBadge
-                  v-else-if="row.status == 'hidden'"
+                  v-else-if="row.is_hidden"
                   color="yellow"
                   variant="subtle"
                 >
-                  {{ row.status }}
+                  Hidden
                 </UBadge>
                 <UBadge v-else color="green" variant="subtle">
-                  {{ row.status }}
+                  Active
                 </UBadge>
               </div>
             </template>
