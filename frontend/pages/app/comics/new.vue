@@ -185,6 +185,7 @@ async function loadPublishers() {
               <div class="flex gap-3 flex-wrap" ref="image_container">
                 <AppImage
                   v-for="(image, index) in form.images"
+                  :key="image"
                   :image="image"
                   :index="index"
                   :primary="index == 0"

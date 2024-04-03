@@ -1,12 +1,39 @@
 <script setup>
+const config = useRuntimeConfig();
 const route = useRoute();
-const description = ref("");
-const has_discount = ref(false);
 const is_loading = ref(false);
+const is_request_sent = ref(false);
+const publisher = ref("");
+const publishers_data = ref([]);
 const data = ref(null);
+const image = ref(null);
 const id = route.params.id;
+const form = ref({
+  name: "",
+  categories: [],
+  description: "",
+  price: "",
+  has_discount: false,
+  discount: "",
+  publisher: "",
+  published_date: "",
+  images: [],
+});
 onMounted(async () => {
-  await loadData();
+  await loadPublishers();
+  loadData();
+});
+watch(image, (newValue) => {
+  if (newValue) {
+    form.value.images.push(newValue);
+  }
+});
+watch(publisher, (value) => {
+  const selected_publisher = publishers_data.value.find(
+    (pub) => pub.name === value
+  );
+  console.log(selected_publisher);
+  form.value.publisher = selected_publisher?._id;
 });
 
 const categories = [
@@ -22,33 +49,29 @@ const categories = [
   "romance",
 ];
 
-const publishers = [
-  "DC Comics",
-  "Marvel Comics",
-  "Image Comics",
-  "Dark Horse Comics",
-  "IDW Publishing",
-  "Dynamite Entertainment",
-  "BOOM! Studios",
-  "Valiant Comics",
-  "Archie Comics",
-  "Oni Press",
-  "Top Cow Productions",
-  "Avatar Press",
-  "Zenescope Entertainment",
-  "Aspen MLT",
-  "Action Lab Entertainment",
-  "Aftershock Comics",
-  "Abstract Studio",
-  "Aardvark-Vanaheim",
-  "AC Comics",
-];
+const publishers = ref([]);
 
 async function loadData() {
   is_loading.value = true;
-  const { data: comic } = await useApiFetch(`/api/comics/${id}`, {}, false);
-  if (comic) {
-    data.value = comic.comic;
+  const { data: response } = await useApiFetch(`/api/comics/${id}`, {}, false);
+  if (response) {
+    const comic = response.comic;
+    data.value = comic;
+    form.value = {
+      name: comic.name,
+      categories: comic.categories,
+      description: comic.description,
+      price: comic.price,
+      has_discount: comic.has_discount,
+      discount: comic.discount,
+      publisher: comic.publisher._id,
+      published_date: comic.issued_at,
+      images: comic.images,
+    };
+    form.value.images = comic.images.map(
+      (image) => `${config.public.apiURL}/storage/${image}`
+    );
+    publisher.value = comic.publisher.name;
   } else {
     data.value = "not_found";
     useNotifications().value.push({
@@ -57,6 +80,41 @@ async function loadData() {
     });
   }
   is_loading.value = false;
+}
+
+async function loadPublishers() {
+  is_loading.value = true;
+  const { data } = await useApiFetch("/api/publishers");
+  if (data) {
+    publishers.value = data.publishers.map(publisher => publisher.name);
+    publishers_data.value = data.publishers;
+  }
+}
+
+async function update() {
+  is_request_sent.value = true;
+  const { data } = await useApiFetch(`/api/comics/${id}`, {
+    method: "PUT",
+    body: form.value,
+  });
+  if (data) {
+    useNotifications().value.push({
+      type: "success",
+      message: "Comic updated successfully",
+    });
+    useRouter().push(`/app/comics/${id}`);
+  }
+  is_request_sent.value = false;
+}
+
+function removeImage(index) {
+  form.value.images.splice(index, 1);
+}
+
+function markAsPrimary(index) {
+  const primary = form.value.images[index];
+  form.value.images.splice(index, 1);
+  form.value.images.unshift(primary);
 }
 </script>
 
@@ -78,31 +136,96 @@ async function loadData() {
         </div>
         <UDivider class="my-2" />
         <AppHeading title="Edit This comic" />
-        <div class="grid grid-cols-8 gap-3 mt-5">
+        <div class="grid grid-cols-2 mt-5 gap-3" v-if="is_loading">
+          <div class="flex flex-col gap-1">
+            <USkeleton class="w-[200px] h-3" />
+            <USkeleton class="w-full h-10" />
+          </div>
+          <div class="flex flex-col gap-1">
+            <USkeleton class="w-[200px] h-3" />
+            <USkeleton class="w-full h-10" />
+          </div>
+          <div class="col-span-full flex flex-col gap-1">
+            <USkeleton class="w-[200px] h-3" />
+            <USkeleton class="w-full h-[200px]" />
+          </div>
+          <div class="flex flex-col gap-1">
+            <USkeleton class="w-[200px] h-3" />
+            <USkeleton class="w-full h-10" />
+          </div>
+          <div class="flex flex-col gap-1">
+            <USkeleton class="w-[200px] h-3" />
+            <USkeleton class="w-full h-10" />
+          </div>
+          <div class="flex flex-col gap-1">
+            <USkeleton class="w-[200px] h-3" />
+            <USkeleton class="w-full h-10" />
+          </div>
+          <div class="flex flex-col gap-1">
+            <USkeleton class="w-[200px] h-3" />
+            <USkeleton class="w-full h-10" />
+          </div>
+          <div class="col-span-full flex flex-col gap-1">
+            <USkeleton class="w-[200px] h-3" />
+            <USkeleton class="w-full h-[200px]" />
+          </div>
+        </div>
+        <div
+          v-else-if="data == 'not_found' || data == null"
+          class="w-full flex flex-col"
+        >
+          <div class="w-full flex flex-col items-center">
+            <h1
+              class="text-4xl uppercase text-gradient from-green-600 dark:from-green-700 to-violet-500 dark:to-violet-500 font-extrabold"
+            >
+              Comic Not Fount
+            </h1>
+            <span class="text-lg font-bold text-center">
+              We couldn't find the comic you are looking for, please try
+              refreshing the page or
+              <ULink
+                @click="$router.back()"
+                active-class="text-primary"
+                inactive-class="text-primary"
+              >
+                Go Back </ULink
+              >.
+            </span>
+          </div>
+        </div>
+        <div class="grid grid-cols-8 gap-3 mt-5" v-else>
           <div class="col-span-full md:col-span-5">
             <UFormGroup label="Name" required>
-              <UInput placeholder="Name Of The Comic Book" />
+              <UInput
+                placeholder="Name Of The Comic Book"
+                v-model="form.name"
+              />
             </UFormGroup>
           </div>
           <div class="col-span-full md:col-span-3">
             <UFormGroup label="Category" required>
               <USelectMenu
                 searchable
+                multiple
                 searchable-placeholder="Search a category..."
                 placeholder="Select a category"
                 :options="categories"
-                model-value="superhero"
+                v-model="form.categories"
               />
             </UFormGroup>
           </div>
           <div class="col-span-full">
             <UFormGroup label="Description" required>
-              <TipTap v-model="description" />
+              <TipTap v-model="form.description" />
             </UFormGroup>
           </div>
           <div class="col-span-full md:col-span-4">
             <UFormGroup label="Price" required>
-              <UInput placeholder="Enter the Price" class="rounded-l-none">
+              <UInput
+                placeholder="Enter the Price"
+                class="rounded-l-none"
+                v-model="form.price"
+              >
                 <template #leading>
                   <span class="text-gray-500 dark:text-gray-400 text-sm"
                     >LKR</span
@@ -114,12 +237,13 @@ async function loadData() {
           <div class="col-span-full md:col-span-4">
             <UFormGroup label="Discount">
               <UInput
-                :disabled="!has_discount"
+                :disabled="!form.has_discount"
                 placeholder="Enter The Discount"
                 :ui="{ icon: { leading: { pointer: '' } } }"
+                v-model="form.discount"
               >
                 <template #leading>
-                  <UCheckbox v-model="has_discount" />
+                  <UCheckbox v-model="form.has_discount" />
                 </template>
               </UInput>
             </UFormGroup>
@@ -131,37 +255,47 @@ async function loadData() {
                 searchable-placeholder="Search a category..."
                 placeholder="Select a category"
                 :options="publishers"
-                model-value="DC Comics"
+                v-model="publisher"
               />
             </UFormGroup>
           </div>
           <div class="col-span-full md:col-span-4">
             <UFormGroup label="Published Date" required>
-              <UInput type="date" class="rounded-l-none" />
+              <UInput
+                type="date"
+                class="rounded-l-none"
+                v-model="form.published_date"
+              />
             </UFormGroup>
           </div>
           <div class="col-span-full">
             <div class="flex flex-col gap-5">
               <UFormGroup label="Images" hint="Max 5 Images" required>
-                <FileUploader />
+                <FileUploader v-model="image" />
               </UFormGroup>
               <div class="flex gap-3 flex-wrap">
-                <AppImage image="https://via.placeholder.com/400x200" primary />
-                <AppImage image="https://via.placeholder.com/150x200" />
-                <AppImage image="https://via.placeholder.com/1280x720" />
-                <AppImage image="https://via.placeholder.com/150" />
-                <AppImage image="https://via.placeholder.com/400x200" />
+                <AppImage
+                  v-for="(image, index) in form.images"
+                  :key="image"
+                  :image="image"
+                  :index="index"
+                  :primary="index == 0"
+                  @onremove="removeImage"
+                  @onmark="markAsPrimary"
+                />
               </div>
             </div>
           </div>
           <div class="col-span-full flex justify-center md:justify-end gap-3">
-            <UButton color="gray" variant="solid" label="Discard" />
+            <UButton @click="$router.back" color="gray" variant="solid" label="Discard" />
             <UButton
               color="black"
               variant="solid"
               label="Save Changes"
               icon="ic:round-send"
+              :loading="is_request_sent"
               trailing
+              @click="update"
             />
           </div>
           <div

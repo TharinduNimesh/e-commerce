@@ -63,6 +63,42 @@ class ComicController extends Controller
         ]);
     }
 
+    public function update(CreateComicRequest $request, $id)
+    {
+        $comic = Comic::find($id);
+        $images = [];
+
+        foreach ($request->images as $image) {
+            // store image in storage if it's new
+            if (strpos($image, 'data:image') !== false) {
+                $path = ImageController::store($image, 'comics');
+                array_push($images, $path);
+            } else {
+                // remove url path from image
+                $image = explode('storage/', $image)[1];
+                array_push($images, $image);
+            }
+        }
+
+        $comic->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'images' => $images,
+            'price' => $request->price,
+            'has_discount' => $request->has_discount,
+            'discount' => $request->discount,
+            'categories' => $request->categories,
+            'publisher' => $request->publisher,
+            'issued_at' => $request->published_date,
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Comic updated successfully',
+            'comic' => $comic
+        ]);
+    }
+
     public function create(CreateComicRequest $request)
     {
         $data = $request->validated();
