@@ -69,11 +69,12 @@ const items = (row) => [
     {
       label: row.is_hidden ? "Mark as visible" : "Hide",
       icon: row.is_hidden ? "solar:eye-bold" : "ph:eye-slash-fill",
-      click: () => hideComic(row._id),
+      click: () => toggleHide(row._id),
     },
     {
       label: "Delete",
       icon: "i-heroicons-trash-20-solid",
+      click: () => remove(row._id),
     },
   ],
 ];
@@ -266,9 +267,18 @@ function updateComicsLayout(list) {
   }));
 }
 
-async function hideComic(id) {
+async function toggleHide(id) {
   const { data } = await useApiFetch(`/api/comics/hide/${id}`, {
     method: "PUT",
+  });
+  if (data) {
+    loadComics();
+  }
+}
+
+async function remove(id) {
+  const { data } = await useApiFetch(`/api/comics/${id}`, {
+    method: "DELETE",
   });
   if (data) {
     loadComics();
@@ -318,11 +328,7 @@ async function hideComic(id) {
 
             <template #status-data="{ row }">
               <div class="capitalize">
-                <UBadge
-                  v-if="row.is_removed"
-                  color="red"
-                  variant="subtle"
-                >
+                <UBadge v-if="row.is_removed" color="red" variant="subtle">
                   Removed
                 </UBadge>
                 <UBadge
@@ -332,9 +338,7 @@ async function hideComic(id) {
                 >
                   Hidden
                 </UBadge>
-                <UBadge v-else color="green" variant="subtle">
-                  Active
-                </UBadge>
+                <UBadge v-else color="green" variant="subtle"> Active </UBadge>
               </div>
             </template>
 
@@ -355,7 +359,15 @@ async function hideComic(id) {
             </template>
 
             <template #action-data="{ row }">
-              <UDropdown :items="items(row)">
+              <UButton
+                v-if="row.is_removed"
+                color="gray"
+                variant="ghost"
+                icon="solar:eye-bold"
+                class="dark:hover:bg-secondary-dark/30"
+                :to="$router.resolve(`/app/comics/${row._id}`)"
+              />
+              <UDropdown :items="items(row)" v-else>
                 <UButton
                   color="gray"
                   variant="ghost"

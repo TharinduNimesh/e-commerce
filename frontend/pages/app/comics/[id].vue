@@ -86,6 +86,17 @@ async function loadData() {
             class="w-full flex gap-5 lg:gap-0 flex-wrap"
             v-else-if="data != null"
           >
+            <div v-if="data.is_removed" class="w-full flex justify-center">
+              <div
+                class="w-full md:w-2/3 lg:w-1/2 p-5 bg-orange-500/30 border border-orange-600/60 text-orange-500 dark:text-orange-400 mb-5 rounded-lg"
+              >
+                <h2 class="text-xl font-bold uppercase underline">WARNING</h2>
+                <span>
+                  The Comic you are trying to view has been removed from the
+                  ComicCage. You can't edit this comic anymore.
+                </span>
+              </div>
+            </div>
             <div
               class="relative w-full flex flex-col justify-center items-center lg:w-1/2"
             >
@@ -95,7 +106,11 @@ async function loadData() {
                 }"
                 class="absolute w-[80px] top-0 left-0"
               >
-                <img :src="`${$config.public.apiURL}/storage${data.publisher.logo}`" alt="DC Studios" class="w-full" />
+                <img
+                  :src="`${$config.public.apiURL}/storage${data.publisher.logo}`"
+                  alt="DC Studios"
+                  class="w-full"
+                />
               </div>
               <div class="w-4/5 max-w-[500px]">
                 <img
@@ -185,7 +200,10 @@ async function loadData() {
                     >LKR. {{ data.price }}</span
                   >
                 </div>
-                <div class="w-full grid grid-cols-12 gap-3">
+                <div
+                  class="w-full grid grid-cols-12 gap-3"
+                  v-if="!data.is_removed"
+                >
                   <div class="col-span-full md:col-span-6 lg:col-span-7">
                     <UButton
                       color="indigo"
@@ -211,7 +229,7 @@ async function loadData() {
                   <div
                     class="col-span-full italic flex flex-col text-gray-400 dark:text-gray-500 items-end mt-5 gap-2"
                   >
-                    <!-- <span>
+                    <span>
                       Issued At :
                       {{ getFormatedDate(new Date(data.issued_at)) }}
                     </span>
@@ -222,7 +240,7 @@ async function loadData() {
                     <span>
                       Last Update :
                       {{ getFormatedDate(new Date(data.updated_at)) }}
-                    </span> -->
+                    </span>
                   </div>
                 </div>
               </div>

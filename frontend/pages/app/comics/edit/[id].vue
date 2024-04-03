@@ -86,7 +86,7 @@ async function loadPublishers() {
   is_loading.value = true;
   const { data } = await useApiFetch("/api/publishers");
   if (data) {
-    publishers.value = data.publishers.map(publisher => publisher.name);
+    publishers.value = data.publishers.map((publisher) => publisher.name);
     publishers_data.value = data.publishers;
   }
 }
@@ -193,6 +193,17 @@ function markAsPrimary(index) {
             </span>
           </div>
         </div>
+        <div class="w-full flex justify-center" v-else-if="data.is_removed">
+          <div
+            class="w-full p-5 bg-orange-500/30 border border-orange-600/60 text-orange-500 dark:text-orange-400 my-5 rounded-lg"
+          >
+            <h2 class="text-xl font-bold uppercase underline">WARNING</h2>
+            <span>
+              The Comic you are trying to view has been removed from the
+              ComicCage. You can't edit this comic anymore.
+            </span>
+          </div>
+        </div>
         <div class="grid grid-cols-8 gap-3 mt-5" v-else>
           <div class="col-span-full md:col-span-5">
             <UFormGroup label="Name" required>
@@ -287,7 +298,12 @@ function markAsPrimary(index) {
             </div>
           </div>
           <div class="col-span-full flex justify-center md:justify-end gap-3">
-            <UButton @click="$router.back" color="gray" variant="solid" label="Discard" />
+            <UButton
+              @click="$router.back"
+              color="gray"
+              variant="solid"
+              label="Discard"
+            />
             <UButton
               color="black"
               variant="solid"

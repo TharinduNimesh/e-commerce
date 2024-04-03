@@ -54,6 +54,7 @@ Route::prefix('comics')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [ComicController::class, 'index']);
     Route::get('/{id}', [ComicController::class, 'show']);
     Route::put('/{id}', [ComicController::class, 'update']);
+    Route::delete('/{id}', [ComicController::class, 'remove']);
     Route::put('/hide/{id}', [ComicController::class, 'toggleHide']);
     Route::post('/create', [ComicController::class, 'create']);
 });

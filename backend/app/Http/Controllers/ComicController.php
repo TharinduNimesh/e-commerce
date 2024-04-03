@@ -10,7 +10,7 @@ class ComicController extends Controller
 {
     public function index()
     {
-        $comics = Comic::all();
+        $comics = Comic::orderBy('is_removed', 'asc')->get();
         $mapped_comics = $comics->map(function ($comic) {
             $publisher = Publisher::find($comic->publisher);
             $comic->publisher = $publisher;
@@ -21,6 +21,35 @@ class ComicController extends Controller
             'status' => 'success',
             'comics' => $mapped_comics
         ]);
+    }
+
+    public function create(CreateComicRequest $request)
+    {
+        $data = $request->validated();
+
+        $images = [];
+        foreach ($request->images as $image) {
+            $path = ImageController::store($image, 'comics');
+            array_push($images, $path);
+        }
+
+        $comic = Comic::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'images' => $images,
+            'price' => $request->price,
+            'has_discount' => $request->has_discount,
+            'discount' => $request->discount,
+            'categories' => $request->categories,
+            'publisher' => $request->publisher,
+            'issued_at' => $request->published_date,
+            'created_by' => request()->user()->_id,
+        ]);
+
+        return response()->json([
+            'message' => 'Comic created successfully',
+            'comic' => $comic
+        ], 201);
     }
 
     public function show($id)
@@ -99,32 +128,24 @@ class ComicController extends Controller
         ]);
     }
 
-    public function create(CreateComicRequest $request)
+    public function remove($id)
     {
-        $data = $request->validated();
+        $comic = Comic::find($id);
 
-        $images = [];
-        foreach ($request->images as $image) {
-            $path = ImageController::store($image, 'comics');
-            array_push($images, $path);
+        if ($comic == null) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Comic not found'
+            ], 404);
         }
 
-        $comic = Comic::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'images' => $images,
-            'price' => $request->price,
-            'has_discount' => $request->has_discount,
-            'discount' => $request->discount,
-            'categories' => $request->categories,
-            'publisher' => $request->publisher,
-            'issued_at' => $request->published_date,
-            'created_by' => request()->user()->_id,
+        $comic->update([
+            'is_removed' => true
         ]);
 
         return response()->json([
-            'message' => 'Comic created successfully',
-            'comic' => $comic
-        ], 201);
+            'status' => 'success',
+            'message' => 'Comic deleted successfully'
+        ]);
     }
 }
