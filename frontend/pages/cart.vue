@@ -1,3 +1,35 @@
+<script setup>
+const cart_store = useCartStore();
+const is_loading = ref(false);
+const items = ref([]);
+onMounted(() => {
+  loadCart();
+});
+
+async function loadCart() {
+  is_loading.value = true;
+  const { data } = await useApiFetch("/api/cart", {
+    method: "POST",
+    body: {
+      cart: cart_store.cart,
+    },
+  });
+  if (data) {
+    items.value = data.cart;
+  }
+  is_loading.value = false;
+}
+
+function remove(id) {
+  cart_store.remove(id);
+  items.value = items.value.filter((item) => item._id !== id);
+  useNotifications().value.push({
+    type: "success",
+    message: "Item removed from the cart",
+  });
+}
+</script>
+
 <template>
   <div>
     <NuxtLayout name="shop">
@@ -11,22 +43,54 @@
               <UButton to="/shop">Continue Shopping</UButton>
             </div>
           </div>
-          <div class="w-full grid grid-cols-2 mt-5 gap-5">
+          <div class="w-full grid grid-cols-2 mt-5 gap-5" v-if="is_loading">
+            <div class="flex flex-col gap-3">
+              <USkeleton class="w-full h-[200px] rounded-lg" />
+              <USkeleton class="w-full h-[200px] rounded-lg" />
+              <USkeleton class="w-full h-[200px] rounded-lg" />
+            </div>
+            <div class="flex">
+              <USkeleton class="w-full h-[320px] rounded-lg" />
+            </div>
+          </div>
+          <div
+            v-else-if="items.length == 0"
+            class="col-span-full flex justify-center mt-5"
+          >
+            <div
+              class="w-full md:w-2/3 lg:w-1/2 flex flex-col bg-primary-light dark:bg-primary-dark-transparent rounded shadow-lg dark:shadow-black overflow-hidden"
+            >
+              <div
+                class="w-full h-[200px] bg-cover bg-center bg-[url(/img/superman-and-darkseid.png)]"
+              ></div>
+              <div class="w-full p-5 lg:p-8 gap-y-2">
+                <div class="text-center text-lg font-bold">
+                  Your cart is empty
+                </div>
+                <div class="text-center">
+                  <UButton to="/shop">Continue Shopping</UButton>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="w-full grid grid-cols-2 mt-5 gap-5" v-else>
             <div
               class="col-span-full lg:col-span-1 flex flex-col gap-3 order-2 lg:order-1"
             >
               <ShopCartItem
-                v-for="item in 2"
+                v-for="item in items"
                 :key="item"
-                :id="1"
-                name="Batman Gotham Knight #1"
-                publisher="DC Comics"
-                image="batman-comic.png"
+                :id="item._id"
+                :name="item.name"
+                :publisher="item.publisher.name"
+                :image="item.images[0]"
+                :product_price="item.price"
+                :has_discount="item.has_discount"
+                :discount="item.discount"
                 rating="8.5"
                 favourite="2"
-                product_price="1000"
-                offer_percentage="66"
                 buyers="10"
+                @onremove="remove"
               />
             </div>
             <div class="col-span-full lg:col-span-1 order-1 lg:order-2">

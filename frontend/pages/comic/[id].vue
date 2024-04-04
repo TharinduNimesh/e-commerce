@@ -211,11 +211,7 @@ const displayed_comments = computed(() => {
 });
 
 function addToCart() {
-  const status = useCartStore().add({
-    id: data.value._id,
-    name: data.value.name,
-    price: data.value.price,
-  });
+  const status = useCartStore().add(data.value._id);
   if (status == "added") {
     useNotifications().value.push({
       type: "success",

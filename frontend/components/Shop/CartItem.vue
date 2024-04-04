@@ -1,10 +1,11 @@
 <script setup>
+const emit = defineEmits(["onremove"]);
 const props = defineProps({
   is_favorite: {
     type: Boolean,
     default: false,
   },
-  offer_percentage: {
+  discount: {
     type: String,
     default: 0,
   },
@@ -12,19 +13,27 @@ const props = defineProps({
     type: String,
     default: 0,
   },
+  has_discount: {
+    type: Boolean,
+    default: false,
+  },
   name: String,
   publisher: String,
   image: String,
   rating: String,
   buyers: String,
   favourite: String,
-  id: Number,
+  id: String,
 });
 
 function calculatePrice(price, offer) {
   price = parseFloat(price);
   offer = parseFloat(offer);
   return (price - (price * offer) / 100).toFixed(2);
+}
+
+function remove() {
+  emit("onremove", props.id);
 }
 </script>
 
@@ -45,10 +54,10 @@ function calculatePrice(price, offer) {
         class="text-2xl text-red-500 dark:text-red-400"
       />
     </div>
-    <div class="col-span-full flex justify-center sm:col-span-4">
+    <div class="col-span-full flex justify-center sm:col-span-4 pr-3">
       <img
-        :src="`/img/comics/${image}`"
-        class="w-full rounded shadow-lg max-w-[300px]"
+        :src="`${$config.public.apiURL}/storage${image}`"
+        class="rounded shadow-lg max-h-[200px]"
         alt="Comic"
       />
     </div>
@@ -78,23 +87,25 @@ function calculatePrice(price, offer) {
           </div>
           <div class="col-span-1 flex flex-col items-center gap-1">
             <Icon name="heroicons:shopping-cart-20-solid" class="text-xl" />
-            <span class="text-gray-700 text-sm dark:text-slate-100">{{ buyers }}</span>
+            <span class="text-gray-700 text-sm dark:text-slate-100">{{
+              buyers
+            }}</span>
           </div>
           <div class="col-span-1 flex flex-col items-center gap-1">
             <Icon name="i-heroicons-heart-solid" class="text-xl" />
-            <span class="text-gray-700 text-sm dark:text-slate-100"
-              >{{ favourite }}</span
-            >
+            <span class="text-gray-700 text-sm dark:text-slate-100">{{
+              favourite
+            }}</span>
           </div>
         </div>
       </div>
       <div class="w-full flex justify-center py-2">
-        <span v-if="offer_percentage">
+        <span v-if="has_discount">
           <span class="line-through text-red-500 dark:text-red-400 text-xs"
             >LKR. {{ product_price }}</span
           >
           <span class="text-green-500 dark:text-green-600 font-semibold"
-            >LKR. {{ calculatePrice(product_price, offer_percentage) }}</span
+            >LKR. {{ calculatePrice(product_price, discount) }}</span
           >
         </span>
         <span
@@ -104,12 +115,17 @@ function calculatePrice(price, offer) {
         >
       </div>
       <div class="flex gap-3">
-        <UButton color="red" icon="material-symbols:delete-sharp" />
+        <UButton
+          color="red"
+          icon="material-symbols:delete-sharp"
+          @click="remove"
+        />
         <div class="flex-1">
           <UButton
             label="Visit Product"
             icon="material-symbols:shopping-cart-rounded"
             block
+            :to="`/comic/${id}`"
           />
         </div>
       </div>

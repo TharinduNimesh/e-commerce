@@ -11,8 +11,10 @@ class ComicController extends Controller
     public function index()
     {
         $comics = Comic::orderBy('is_removed', 'asc')->get();
-        $mapped_comics = $comics->map(function ($comic) {
-            $publisher = Publisher::find($comic->publisher);
+        $publishers = Publisher::all();
+        $mapped_comics = $comics->map(function ($comic) use ($publishers){
+            // get publisher from publishers collection
+            $publisher = $publishers->where('_id', $comic->publisher)->first();
             $comic->publisher = $publisher;
             return $comic;
         });

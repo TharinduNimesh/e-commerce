@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ComicController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PublisherController;
@@ -53,11 +54,19 @@ Route::prefix('publishers')->middleware(['auth:sanctum'])->group(function () {
 Route::prefix('comics')->group(function () {
     Route::get('/', [ComicController::class, 'index']);
     Route::get('/{id}', [ComicController::class, 'show']);
-    Route::middleware(['auth:sanctum'])->group(function() {
+    Route::middleware(['auth:sanctum'])->group(function () {
         Route::put('/{id}', [ComicController::class, 'update']);
         Route::delete('/{id}', [ComicController::class, 'remove']);
         Route::put('/hide/{id}', [ComicController::class, 'toggleHide']);
         Route::post('/create', [ComicController::class, 'create']);
+    });
+});
+
+Route::prefix('cart')->group(function () {
+    Route::post('/', [CartController::class, 'index']);
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::post('/add', [CartController::class, 'addToCart']);
+        Route::delete('/remove/{id}', [CartController::class, 'removeFromCart']);
     });
 });
 
