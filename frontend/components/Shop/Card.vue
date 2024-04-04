@@ -1,14 +1,20 @@
 <script setup>
-const props = defineProps(["name", "description", "price", "image", "offer"]);
+const props = defineProps([
+  "name",
+  "description",
+  "price",
+  "image",
+  "offer",
+  "id",
+]);
 
 function truncateWords(inputString, maxWords) {
   let words = inputString.split(/\s+/);
   if (words.length <= maxWords) {
     return inputString;
   }
-  return words.slice(0, maxWords).join(' ');
+  return words.slice(0, maxWords).join(" ");
 }
-
 
 function calculatePrice() {
   let price = parseFloat(props.price);
@@ -29,22 +35,31 @@ function calculatePrice() {
     </div>
     <div class="w-full h-[240px] rounded-t-lg">
       <img
-        :src="`/img/game/${image}`"
+        :src="`${$config.public.apiURL}/storage${image}`"
         :alt="name"
         class="w-full h-full object-cover rounded-t-lg"
       />
     </div>
-    <div class="w-full flex flex-col px-5 py-3">
-      <h3 class="text-xl font-bold uppercase text-center">{{ name }}</h3>
-      <p class="text-gray-600 dark:text-gray-400">{{ truncateWords(description, 15) }} ...</p>
-      <div class="w-full flex justify-center py-2">
-        <span v-if="offer">
-            <span class="line-through text-red-500 dark:text-red-400 text-xs">LKR. {{ price }}</span>
-            <span class="text-green-500 dark:text-green-600 font-semibold">LKR. {{ calculatePrice() }}</span>
-        </span>
-        <span v-else>LKR. {{ price }}</span>
+    <div class="w-full flex flex-col px-5 py-3 justify-between h-full">
+      <div>
+        <h3 class="text-xl font-bold uppercase text-center">{{ name }}</h3>
+        <p
+          class="text-gray-600 dark:text-gray-400"
+          v-html="`${truncateWords(description, 15)}...`"
+        ></p>
       </div>
       <div class="grid grid-cols-4 gap-2 mt-3">
+        <div class="col-span-full flex justify-center py-2">
+          <span v-if="offer">
+            <span class="line-through text-red-500 dark:text-red-400 text-xs"
+              >LKR. {{ price }}</span
+            >
+            <span class="text-green-500 dark:text-green-600 font-semibold"
+              >LKR. {{ calculatePrice() }}</span
+            >
+          </span>
+          <span v-else>LKR. {{ price }}</span>
+        </div>
         <div class="col-span-1">
           <UButton
             color="red"
@@ -61,6 +76,7 @@ function calculatePrice() {
             class="h-full"
             label="Buy Now"
             icon="i-heroicons-shopping-cart-20-solid"
+            :to="`/comic/${id}`"
           />
         </div>
       </div>

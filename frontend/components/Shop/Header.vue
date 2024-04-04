@@ -34,8 +34,8 @@ const paths = [
     path: "/category",
   },
   {
-    name: "Latest",
-    path: "/latest",
+    name: "Cart",
+    path: "/cart",
   },
   {
     name: "Support",

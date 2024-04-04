@@ -1,10 +1,21 @@
 <script setup>
+const is_loading = ref(false);
+const comics = ref([]);
+onMounted(() => {
+  loadComics();
+});
 useHead({
   title: "Home | ComicCage",
 });
 
-function showModal(i) {
-  alert(i);
+async function loadComics() {
+  is_loading.value = true;
+  const { data } = await useApiFetch("/api/comics");
+  if (data) {
+    comics.value = data.comics;
+    console.log(comics.value);
+  }
+  is_loading.value = false;
 }
 </script>
 
@@ -53,14 +64,16 @@ function showModal(i) {
         <h1 class="main-heading">Latest Releases</h1>
         <div class="w-full mt-8">
           <ShopScrollable unique="latest-scrollable">
-            <ShopCard
-              v-for="i in 10"
-              :key="i"
-              name="Cyberpunk 2077"
-              description="Cyberpunk 2077 is an open-world, action-adventure story set in Night City, a megalopolis obsessed with power, glamour and body modification."
-              price="59.99"
-              image="cyberpunk-2077.avif"
-            />
+            <div v-for="comic in comics" :key="comic._id">
+              <ShopCard
+                v-if="!comic.is_removed && !comic.is_hidden"
+                :name="comic.name"
+                :description="comic.description"
+                :price="comic.price"
+                :image="comic.images[0]"
+                :id="comic._id"
+              />
+            </div>
           </ShopScrollable>
         </div>
         <h1 class="main-heading mt-10">Trending Offers</h1>
