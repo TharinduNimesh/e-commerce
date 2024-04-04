@@ -13,7 +13,7 @@ export const useCartStore = defineStore("useCartStore", {
       }
       this.cart.push(item);
       if (useAuthStore().isLoggedIn) {
-        useApiFetch("/api/cart", {
+        useApiFetch("/api/cart/add", {
           method: "POST",
           body: { id: item },
         });
@@ -21,18 +21,34 @@ export const useCartStore = defineStore("useCartStore", {
       localStorage.setItem("cart", JSON.stringify(this.cart));
       return "added";
     },
-    remove(id: string) {
-      this.cart = this.cart.filter((item) => item !== id);
+    remove(items: Array<string>) {
+      this.cart = this.cart.filter((item) => !items.includes(item));
       if (useAuthStore().isLoggedIn) {
         useApiFetch("/api/cart", {
           method: "DELETE",
-          body: { id },
+          body: { items },
         });
       }
       localStorage.setItem("cart", JSON.stringify(this.cart));
     },
     setCart(cart: string[]) {
       this.cart = cart;
+    },
+    async sync() {
+      if (useAuthStore().isLoggedIn) {
+        await useApiFetch("/api/cart/add", {
+          method: "POST",
+          body: { cart: this.cart },
+        });
+        const { data } = await useApiFetch("/api/cart", {
+          method: "POST",
+        });
+        if (data) {
+          const cart_arr = data.cart.map((item: any)=> item._id);
+          this.cart = cart_arr;
+          localStorage.setItem("cart", JSON.stringify(this.cart));
+        }
+      }
     },
   },
 });

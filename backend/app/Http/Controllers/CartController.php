@@ -29,4 +29,62 @@ class CartController extends Controller
             'cart' => $comics,
         ]);
     }
+
+    public function create(Request $request)
+    {
+        $validated = $request->validate([
+            'id' => ['nullable', 'string', 'exists:comics,_id'],
+            'cart' => ['nullable', 'array'],
+        ]);
+
+        $user = $request->user();
+
+        if ($request->id) {
+            $user->push('cart', $validated['id'], true);
+        }
+
+        if ($request->cart) {
+            $cart = $request->cart;
+            // merge array and remove duplicates
+            if ($user->cart) {
+                $cart = array_unique(array_merge($user->cart, $cart));
+            }
+
+            $user->update([
+                'cart' => $cart,
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'cart' => $user->cart,
+        ]);
+    }
+
+    public function remove(Request $request)
+    {
+        $validated = $request->validate([
+            'items' => ['required', 'array'],
+        ]);
+
+        $user = $request->user();
+        $cart = $user->cart;
+
+        if (!$cart) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Cart is empty',
+            ]);
+        }
+
+        $cart = array_diff($cart, $request->items);
+        $user->update([
+            'cart' => $cart,
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'cart' => $user->cart,
+        ]);
+    }
 }

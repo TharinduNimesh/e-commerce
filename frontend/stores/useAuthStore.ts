@@ -32,6 +32,10 @@ export const useAuthStore = defineStore("useAuthStore", {
     },
     logout() {
       this.user = null;
+      useApiFetch("/api/logout", {
+        method: "POST",
+      }, false);
+      localStorage.removeItem("auth-token");
       useRouter().push("/login");
     }
   },

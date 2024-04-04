@@ -13,7 +13,6 @@ async function loadComics() {
   const { data } = await useApiFetch("/api/comics");
   if (data) {
     comics.value = data.comics;
-    console.log(comics.value);
   }
   is_loading.value = false;
 }

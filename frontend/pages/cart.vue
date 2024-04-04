@@ -21,7 +21,7 @@ async function loadCart() {
 }
 
 function remove(id) {
-  cart_store.remove(id);
+  cart_store.remove([id]);
   items.value = items.value.filter((item) => item._id !== id);
   useNotifications().value.push({
     type: "success",

@@ -25,7 +25,6 @@ watch(publisher, (value) => {
   const selected_publisher = publishers_data.value.find(
     (pub) => pub.name === value
   );
-  console.log(selected_publisher);
   form.value.publisher = selected_publisher?._id;
 });
 

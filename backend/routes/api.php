@@ -29,6 +29,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/newsletter', [UserController::class, 'subscribe']);
+Route::post('/logout', function(Request $request) {
+    $request->user()->tokens()->delete();
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Logged out successfully',
+    ]);
+})->middleware('auth:sanctum');
 
 // Auth routes
 Route::middleware('throttle:auth')->group(function () {
@@ -65,8 +72,8 @@ Route::prefix('comics')->group(function () {
 Route::prefix('cart')->group(function () {
     Route::post('/', [CartController::class, 'index']);
     Route::middleware(['auth:sanctum'])->group(function () {
-        Route::post('/add', [CartController::class, 'addToCart']);
-        Route::delete('/remove/{id}', [CartController::class, 'removeFromCart']);
+        Route::post('/add', [CartController::class, 'create']);
+        Route::delete('/', [CartController::class, 'remove']);
     });
 });
 
