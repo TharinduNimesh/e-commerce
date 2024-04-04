@@ -28,6 +28,16 @@ function remove(id) {
     message: "Item removed from the cart",
   });
 }
+
+function removeAll() {
+  const ids = items.value.map((item) => item._id);
+  cart_store.remove(ids);
+  items.value = [];
+  useNotifications().value.push({
+    type: "success",
+    message: "All items removed from the cart",
+  });
+}
 </script>
 
 <template>
@@ -128,6 +138,7 @@ function remove(id) {
                         color="gray"
                         size="lg"
                         icon="system-uicons:reset-forward"
+                        @click="removeAll"
                       >
                         Reset Cart
                       </UButton>

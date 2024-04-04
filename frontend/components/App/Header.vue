@@ -44,7 +44,7 @@ const items = [
     {
       label: "Sign out",
       icon: "i-heroicons-arrow-left-on-rectangle",
-      click: () => (is_auth.value = false),
+      click: () => useAuthStore().logout(),
     },
   ],
 ];

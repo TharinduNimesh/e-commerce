@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ComicController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PublisherController;
 use App\Http\Controllers\UserController;
@@ -29,7 +30,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/newsletter', [UserController::class, 'subscribe']);
-Route::post('/logout', function(Request $request) {
+Route::post('/logout', function (Request $request) {
     $request->user()->tokens()->delete();
     return response()->json([
         'status' => 'success',
@@ -85,9 +86,10 @@ Route::prefix('payments')->middleware(['auth:sanctum'])->group(function () {
     Route::delete('/delete/{id}', [PaymentController::class, 'delete']);
 });
 
+Route::prefix('support')->group(function () {
+    ROute::post('/send-message', [MessageController::class, 'create'])->middleware('throttle:api');
+});
+
 Route::prefix('users')->middleware(['auth:sanctum'])->group(function () {
     Route::put('/update', [UserController::class, 'update']);
 });
-
-// temporary route for testing
-Route::get('/deploy', [UserController::class, 'deploy']);

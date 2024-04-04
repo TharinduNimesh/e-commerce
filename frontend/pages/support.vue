@@ -2,6 +2,28 @@
 useHead({
   title: "Support | ComicCage",
 });
+
+const form = ref({
+  first_name: "",
+  last_name: "",
+  email: "",
+  subject: "",
+  message: "",
+});
+
+async function send() {
+  const { data } = await useApiFetch("/api/support/send-message", {
+    method: "POST",
+    body: form.value,
+  });
+  if (data) {
+    useNotifications().value.push({
+      type: "success",
+      message: "Message sent successfully",
+    });
+    form.value = useFormReset(form.value);
+  }
+}
 </script>
 
 <template>
@@ -47,30 +69,46 @@ useHead({
                   class="col-span-full sm:col-span-1 md:col-span-full lg:col-span-1"
                 >
                   <UFormGroup label="First Name" required>
-                    <UInput type="text" placeholder="Enter Your First Name" />
+                    <UInput
+                      type="text"
+                      placeholder="Enter Your First Name"
+                      v-model="form.first_name"
+                    />
                   </UFormGroup>
                 </div>
                 <div
                   class="col-span-full sm:col-span-1 md:col-span-full lg:col-span-1"
                 >
                   <UFormGroup label="Last Name" required>
-                    <UInput type="text" placeholder="Enter Your Last Name" />
+                    <UInput
+                      type="text"
+                      placeholder="Enter Your Last Name"
+                      v-model="form.last_name"
+                    />
                   </UFormGroup>
                 </div>
               </div>
               <UFormGroup label="Email Address" required>
-                <UInput type="email" placeholder="Enter Your Email Address" />
+                <UInput
+                  type="email"
+                  placeholder="Enter Your Email Address"
+                  v-model="form.email"
+                />
               </UFormGroup>
 
               <UFormGroup label="Subject" required>
-                <UInput type="text" placeholder="Enter The Subject" />
+                <UInput
+                  type="text"
+                  placeholder="Enter The Subject"
+                  v-model="form.subject"
+                />
               </UFormGroup>
 
               <UFormGroup label="Message" required>
-                <UTextarea placeholder="Message..." />
+                <UTextarea placeholder="Message..." v-model="form.message" />
               </UFormGroup>
               <div class="flex">
-                <UButton label="Send Message" block />
+                <UButton label="Send Message" block @click="send" />
               </div>
             </form>
           </div>
