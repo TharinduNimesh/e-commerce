@@ -22,6 +22,7 @@ class Comic extends Model
         'issued_at',
         'created_by',
         'is_hidden',
-        'is_removed'
+        'is_removed',
+        'buyers'
     ];
 }

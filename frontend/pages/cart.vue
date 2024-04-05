@@ -1,6 +1,7 @@
 <script setup>
 const cart_store = useCartStore();
 const is_loading = ref(false);
+const is_requesting = ref(false);
 const items = ref([]);
 onMounted(() => {
   loadCart();
@@ -37,6 +38,28 @@ function removeAll() {
     type: "success",
     message: "All items removed from the cart",
   });
+}
+
+async function checkout() {
+  is_requesting.value = true;
+  const { data } = await useApiFetch("/api/checkout", {
+    method: "POST",
+    body: {
+      items: cart_store.cart,
+    },
+  });
+  cart_store.remove(cart_store.cart);
+  is_requesting.value = false;
+  if (data) {
+    if (!data.message?.links[1].href) {
+      useNotifications().value.push({
+        type: "error",
+        message: "Error occurred while processing the payment",
+      });
+      return;
+    }
+    window.location.href = data.message.links[1].href;
+  }
 }
 </script>
 
@@ -113,13 +136,13 @@ function removeAll() {
                 <div class="w-full p-5 lg:p-8 gap-y-2">
                   <div class="grid grid-cols-2">
                     <div class="font-bold uppercase">Subtotal:</div>
-                    <div>LKR. 12000.00</div>
+                    <div>USD. 12000.00</div>
 
                     <div class="font-bold uppercase">Discount:</div>
-                    <div>LKR. 2000.00</div>
+                    <div>USD. 2000.00</div>
 
                     <div class="font-bold uppercase">Total:</div>
-                    <div class="font-bold uppercase">LKR. 10000.00</div>
+                    <div class="font-bold uppercase">USD. 10000.00</div>
                   </div>
                   <div class="grid grid-cols-12 gap-3 mt-5">
                     <div class="col-span-full md:col-span-8">
@@ -128,6 +151,8 @@ function removeAll() {
                         color="black"
                         size="lg"
                         icon="material-symbols:shopping-cart-checkout-sharp"
+                        @click="checkout"
+                        :loading="is_requesting"
                       >
                         Checkout
                       </UButton>

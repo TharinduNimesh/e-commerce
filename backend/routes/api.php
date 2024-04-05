@@ -55,6 +55,7 @@ Route::middleware('auth:sanctum')->group(function () {
 // Publisher routes
 Route::prefix('publishers')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [PublisherController::class, 'index']);
+    Route::get('/{id}', [PublisherController::class, 'show']);
     Route::post('/create', [PublisherController::class, 'create']);
 });
 
@@ -93,3 +94,7 @@ Route::prefix('support')->group(function () {
 Route::prefix('users')->middleware(['auth:sanctum'])->group(function () {
     Route::put('/update', [UserController::class, 'update']);
 });
+
+Route::post('/checkout', [PaymentController::class, 'checkout'])->middleware('auth:sanctum');
+Route::get('/success', [PaymentController::class, 'success'])->name('payment.success');
+Route::get('/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');

@@ -102,16 +102,16 @@ function remove() {
       <div class="w-full flex justify-center py-2">
         <span v-if="has_discount">
           <span class="line-through text-red-500 dark:text-red-400 text-xs"
-            >LKR. {{ product_price }}</span
+            >USD. {{ product_price }}</span
           >
           <span class="text-green-500 dark:text-green-600 font-semibold"
-            >LKR. {{ calculatePrice(product_price, discount) }}</span
+            >USD. {{ calculatePrice(product_price, discount) }}</span
           >
         </span>
         <span
           v-else
           class="font-semibold text-xl text-gray-500 dark:text-gray-400"
-          >LKR. {{ product_price }}</span
+          >USD. {{ product_price }}</span
         >
       </div>
       <div class="flex gap-3">

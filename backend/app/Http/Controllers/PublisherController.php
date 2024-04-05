@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreatePublisherRequest;
+use App\Models\Comic;
 use App\Models\Publisher;
 use Illuminate\Support\Facades\Storage;
 
@@ -40,6 +41,26 @@ class PublisherController extends Controller
             'name' => $request->name,
             'logo' => $path
         ]);
+
+        return response()->json([
+            'status' => 'success',
+            'publisher' => $publisher
+        ]);
+    }
+
+    public function show($id)
+    {
+        $publisher = Publisher::find($id);
+
+        if (!$publisher) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Publisher not found'
+            ], 404);
+        }
+        
+        $comics = Comic::where('publisher', $id)->limit(4)->get();
+        $publisher->comics = $comics;
 
         return response()->json([
             'status' => 'success',

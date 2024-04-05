@@ -60,7 +60,7 @@ const items = [
     {
       label: "Console",
       icon: "heroicons:presentation-chart-line",
-      click: () => router.push("/app/dashboard"),
+      click: () => router.push("/app/comics"),
     },
   ],
   [

@@ -259,8 +259,8 @@ function updateComicsLayout(list) {
   return list.map((data) => ({
     ...data,
     publisher: data.publisher?.name.toLowerCase(),
-    price: `LKR ${data.price?.toLocaleString("en-US")}`,
-    profit: `LKR ${(data.price * data.buyers).toLocaleString("en-US")}`,
+    price: `USD ${data.price?.toLocaleString("en-US")}`,
+    profit: `USD ${(data.price * data.buyers).toLocaleString("en-US")}`,
     status: data.status ? data.status : "Active",
     created_at: getFormatedDate(new Date(data.issued_at)),
     updated_at: getFormatedDate(new Date(data.updated_at)),
@@ -343,7 +343,10 @@ async function remove(id) {
             </template>
 
             <template #buyers-data="{ row }">
-              <UBadge v-if="row.buyers < 20" color="red" variant="subtle">
+              <UBadge v-if="!row.buyers" color="red" variant="subtle">
+                No Buyers
+              </UBadge>
+              <UBadge v-else-if="row.buyers < 20" color="red" variant="subtle">
                 {{ row.buyers }} Buyers
               </UBadge>
               <UBadge

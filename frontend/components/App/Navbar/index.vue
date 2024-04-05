@@ -4,11 +4,11 @@ defineProps({
 });
 
 const nav_items = [
-  {
-    path: "/app/dashboard",
-    icon: "solar:chart-bold",
-    name: "Dashboard",
-  },
+  // {
+  //   path: "/app/dashboard",
+  //   icon: "solar:chart-bold",
+  //   name: "Dashboard",
+  // },
   {
     path: "/app/comics",
     icon: "solar:notebook-bookmark-bold",
@@ -25,9 +25,9 @@ const nav_items = [
     name: "Categories",
   },
   {
-    path: "/app/users",
+    path: "/app/messages",
     icon: "bx:bxs-user-account",
-    name: "Users",
+    name: "Messages",
   },
 ];
 
@@ -64,7 +64,7 @@ function isActive(current_route, item_route) {
       </div>
     </div>
     <div class="w-full flex flex-col px-3 overflow-y-scroll">
-      <div class="flex items-center mt-5 gap-3">
+      <div class="flex items-center mt-5 gap-3" @click="$router.push('/')">
         <img src="/img/logo.png" alt="ComicCage" class="h-16 rounded-full" />
         <div class="flex flex-col">
           <h1 class="text-2xl text-gray-700 dark:text-gray-200 font-bold">

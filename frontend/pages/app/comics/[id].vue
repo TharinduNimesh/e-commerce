@@ -187,17 +187,17 @@ async function loadData() {
                   <span v-if="data.has_discount">
                     <span
                       class="line-through text-red-500 dark:text-red-400 text-sm"
-                      >LKR. {{ data.price }}</span
+                      >USD. {{ data.price }}</span
                     >
                     <span
                       class="text-green-500 dark:text-green-600 font-semibold text-xl"
-                      >LKR. {{ calculatePrice() }}</span
+                      >USD. {{ calculatePrice() }}</span
                     >
                   </span>
                   <span
                     v-else
                     class="font-semibold text-xl text-gray-500 dark:text-gray-400"
-                    >LKR. {{ data.price }}</span
+                    >USD. {{ data.price }}</span
                   >
                 </div>
                 <div

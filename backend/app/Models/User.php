@@ -29,7 +29,8 @@ class User extends Authenticatable
         'role',
         'otps',
         'payment_methods',
-        'cart'
+        'cart',
+        'vault',
     ];
 
     /**

@@ -52,13 +52,13 @@ function calculatePrice() {
         <div class="col-span-full flex justify-center py-2">
           <span v-if="offer">
             <span class="line-through text-red-500 dark:text-red-400 text-xs"
-              >LKR. {{ price }}</span
+              >USD. {{ price }}</span
             >
             <span class="text-green-500 dark:text-green-600 font-semibold"
-              >LKR. {{ calculatePrice() }}</span
+              >USD. {{ calculatePrice() }}</span
             >
           </span>
-          <span v-else>LKR. {{ price }}</span>
+          <span v-else>USD. {{ price }}</span>
         </div>
         <div class="col-span-1">
           <UButton

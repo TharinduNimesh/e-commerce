@@ -9,11 +9,11 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  offer_percentage: {
+  discount: {
     type: String,
     default: 0,
   },
-  product_price: {
+  price: {
     type: String,
     default: 0,
   },
@@ -23,7 +23,7 @@ const props = defineProps({
   rating: String,
   buyers: String,
   favourite: String,
-  id: Number,
+  id: String,
 });
 
 function calculatePrice(price, offer) {
@@ -42,9 +42,9 @@ function calculatePrice(price, offer) {
         class="col-span-full sm:col-span-4 sm:h-[140px] flex justify-center items-center"
       >
         <img
-          :src="`/img/comics/${image}`"
+          :src="`${$config.public.apiURL}/storage${image}`"
           class="rounded shadow-lg w-full max-w-[200px] sm:w-auto sm:h-full object-contain"
-          alt="Comic"
+          :alt="name"
         />
       </div>
 
@@ -86,25 +86,25 @@ function calculatePrice(price, offer) {
 
     <div class="col-span-full">
       <div class="w-full flex justify-center py-2">
-        <span v-if="offer_percentage">
+        <span v-if="discount">
           <span class="line-through text-red-500 dark:text-red-400 text-xs"
-            >LKR. {{ product_price }}</span
+            >USD. {{ price }}</span
           >
           <span class="text-green-500 dark:text-green-600 font-semibold"
-            >LKR. {{ calculatePrice(product_price, offer_percentage) }}</span
+            >USD. {{ calculatePrice(price, discount) }}</span
           >
         </span>
         <span
           v-else
           class="font-semibold text-xl text-gray-500 dark:text-gray-400"
-          >LKR. {{ product_price }}</span
+          >USD. {{ price }}</span
         >
       </div>
       <div class="flex gap-3">
-        <UButton color="gray" icon="material-symbols:shopping-cart-rounded" />
+        <UButton color="gray" icon="material-symbols:shopping-cart-rounded" :to="`/comic/${id}`" />
         <div class="flex-1">
           <UButton
-            to="/app/comics/1"
+            :to="`/app/comics/${id}`"
             color="black"
             label="View Comic"
             icon="solar:eye-outline"

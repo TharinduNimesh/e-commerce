@@ -140,7 +140,7 @@ async function loadPublishers() {
               <UInput placeholder="Enter the Price" class="rounded-l-none" v-model="form.price">
                 <template #leading>
                   <span class="text-gray-500 dark:text-gray-400 text-sm"
-                    >LKR</span
+                    >USD</span
                   >
                 </template>
               </UInput>
