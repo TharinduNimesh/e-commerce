@@ -21,9 +21,9 @@ export const useCartStore = defineStore("useCartStore", {
       localStorage.setItem("cart", JSON.stringify(this.cart));
       return "added";
     },
-    remove(items: Array<string>) {
+    remove(items: Array<string>, removeRemote = true) {
       this.cart = this.cart.filter((item) => !items.includes(item));
-      if (useAuthStore().isLoggedIn) {
+      if (useAuthStore().isLoggedIn && removeRemote) {
         useApiFetch("/api/cart", {
           method: "DELETE",
           body: { items },

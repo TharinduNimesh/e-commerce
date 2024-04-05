@@ -7,6 +7,21 @@ onMounted(() => {
   loadCart();
 });
 
+const price = computed(() => {
+  return items.value.reduce((acc, item) => {
+    return acc + parseFloat(item.price);
+  }, 0);
+});
+
+const discount = computed(() => {
+  return items.value.reduce((acc, item) => {
+    if (item.has_discount) {
+      acc = acc + parseFloat(item.price * (item.discount / 100));
+    }
+    return Math.round(acc * 100) / 100;
+  }, 0);
+});
+
 async function loadCart() {
   is_loading.value = true;
   const { data } = await useApiFetch("/api/cart", {
@@ -48,7 +63,7 @@ async function checkout() {
       items: cart_store.cart,
     },
   });
-  cart_store.remove(cart_store.cart);
+  cart_store.remove(cart_store.cart, false);
   is_requesting.value = false;
   if (data) {
     if (!data.message?.links[1].href) {
@@ -136,13 +151,15 @@ async function checkout() {
                 <div class="w-full p-5 lg:p-8 gap-y-2">
                   <div class="grid grid-cols-2">
                     <div class="font-bold uppercase">Subtotal:</div>
-                    <div>USD. 12000.00</div>
+                    <div>USD. {{ price }}</div>
 
                     <div class="font-bold uppercase">Discount:</div>
-                    <div>USD. 2000.00</div>
+                    <div>USD. {{ discount }}</div>
 
                     <div class="font-bold uppercase">Total:</div>
-                    <div class="font-bold uppercase">USD. 10000.00</div>
+                    <div class="font-bold uppercase">
+                      USD. {{ price - discount }}
+                    </div>
                   </div>
                   <div class="grid grid-cols-12 gap-3 mt-5">
                     <div class="col-span-full md:col-span-8">
