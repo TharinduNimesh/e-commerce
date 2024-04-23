@@ -1,2 +1,2 @@
-# e-commerce project for viva
+# e-commerce project for web development viva
 Laravel backend and nuxt js frontend
