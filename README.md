@@ -1,2 +1,2 @@
 # e-commerce project for web development viva
-Laravel backend and nuxt js frontend
+nuxt js frontend with laravel sanctum API
