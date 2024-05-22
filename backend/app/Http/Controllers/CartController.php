@@ -15,6 +15,11 @@ class CartController extends Controller
             $cart = auth('sanctum')->user()->cart;
         }
 
+        // if cart is empty, return;
+        if (!$cart) {
+            return;
+        }
+
         $cart = Comic::whereIn('_id', $cart)->get();
         $publishers = Publisher::all();
         $comics = $cart->map(function ($comic) use ($publishers){
