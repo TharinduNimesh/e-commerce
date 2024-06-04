@@ -4,13 +4,7 @@ defineProps(["modelValue"]);
 const emit = defineEmits(["update:modelValue"]);
 
 function uploadFile(event) {
-  const file = event.target.files[0];
-  const reader = new FileReader();
-
-  reader.onload = (event) => {
-    emit("update:modelValue", event.target.result);
-  };
-  reader.readAsDataURL(file);
+  emit("update:modelValue", event.target.files[0]);
 }
 </script>
 
