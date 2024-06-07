@@ -1,16 +1,14 @@
 <script setup>
 const is_loading = ref(false);
 const image_container = ref();
-const encoded_images = ref([]);
 const image = ref("");
-const images = ref([]);
 const publisher = ref("");
 onMounted(() => {
   loadPublishers();
 });
 watch(image, (value) => {
   if (value) {
-    if (images.value.length >= 5) {
+    if (form.value.images.length >= 5) {
       useNotifications().value.push({
         type: "error",
         title: "Error",
@@ -19,14 +17,7 @@ watch(image, (value) => {
       return;
     }
 
-    // Append the image to the container
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      encoded_images.value.push(e.target.result);
-    };
-    reader.readAsDataURL(image.value);
-
-    images.value.push(value);
+    form.value.images.push(value);
     image.value = "";
   }
 });
@@ -70,20 +61,13 @@ function removeImage(index) {
 }
 
 function markAsPrimary(index) {
-  const primary = encoded_images.value[index];
-  encoded_images.value.splice(index, 1);
-  encoded_images.value.unshift(primary);
-
-  const primaryImage = images.value[index];
-  images.value.splice(index, 1);
-  images.value.unshift(primaryImage);
+  const primary = form.value.images[index];
+  form.value.images.splice(index, 1);
+  form.value.images.unshift(primary);
 }
 
 async function addProduct() {
   is_loading.value = true;
-  if (images.value.length > 0) {
-    await uploadImages();
-  }
   const { data } = await useApiFetch("/api/comics/create", {
     method: "POST",
     body: form.value,
@@ -101,38 +85,10 @@ async function addProduct() {
   }
 }
 
-async function uploadImages() {
-  console.log("Uploading images...");
-  const formData = new FormData();
-  images.value.forEach((image) => {
-    formData.append("images", image);
-  });
-
-  const { data } = await useApiFetch("/api/comics/upload/images", {
-    method: "POST",
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-    body: formData,
-  });
-
-  if (data) {
-    form.value.images = data.images;
-    console.log("Images uploaded successfully");
-    return;
-  }
-
-  useNotifications().value.push({
-    type: "error",
-    title: "Error",
-    message: "Failed to upload images",
-  });
-}
-
 async function loadPublishers() {
   const { data } = await useApiFetch("/api/publishers");
   if (data) {
-    publishers.value = data.publishers.map((publisher) => publisher.name);
+    publishers.value = data.publishers.map(publisher => publisher.name);
     publishers_data.value = data.publishers;
   }
 }
@@ -159,10 +115,7 @@ async function loadPublishers() {
         <div class="grid grid-cols-8 gap-3 mt-5">
           <div class="col-span-full md:col-span-5">
             <UFormGroup label="Name" required>
-              <UInput
-                placeholder="Name Of The Comic Book"
-                v-model="form.name"
-              />
+              <UInput placeholder="Name Of The Comic Book" v-model="form.name" />
             </UFormGroup>
           </div>
           <div class="col-span-full md:col-span-3">
@@ -184,11 +137,7 @@ async function loadPublishers() {
           </div>
           <div class="col-span-full md:col-span-4">
             <UFormGroup label="Price" required>
-              <UInput
-                placeholder="Enter the Price"
-                class="rounded-l-none"
-                v-model="form.price"
-              >
+              <UInput placeholder="Enter the Price" class="rounded-l-none" v-model="form.price">
                 <template #leading>
                   <span class="text-gray-500 dark:text-gray-400 text-sm"
                     >USD</span
@@ -224,11 +173,7 @@ async function loadPublishers() {
           </div>
           <div class="col-span-full md:col-span-4">
             <UFormGroup label="Published Date" required>
-              <UInput
-                type="date"
-                class="rounded-l-none"
-                v-model="form.published_date"
-              />
+              <UInput type="date" class="rounded-l-none" v-model="form.published_date"/>
             </UFormGroup>
           </div>
           <div class="col-span-full">
@@ -238,11 +183,11 @@ async function loadPublishers() {
               </UFormGroup>
               <div class="flex gap-3 flex-wrap" ref="image_container">
                 <AppImage
-                  v-for="(image, index) in encoded_images"
+                  v-for="(image, index) in form.images"
                   :key="image"
                   :image="image"
                   :index="index"
-                  :primary="index === 0"
+                  :primary="index == 0"
                   @onremove="removeImage"
                   @onmark="markAsPrimary"
                 />

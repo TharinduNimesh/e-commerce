@@ -5,18 +5,9 @@ onMounted(() => {
 });
 
 const router = useRouter();
-const isLoading = ref(false);
-
 const is_add_issuer_open = ref(false);
 const publishers = ref([]);
-const logo = ref(null);
-watch(logo, (value) => {
-  const reader = new FileReader();
-  reader.onload = function (e) {
-    form.value.logo = e.target.result;
-  };
-  reader.readAsDataURL(value);
-});
+const isLoading = ref(false);
 
 const columns = [
   {
@@ -297,7 +288,7 @@ async function addPublisher() {
                 />
               </UFormGroup>
               <UFormGroup label="Logo" required>
-                <FileUploader v-model="logo" />
+                <FileUploader v-model="form.logo" />
               </UFormGroup>
             </div>
 

@@ -12,7 +12,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiURL: process.env.API_URL || "http://localhost:8000",
+      apiURL: process.env.API_URL || "http://localhost:3000",
     }
   }
 });
