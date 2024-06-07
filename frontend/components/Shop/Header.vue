@@ -67,6 +67,7 @@ const items = [
     {
       label: "Vault",
       icon: "i-heroicons-inbox",
+      click: () => router.push("/vault"),
     },
     {
       label: "Cart",

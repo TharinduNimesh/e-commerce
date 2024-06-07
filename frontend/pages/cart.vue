@@ -89,7 +89,7 @@ async function checkout() {
               <h1 class="main-heading">Your Cart</h1>
             </div>
             <div class="hidden lg:flex justify-end">
-              <UButton to="/shop">Continue Shopping</UButton>
+              <UButton to="/">Continue Shopping</UButton>
             </div>
           </div>
           <div class="w-full grid grid-cols-2 mt-5 gap-5" v-if="is_loading">
@@ -117,7 +117,7 @@ async function checkout() {
                   Your cart is empty
                 </div>
                 <div class="text-center">
-                  <UButton to="/shop">Continue Shopping</UButton>
+                  <UButton to="/">Continue Shopping</UButton>
                 </div>
               </div>
             </div>

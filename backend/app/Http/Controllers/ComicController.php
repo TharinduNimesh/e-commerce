@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateComicRequest;
 use App\Models\Comic;
 use App\Models\Publisher;
+use Illuminate\Http\Request;
 
 class ComicController extends Controller
 {
@@ -52,6 +53,26 @@ class ComicController extends Controller
             'message' => 'Comic created successfully',
             'comic' => $comic
         ], 201);
+    }
+
+    public function getBoughtComics(Request $request) 
+    {
+        $user = $request->user();
+        $vault = $user->vault;
+
+        if (!$vault) {
+            return response()->json([
+                'status' => 'success',
+                'comics' => []
+            ]);
+        }
+
+        $comics = Comic::whereIn('_id', $vault)->get();
+
+        return response()->json([
+            'status' => 'success',
+            'comics' => $comics
+        ]);
     }
 
     public function show($id)
