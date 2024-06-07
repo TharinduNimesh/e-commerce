@@ -7,7 +7,6 @@ use App\Http\Requests\Payment\UpdatePaymentRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Omnipay\Omnipay;
-use App\Http\Controllers\PaymentController;
 use App\Models\Comic;
 
 class PaymentController extends Controller

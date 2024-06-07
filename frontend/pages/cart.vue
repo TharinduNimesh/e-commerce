@@ -66,6 +66,7 @@ async function checkout() {
   cart_store.remove(cart_store.cart, false);
   is_requesting.value = false;
   if (data) {
+    console.log(toRaw(data));
     if (!data.message?.links[1].href) {
       useNotifications().value.push({
         type: "error",
